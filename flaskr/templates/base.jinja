@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+    <title>{% block title %}{% endblock  title%}</title>
+</head>
+<body style="display: flex;">
+<div><a href="/t" class="nes-btn">test</a></div>
+<div>{% block content %}{% endblock content %}</div>
+</body>

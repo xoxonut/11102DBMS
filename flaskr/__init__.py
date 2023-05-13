@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask,render_template
 
 
 def create_app(test_config=None):
@@ -18,8 +18,10 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/')
     def hello():
-        return 'Hello, World123!'
-    
+        return render_template('hello.jinja')
+    @app.route('/t')
+    def t():
+        return '123'
     from .api import (staff, supplier, member, item,purchase_order, sale_order)
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
