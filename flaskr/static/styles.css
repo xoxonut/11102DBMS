@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'zpix';
+    src: url('./font/ark-pixel-12px-monospaced-zh_tw.woff2') format('woff2');
+}
+
+* {
+    font-family: 'zpix';
+}
