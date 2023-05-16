@@ -22,6 +22,13 @@ def create_app(test_config=None):
     @app.route('/')
     def index():    
         return redirect('/myErp')
+    @app.route('/login',methods=['GET','POST'])
+    def login():    
+        if request.method=='POST':
+            staff_id=request.form.get('staff_id')
+            password=request.form.get('password')
+            return redirect("/myErp")
+        return render_template("login.jinja")
     @app.route('/myErp')
     def myErp():
         return render_template('hello.jinja')
