@@ -1,0 +1,80 @@
+{% extends "base.jinja" %}
+{% block title %}Staff Management{% endblock title %}
+{% block content %}
+<h1>Staff Management</h1>
+<p id="failTest"></p>
+<div class="nes-table-responsive">
+    <table class="nes-table is-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Manager ID</th>
+                <th>Modify</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in staffs %}
+            <tr style="text-align: center">
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.mId }}</td>
+                <td>
+                    <i class="nes-icon coin is-small" onclick="showDialog('{{ s.id }}', '{{ s.name }}', '{{ s.mId }}')"></i>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <dialog class="nes-dialog" id="dialog-default">
+        <form method="dialog">
+            <p class="title">Dialog</p>
+            <p>Staff ID: <span id="dialog-id"></span></p>
+            <p>Name: <span id="dialog-name"></span></p>
+            <p>Manager ID: <span id="dialog-mid"></span></p>
+            <menu class="dialog-menu">
+                <button class="nes-btn" onclick="closeDialog(this)">Cancel</button>
+                <button class="nes-btn is-primary" onclick="closeDialog(this)">Confirm</button>
+            </menu>
+        </form>
+    </dialog>
+</div>
+
+<script>
+    function showDialog(id, name, mid) {
+        const dialog = document.getElementById('dialog-default');
+        const dialogId = document.getElementById('dialog-id');
+        const dialogName = document.getElementById('dialog-name');
+        const dialogMid = document.getElementById('dialog-mid');
+
+        dialogId.textContent = id;
+        dialogName.textContent = name;
+        dialogMid.textContent = mid;
+
+        if (!dialog.hasAttribute('opened')) {
+            dialog.showModal();
+            dialog.setAttribute('opened', 'true');
+        }
+    }
+
+    function closeDialog(element) {
+        const dialog = document.getElementById('dialog-default');
+        dialog.close();
+        dialog.removeAttribute('opened');
+
+        // Send GET request to staff/ endpoint
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/staff/');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = xhr.responseText;
+                console.log(response); // Handle the response as needed
+                const test=document.getElementById('failTest')
+                test.textContent="fail"
+            }
+        };
+        xhr.send();
+    }
+</script>
+
+{% endblock content %}

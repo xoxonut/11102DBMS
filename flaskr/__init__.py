@@ -27,7 +27,8 @@ def create_app(test_config=None):
         return render_template('hello.jinja')
     @app.route('/myErp/staff')
     def staff():
-        return '123'
+        staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
+        return render_template('staff.jinja',staffs=staffs)
     @app.route('/myErp/supplier')
     def supplier():
         return '123'
@@ -43,6 +44,7 @@ def create_app(test_config=None):
     @app.route('/myErp/sale_order')
     def sale_order():
         return '123'
+    
     from .api import (staff, supplier, member, item,purchase_order, sale_order)
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
