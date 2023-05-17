@@ -51,6 +51,15 @@ def create_app(test_config=None):
     @app.route('/myErp/sale_order')
     def sale_order():
         return '123'
+     @app.route('/add',methods=['GET','POST'])
+    def add():
+        if request.method=='POST':
+            staff_id=request.form.get('id')
+            name=request.form.get('name')
+            managerId=request.form.get('mId')
+            staffs.append({'id': staff_id, 'name': name, 'mId': managerId})
+            return redirect("/myErp/staff")  
+        return render_template('add.jinja')
     
     from .api import (staff, supplier, member, item,purchase_order, sale_order)
     app.register_blueprint(staff.bp)
