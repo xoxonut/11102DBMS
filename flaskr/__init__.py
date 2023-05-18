@@ -17,7 +17,7 @@ def create_app(test_config=None):
         pass
     from . import db
     db.init_app(app)
-    
+    staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
     # a simple page that says hello
     @app.route('/')
     def index():    
@@ -34,7 +34,7 @@ def create_app(test_config=None):
         return render_template('hello.jinja')
     @app.route('/myErp/staff')
     def staff():
-        staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
+        
         return render_template('staff.jinja',staffs=staffs)
     @app.route('/myErp/supplier')
     def supplier():
@@ -51,7 +51,7 @@ def create_app(test_config=None):
     @app.route('/myErp/sale_order')
     def sale_order():
         return '123'
-     @app.route('/add',methods=['GET','POST'])
+    @app.route('/add',methods=['GET','POST'])
     def add():
         if request.method=='POST':
             staff_id=request.form.get('id')
