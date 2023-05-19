@@ -16,6 +16,11 @@
     - decrease : CRUD
 - item : R 
 
+### http verb
+- C -> POST
+- R -> GET
+- U -> PUT
+- D -> DELETE
 
 ## LIST
 
