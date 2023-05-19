@@ -37,9 +37,8 @@
     - request
         - supplier_id : str
         - staff_id : str
-        - items : list[item]
-        - delivery_date : datetime
-        - status : bool
+        - items : list[item] ps:沒有那個item就新增
+
 - R
     - response
         - orders : list[purchase order]
@@ -52,9 +51,7 @@
     - request
         - staff_id : str
         - customer_id : str
-        - deliver_date : datetime
-        - status : bool
-        - items : list[item]
+        - items : list[item] ps:沒有那個item就拒絕
 - R
     - response
         - orders : list[sales order]
