@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("instance/flaskr.db")
+conn = sqlite3.connect("instance/flaskr.sqlite")
 cursor = conn.cursor()
 
 staff = """CREATE TABLE STAFF(
@@ -44,8 +44,6 @@ purchase_order = """CREATE TABLE PURCHASE_ORDER (
                         supplier_id INT,
                         staff_id INT,
                         p_order_date DATE,
-                        p_delivery_date DATE,
-                        p_order_status TEXT,
                         FOREIGN KEY (supplier_id) REFERENCES SUPPLIER(supplier_id),
                         FOREIGN KEY (staff_id) REFERENCES STAFF(staff_id)
                         )"""
@@ -56,8 +54,6 @@ sales_order = """CREATE TABLE SALES_ORDER (
                     staff_id INT,
                     member_id INT,
                     s_order_date DATE,
-                    s_delivery_date DATE,
-                    s_order_status TEXT,
                     FOREIGN KEY (staff_id) REFERENCES STAFF(staff_id),
                     FOREIGN KEY (member_id) REFERENCES MEMBER(member_id)
                     )"""
