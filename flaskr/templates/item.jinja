@@ -1,0 +1,29 @@
+{%extends "base.jinja"%}
+{%block title%}Item{%endblock%}
+{%block content%}
+<h1>Item</h1>
+<div class="nes-table responsive">
+    <table class="nes-table is-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Stock</th>
+            <th>Unit Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for item in items%}
+        <tr style="text-align: center;">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.stock}}</td>
+            <td>{{item.unit_price}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+    </table>
+</div>
+{%endblock%}

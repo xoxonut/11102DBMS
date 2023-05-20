@@ -63,19 +63,6 @@
         const dialog = document.getElementById('dialog-default');
         dialog.close();
         dialog.removeAttribute('opened');
-
-        // Send GET request to staff/ endpoint
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', '/staff/');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                const response = xhr.responseText;
-                console.log(response); // Handle the response as needed
-                const test=document.getElementById('failTest')
-                test.textContent="fail"
-            }
-        };
-        xhr.send();
     }
 </script>
 

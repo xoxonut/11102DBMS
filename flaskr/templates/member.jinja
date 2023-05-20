@@ -1,0 +1,94 @@
+{%extends "base.jinja"%}
+{%block title%}Member{%endblock%}
+{%block content%}
+<div style="display: flex; margin:10px">
+<h1>Member</h1>
+<button type="button" class="nes-btn is-primary">ADD</button>
+</div>
+<div class="nes-table-responsive">
+    <table class="nes-table is-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Modify</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in members %}
+            <tr style="text-align: center">
+                <td>{{ m.id }}</td>
+                <td>{{ m.name }}</td>
+                <td>{{ m.email }}</td>
+                <td>{{ m.phone }}</td>
+                <td>{{ m.address }}</td>
+                <td>
+                    <i class="nes-icon coin is-small show-dialog"></i>
+                </td>
+                <td>
+                    <i class="nes-icon close is-small" onclick="location.reload()"></i>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <dialog class="nes-dialog" id="member_modify">
+        <form method="dialog">
+            <p class="title">Modify</p>
+            <p>Member ID: <span id="dialog-id"></span></p>
+            <label for="dialog-name">Name</label>
+            <input type="text" class="nes-input" id="dialog-name">
+            <label for="dialog-email">Email</label>
+            <input type="text" class="nes-input" id="dialog-email">
+            <label for="dialog-phone">Phone</label>
+            <input type="text" class="nes-input" id="dialog-phone">
+            <label for="dialog-address">Address</label>
+            <input type="text" class="nes-input" id="dialog-address">
+            <menu class="dialog-menu">
+                <button class="nes-btn send-modify-dialog">OK</button>
+                <button class="nes-btn is-primary close-dialog">Cancel</button>
+            </menu>
+        </form>
+    </dialog>
+    <dialog class="nes-dialog" id="member_add">
+        <form>
+
+        </form>
+    </dialog>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.show-dialog').click(function () {
+            const member_row = $(this).parent().siblings();
+            const dialog_fields = $('#member_modify').children().children();
+
+            for (let i = 0; i < member_row.length; i++) {
+                if (i > 4) {
+                    break;
+                }
+
+                dialog_fields.eq(i+1).children().text(member_row[i].innerHTML);
+            }
+
+            $('#member_modify').show();
+        });
+        $('.send-modify-dialog').click(function () {
+            $('#member_modify').hide();
+            location.reload();
+        });
+        $('.close-dialog').click(function () {
+            $('#member_modify').hide();
+        });
+    });
+
+</script>
+<style>
+    .nes-input{
+        margin-bottom: 10px;
+    }
+</style>
+{%endblock content%}

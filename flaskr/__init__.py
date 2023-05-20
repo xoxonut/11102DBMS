@@ -18,6 +18,10 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
     staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
+    members =[{'id':'1','name':'Frank','email':'frank@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'},
+            {'id':'2','name':'Rex','email':'sad@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'}]
+    items = [{'id':1,'name':'apple','type':'fruit','unit_price':100,'stock':1984},
+            {'id':2,'name':'banana','type':'fruit','unit_price':50,'stock':1984}]
     # a simple page that says hello
     @app.route('/')
     def index():    
@@ -29,28 +33,43 @@ def create_app(test_config=None):
             password=request.form.get('password')
             return redirect("/myErp")
         return render_template("login.jinja")
+    
+    
     @app.route('/myErp')
     def myErp():
         return render_template('hello.jinja')
+    
+    
     @app.route('/myErp/staff')
     def staff():
-        
         return render_template('staff.jinja',staffs=staffs)
+    
+    
     @app.route('/myErp/supplier')
     def supplier():
         return '123'
+    
+    
     @app.route('/myErp/member')
     def member():
-        return '123'
+        return render_template('member.jinja',members=members)
+    
+    
     @app.route('/myErp/item')
     def item():
-        return '123'
+        return render_template('item.jinja',items=items)
+    
+    
     @app.route('/myErp/purchase_order')
     def purchase_order():
         return '123'
+    
+    
     @app.route('/myErp/sale_order')
     def sale_order():
         return '123'
+    
+    
     @app.route('/add',methods=['GET','POST'])
     def add():
         if request.method=='POST':
