@@ -80,7 +80,25 @@ def create_app(test_config=None):
     
     @app.route('/myErp/sale_order')
     def sale_order():
-        return '123'
+        return render_template('sale_order.jinja',orders=porder)
+    @app.route('/myErp/sale_order/<pid>')
+    def sale_order_detail(pid):
+        pid=int(pid)
+        return render_template('sale_order_detail.jinja',items=[items[pid-1]])
+    @app.route('/myErp/sale_order/add')
+    def sale_order_add():
+        return render_template('sale_order_add.jinja')
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     @app.route('/add',methods=['GET','POST'])

@@ -1,16 +1,16 @@
 {%extends "base.jinja"%}
-{%block title%}Purchase Order{%endblock%}
+{%block title%}Sales Order{%endblock%}
 {%block content%}
 <div style="display :flex; margin:10px">
-    <h1>Purchase Order</h1>
-    <a href="{{url_for('.purchase_order_add')}}"><button type="button" class="nes-btn is-primary" id="add_btn">ADD</button></a>  
+    <h1>Sales Order</h1>
+    <a href="{{url_for('.sale_order_add')}}"><button type="button" class="nes-btn is-primary" id="add_btn">ADD</button></a>  
 </div>
 <div class="nes-table responsive">
     <table class="nes-table is-bordered">
         <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Supplier ID</th>
+                <th>Member ID</th>
                 <th>Staff ID</th>
                 <th>Detail</th>
             </tr>
@@ -22,7 +22,7 @@
                 <td>{{order.supplier_id}}</td>
                 <td>{{order.staff_id}}</td>
                 <td>
-                    <a href="{{url_for('.purchase_order_detail',pid=order.id)}}"><i class="nes-icon is-small star"></i></a>
+                    <a href="{{url_for('.sale_order_detail',pid=order.id)}}"><i class="nes-icon is-small star"></i></a>
                 </td>
             </tr>
             {%endfor%}

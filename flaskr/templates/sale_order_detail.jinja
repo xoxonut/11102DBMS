@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>Sales Order Detail</title>
+</head>
+    <div class="nes-table responsive">
+    <table class="nes-table is-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for item in items%}
+        <tr style="text-align: center;">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.stock}}</td>
+        </tr>
+        {%endfor%}
+    </tbody>
+    </table>
+</div>
+</html>
