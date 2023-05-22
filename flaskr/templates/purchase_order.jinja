@@ -1,0 +1,33 @@
+{%extends "base.jinja"%}
+{%block title%}Item{%endblock%}
+{%block content%}
+<div style="display :flex; margin:10px">
+    <h1>Purchase Order</h1>
+    <button type="button" class="nes-btn is-primary" id="add_btn">ADD</button>
+</div>
+<div class="nes-table responsive">
+    <table class="nes-table is-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Supplier ID</th>
+                <th>Staff ID</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for order in orders%}
+            <tr style="text-align: center;">
+                <td>{{order.id}}</td>
+                <td>{{order.supplier_id}}</td>
+                <td>{{order.staff_id}}</td>
+                <td>
+                    <a href="{{url_for('.purchase_order_detail',pid=order.id)}}"><i class="nes-icon is-small star"></i></a>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
+{%endblock%}

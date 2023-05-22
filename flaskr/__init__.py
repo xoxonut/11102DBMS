@@ -22,6 +22,8 @@ def create_app(test_config=None):
             {'id':'2','name':'Rex','email':'sad@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'}]
     items = [{'id':1,'name':'apple','type':'fruit','unit_price':100,'stock':1984},
             {'id':2,'name':'banana','type':'fruit','unit_price':50,'stock':1984}]
+    porder = [{'id':1,'supplier_id':1,'staff_id':1},
+            {'id':2,'supplier_id':2,'staff_id':2}]
     # a simple page that says hello
     @app.route('/')
     def index():    
@@ -62,8 +64,12 @@ def create_app(test_config=None):
     
     @app.route('/myErp/purchase_order')
     def purchase_order():
-        return '123'
+        return render_template('purchase_order.jinja',orders=porder)
     
+    @app.route('/myErp/purchase_order/<pid>')
+    def purchase_order_detail(pid):
+        pid=int(pid)
+        return render_template('purchase_order_detail.jinja',items=[items[pid-1]])
     
     @app.route('/myErp/sale_order')
     def sale_order():

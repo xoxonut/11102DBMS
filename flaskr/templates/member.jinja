@@ -2,8 +2,8 @@
 {%block title%}Member{%endblock%}
 {%block content%}
 <div style="display: flex; margin:10px">
-<h1>Member</h1>
-<button type="button" class="nes-btn is-primary">ADD</button>
+    <h1>Member</h1>
+    <button type="button" class="nes-btn is-primary" id="add_btn">ADD</button>
 </div>
 <div class="nes-table-responsive">
     <table class="nes-table is-bordered">
@@ -36,30 +36,42 @@
             {% endfor %}
         </tbody>
     </table>
-    <dialog class="nes-dialog" id="member_modify">
-        <form method="dialog">
-            <p class="title">Modify</p>
-            <p>Member ID: <span id="dialog-id"></span></p>
-            <label for="dialog-name">Name</label>
-            <input type="text" class="nes-input" id="dialog-name">
-            <label for="dialog-email">Email</label>
-            <input type="text" class="nes-input" id="dialog-email">
-            <label for="dialog-phone">Phone</label>
-            <input type="text" class="nes-input" id="dialog-phone">
-            <label for="dialog-address">Address</label>
-            <input type="text" class="nes-input" id="dialog-address">
-            <menu class="dialog-menu">
-                <button class="nes-btn send-modify-dialog">OK</button>
-                <button class="nes-btn is-primary close-dialog">Cancel</button>
-            </menu>
-        </form>
-    </dialog>
-    <dialog class="nes-dialog" id="member_add">
-        <form>
-
-        </form>
-    </dialog>
 </div>
+<dialog class="nes-dialog" id="member_modify">
+    <form method="dialog">
+        <p class="title">Modify</p>
+        <p>Member ID: <span id="dialog-id"></span></p>
+        <label for="dialog-name">Name</label>
+        <input type="text" class="nes-input" id="dialog-name">
+        <label for="dialog-email">Email</label>
+        <input type="text" class="nes-input" id="dialog-email">
+        <label for="dialog-phone">Phone</label>
+        <input type="text" class="nes-input" id="dialog-phone">
+        <label for="dialog-address">Address</label>
+        <input type="text" class="nes-input" id="dialog-address">
+        <menu class="dialog-menu">
+            <button class="nes-btn send-modify-dialog">OK</button>
+            <button class="nes-btn is-primary close-dialog">Cancel</button>
+        </menu>
+    </form>
+</dialog>
+<dialog class="nes-dialog" id="member_add">
+    <form method="dialog">
+        <p class="title">Add</p>
+        <label for="dialog-name">Name</label>
+        <input type="text" class="nes-input" id="dialog-name">
+        <label for="dialog-email">Email</label>
+        <input type="text" class="nes-input" id="dialog-email">
+        <label for="dialog-phone">Phone</label>
+        <input type="text" class="nes-input" id="dialog-phone">
+        <label for="dialog-address">Address</label>
+        <input type="text" class="nes-input" id="dialog-address">
+        <menu class="dialog-menu">
+            <button class="nes-btn" id="send-add-btn">OK</button>
+            <button class="nes-btn is-primary close-dialog">Cancel</button>
+        </menu>
+    </form>
+</dialog>
 <script>
     $(document).ready(function () {
         $('.show-dialog').click(function () {
@@ -71,23 +83,35 @@
                     break;
                 }
 
-                dialog_fields.eq(i+1).children().text(member_row[i].innerHTML);
+                dialog_fields.eq(i + 1).children().text(member_row[i].innerHTML);
             }
 
             $('#member_modify').show();
         });
+
         $('.send-modify-dialog').click(function () {
             $('#member_modify').hide();
             location.reload();
         });
+
+        $('#add_btn').click(function () {
+            $('#member_add').show();
+        });
+
+        $('#send-add-btn').click(function () {
+            $('#member_add').hide();
+            location.reload();
+        });
+
         $('.close-dialog').click(function () {
             $('#member_modify').hide();
+            $('#member_add').hide();
         });
     });
 
 </script>
 <style>
-    .nes-input{
+    .nes-input {
         margin-bottom: 10px;
     }
 </style>
