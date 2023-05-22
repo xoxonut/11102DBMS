@@ -3,7 +3,7 @@
 {%block content%}
 <div style="display :flex; margin:10px">
     <h1>Purchase Order</h1>
-    <button type="button" class="nes-btn is-primary" id="add_btn">ADD</button>
+    <a href="{{url_for('.purchase_order_add')}}"><button type="button" class="nes-btn is-primary" id="add_btn">ADD</button></a>  
 </div>
 <div class="nes-table responsive">
     <table class="nes-table is-bordered">

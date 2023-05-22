@@ -71,6 +71,13 @@ def create_app(test_config=None):
         pid=int(pid)
         return render_template('purchase_order_detail.jinja',items=[items[pid-1]])
     
+    @app.route('/myErp/purchase_order/add')
+    def purchase_order_add():
+        return render_template('purchase_order_add.jinja')
+    
+    
+    
+    
     @app.route('/myErp/sale_order')
     def sale_order():
         return '123'
