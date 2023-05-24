@@ -97,8 +97,7 @@
         - supplier_id : str
         - staff_id : str
         - items : list[item]
-        - delivery_date : datetime
-        - status : bool
+
 - R
     - response
         - orders : json list[purchase order]
@@ -124,10 +123,7 @@
         }
        ]
     }
-- U
-    - request
-        - order_id : str
-        - status : bool
+
 - D
     - request
         - p_order_id : str
@@ -143,10 +139,7 @@
 - R
     - response
         - orders : list[sales order]
-- U
-    - request
-        - order_id : str
-        - status : bool
+
 - D
     - request 
         - order_id : str
