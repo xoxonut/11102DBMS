@@ -101,7 +101,29 @@
         - status : bool
 - R
     - response
-        - orders : list[purchase order]
+        - orders : json list[purchase order]
+   {
+    "p_order_list": [
+        {
+            "p_order_date": "2023-5-22",
+            "p_order_id": 1,
+            "staff_name": "Michael",
+            "supplier_name": "apple"
+        },
+        {
+            "p_order_date": "2023-5-22",
+            "p_order_id": 2,
+            "staff_name": "Steve",
+            "supplier_name": "tesla"
+        },
+        {
+            "p_order_date": "2023-5-23",
+            "p_order_id": 3,
+            "staff_name": "John",
+            "supplier_name": "tsmc"
+        }
+       ]
+    }
 - U
     - request
         - order_id : str
