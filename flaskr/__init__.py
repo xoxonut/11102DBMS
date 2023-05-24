@@ -1,5 +1,5 @@
 import os
-
+from flask import url_for # this line should delete 
 from flask import Flask, render_template, redirect, request
 from flask import Flask, request, jsonify
 
@@ -59,7 +59,8 @@ def create_app(test_config=None):
 
     @app.route("/myErp/purchase_order")
     def purchase_order():
-        return "123"
+      return redirect(url_for('purchase_order.read_purchase_order')) #this line shoule delete
+      #  return "123" this line should add
 
     @app.route("/myErp/sale_order")
     def sale_order():
