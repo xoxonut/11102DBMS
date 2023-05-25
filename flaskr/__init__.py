@@ -59,7 +59,7 @@ def create_app(test_config=None):
 
     @app.route("/myErp/purchase_order")
     def purchase_order():
-      return redirect(url_for('purchase_order.read_purchase_order')) #this line shoule delete
+      return redirect(url_for('purchase_order')) #this line shoule delete
       #  return "123" this line should add
 
     @app.route("/myErp/sale_order")
