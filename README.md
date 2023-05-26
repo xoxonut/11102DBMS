@@ -14,7 +14,7 @@
     - customer : C R
     - item : R U D
     - decrease : CRUD
-- item : R 
+- item : UR 
 
 ### http verb
 - C -> POST
@@ -31,20 +31,20 @@
 - C 
     - request 
         - name : str
-        - manager_id : str
+        - manager_id : int
 
 - R 
     - respond
         - staffs : list[staff]
 - U 
     - request
-        - id : str
+        - id : int
         - name : str
-        - manager_id : str
+        - manager_id : int
 
 - D 
     - request
-        - id : str
+        - id : int
 
 
 ## supplier
@@ -60,14 +60,14 @@
         - suppliers : list[supplier]
 - U
     - request
-        - id : str
+        - id : int
         - name : str
         - email : str
         - phone : str
         - address : str
 - D
     - request
-        - id : str
+        - id : int
 
 ## member
 - C
@@ -81,21 +81,21 @@
         - members : list[member]
 - U
     - request
-        - member_id : str
+        - member_id : int
         - name : str
         - address : str
         - email : str
         - address : str
 - D
     - request
-        - member_id : str
+        - member_id : int
 
 ## purchase order
 
 - C
     - request
-        - supplier_id : str
-        - staff_id : str
+        - supplier_id : int
+        - staff_id : int
         - items : list[item]
 
 - R
@@ -132,8 +132,8 @@
 ## sales order
 - C
     - request
-        - staff_id : str
-        - customer_id : str
+        - staff_id : int
+        - customer_id : int
         - deliver_date : datetime
         - status : bool
         - items : list[item]
@@ -147,8 +147,10 @@
 ## Item
 - R
     - items : list[item]
-
-
+- U
+    - requerst
+        - item_id : int
+        - price : int
 
 # 分工
 - 前端 2
