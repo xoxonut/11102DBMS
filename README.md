@@ -101,7 +101,8 @@
 - R
     - response
         - orders : json list[purchase order]
-   {
+ ```
+ {
     "p_order_list": [
         {
             "p_order_date": "2023-5-22",
@@ -123,7 +124,7 @@
         }
        ]
     }
-
+```
 - D
     - request
         - p_order_id : str
