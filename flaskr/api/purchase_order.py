@@ -50,7 +50,6 @@ def create_purchase_order():
       return {"message": "This supplier doesn't exist!"}
 
     # TODO:insert into purchase order
-    db.execute
 
     for item in item_list:
       item_name = item.get('name')
@@ -64,17 +63,28 @@ def create_purchase_order():
         #item doesn't exist, then create item
         item_id = random.randint(1000, 100000) # this line should delete after DB modified to rowid
         cursor = db.execute("INSERT INTO ITEM(item_id, name, type, stock) VALUES (?, ?, ?, ?)", [item_id, item_name, item_type, item_quantity])
-        db.commit()
+        #db.commit()
         print( "This item doesn't exist!")
+      else:
+        # item exist, get item stock then increase item quantity
+        cursor = db.execute("SELECT stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
+        rows = cursor.fetchall()
+        initial_item_stock = rows[0]['stock']
+        print("initial stock: "+str(initial_item_stock))
+        new_item_stock = initial_item_stock + item_quantity
+        cursor = db.execute("UPDATE ITEM SET stock = ? WHERE name = ? AND type = ?", [new_item_stock, item_name, item_type])
+        cursor = db.execute("SELECT stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
+        rows = cursor.fetchall()
+        final_item_stock = rows[0]['stock']
+        print("final stock: "+str(final_item_stock))
+
+
+      cursor = db.execute("SELECT rowid, name, stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
+      rows = cursor.fetchall()
+      print("rowid: "+str(rows[0][0]) + " name: "+str(rows[0][1]) + " stock: "+str(rows[0][2]))
 
       # TODO: insert into increase table
-      cursor = db.execute("SELECT rowid FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
-      rows = cursor.fetchall()
-      print("item has existed ")
-      print("rowid: "+str(rows[0][0]))
 
-
-      # increase item
       
     return "ok" 
   else:
