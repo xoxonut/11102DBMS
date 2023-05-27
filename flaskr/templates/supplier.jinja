@@ -1,21 +1,21 @@
 {% extends "base.jinja" %}
 {% block title %}Supplier Management{% endblock title %}
 {% block content %}
-<h1 style="margin-top: 30px;margin-left: 380px ">Supplier Management</h1>
+<h1 class="page-title">Supplier Management</h1>
 <div>
-    <a onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="nes-btn" style="margin-left: 900px;height:5px width:100px">add staff</a>
+    <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="nes-btn add-button">add data</a>
 </div>
 <div class="nes-table-responsive">
-    <table  class="nes-table is-bordered" style="margin-left: 60px" >
+    <table  class="table-bordered">
         <thead>
             <tr>
-                <th style="width: 125px;text-align: center;height=50px">ID</th>
-                <th style="width: 125px;text-align: center;height=50px">Name</th>
-                <th style="width: 125px;text-align: center;height=50px">Email</th>
-                <th style="width: 125px;text-align: center;height=50px">Phone</th>
-                <th style="width: 150px;text-align: center;height=50px">Address</th>
-                <th style="width: 125px;text-align: center;height=50px">Modify</th>
-                <th style="width: 125px;text-align: center;height=50px">Delete</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Modify</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -71,23 +71,14 @@
     </dialog>
 </div>
 <style>
-  .input-wrapper {
-    display: table-row;
-    vertical-align: middle;
-    
-  }
-
-  .input-wrapper label,
-  .input-wrapper input {
+.input-wrapper input {
     display: table-cell;
     vertical-align: middle;
-    width: 300px
-  }
-
-  .input-wrapper label {
-    margin-right: 10px;
-    white-space: nowrap;
-  }
+    width:300px
+}
+.nnes-table is-bordered{
+    width: 900px;
+}
 </style>
 <script>
     function showDialog(title,id, name, email,phone,address,path,readonly = false) {

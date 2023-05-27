@@ -1,25 +1,25 @@
 {% extends "base.jinja" %}
 {% block title %}Staff Management{% endblock title %}
 {% block content %}
-<h1 style="margin-top: 30px;margin-left: 380px ">Staff Management</h1>
+<h1 class="page-title">Staff Management</h1>
 <div>
-    <a onclick="showDialog('Add staff data' , '', '', '' , '/add')" class="nes-btn" style="margin-left: 900px;height:5px width:100px">add staff</a>
+    <a onclick="showDialog('Add staff data' , '', '', '' , '/add')" class="nes-btn add-button">add data</a>
 </div>
-<p id="failTest"></p>
+
 <div class="nes-table-responsive">
-    <table class="nes-table is-bordered"  style="margin-left: 175px">
+    <table class="table-bordered" style="margin-left: 80px">
         <thead>
             <tr>
-                <th style="width: 125px;text-align: center;">ID</th>
-                <th style="width: 125px;text-align: center;">Name</th>
-                <th style="width: 125px;text-align: center;">Manager ID</th>
-                <th style="width: 125px;text-align: center;">Modify</th>
-                <th style="width: 125px;text-align: center;">Delete</th>
+                <th class="table-header">ID</th>
+                <th class="table-header">Name</th>
+                <th class="table-header">Manager ID</th>
+                <th class="table-header">Modify</th>
+                <th class="table-header">Delete</th>
             </tr>
         </thead>
         <tbody>
             {% for s in staffs %}
-            <tr style="text-align: center;">
+            <tr class="table-header">
                 <td>{{ s.id }}</td>
                 <td>{{ s.name }}</td>
                 <td>{{ s.mId }}</td>
@@ -59,23 +59,6 @@
     </dialog>
 </div>
 
-<style>
-  .input-wrapper {
-    display: table-row;
-    vertical-align: middle;
-  }
-
-  .input-wrapper label,
-  .input-wrapper input {
-    display: table-cell;
-    vertical-align: middle;
-  }
-
-  .input-wrapper label {
-    margin-right: 10px;
-    white-space: nowrap;
-  }
-</style>
 
 <script>
     function showDialog(title,id, name, mid , path , readonly = false) {
