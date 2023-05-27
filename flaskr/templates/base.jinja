@@ -1,18 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../static/styles.css" />
-    <title>{% block title %}{% endblock  title%}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>{% block title %}{% endblock title%}</title>
 </head>
+
 <body style="display: flex;">
-<div style="display: flex; flex-direction: column;">
-    <a href="/myErp/staff" class="nes-btn" style="margin: 10px;">staff</a>
-    <a href="/myErp/supplier" class="nes-btn" style="margin: 10px;">supplier</a>
-    <a href="/myErp/member" class="nes-btn" style="margin: 10px;">member</a>
-    <a href="/myErp/item" class="nes-btn" style="margin: 10px;">item</a>
-    <a href="/myErp/purchase_order" class="nes-btn" style="margin: 10px;">purchase_order</a>
-    <a href="/myErp/sale_order" class="nes-btn" style="margin: 10px;">sale_order</a>
-</div>
-<div>{% block content %}{% endblock content %}</div>
+    <div>
+        <div class=" sidebar nes-container is-centered" style="height: auto; ">
+            <ul class="nes-list" style="padding:0%">
+                <li>
+                    <a href="/myErp/staff" style="margin: 10px;">staff</a>
+                </li>
+                <li>
+                    <a href="/myErp/supplier" style="margin: 10px;">supplier</a>
+                </li>
+                <li>
+                    <a href="/myErp/member" style="margin: 10px;">member</a>
+                </li>
+                <li>
+                    <a href="/myErp/item" style="margin: 10px;">item</a>
+                </li>
+                <li>
+                    <a href="/myErp/purchase_order" style="margin: 10px;">purchase_order</a>
+                </li>
+                <li>
+                    <a href="/myErp/sale_order" style="margin: 10px;">sale_order</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>{% block content %}{% endblock content %}</div>
 </body>
+<style>
+    .sidebar {
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+</style>
+
+</html>
