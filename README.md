@@ -97,6 +97,26 @@
         - supplier_id : int
         - staff_id : int
         - items : list[item]
+```
+{
+    "supplier_id": 1,
+    "staff_id": 2,
+    "item_list": [
+        {
+            "name": "iphone 14",
+            "type": "mobile phone",
+            "quantity": 3,
+            "unit_cost": 50
+        },
+        {            
+            "name": "Mac",
+            "type": "test",
+            "quantity": 10,
+            "unit_cost": 1000
+        }
+    ]
+}
+```
 
 - R
     - response
