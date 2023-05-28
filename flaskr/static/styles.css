@@ -57,6 +57,10 @@
     margin-top: 30px;
     margin-left: 380px;
   }
-
+ .with-border {
+    border-bottom: 0;
+    border-right: 0;
+    border: 5px solid #006bb3;
+}
 
 
