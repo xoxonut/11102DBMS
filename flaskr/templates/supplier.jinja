@@ -64,7 +64,7 @@
 
             <span id="dialog-path" hidden></span>
             <menu class="dialog-menu">
-                <button class="nes-btn" onclick="closeDialog(false)">Cancel</button>
+                <button class="nes-btn " onclick="closeDialog(false)">Cancel</button>
                 <button class="nes-btn is-primary" onclick="closeDialog(true)">Confirm</button>
             </menu>
         </form>
@@ -76,9 +76,7 @@
     vertical-align: middle;
     width:300px
 }
-.nnes-table is-bordered{
-    width: 900px;
-}
+
 </style>
 <script>
     function showDialog(title,id, name, email,phone,address,path,readonly = false) {
