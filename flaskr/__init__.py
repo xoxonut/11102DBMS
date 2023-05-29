@@ -50,7 +50,7 @@ def create_app(test_config=None):
         return '123'
     @app.route('/myErp/sale_order')
     def sale_order():
-        return '123'
+        return redirect(url_for('sale_order'))
     @app.route('/add',methods=['GET','POST'])
     def add():
         if request.method=='POST':
