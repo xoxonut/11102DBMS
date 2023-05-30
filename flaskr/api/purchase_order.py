@@ -108,3 +108,42 @@ def create_purchase_order():
     return jsonify({"message": "Create purchase order success!"})
   else:
     return jsonify({"message": "Content-Type not supported!"})
+
+@bp.route('/', methods = ['DELETE'])
+def delete_purchase_order():
+  content_type = request.headers.get('Content-Type')
+  if (content_type == 'application/json'):
+    p_order_id = request.json.get('p_order_id')
+    # check purchase order exist
+    db = get_db()
+    cursor = db.execute("SELECT COUNT(*) AS result FROM PURCHASE_ORDER WHERE rowid=?", [p_order_id])
+    rows = cursor.fetchall()
+    if (rows[0]['result'] != 1):
+      return {"message": "This purchase order doesn't exist!"}
+
+    # get all related item_id and quantity from increase table
+    cursor = db.execute("SELECT item_id, item_quantity FROM INCREASE WHERE p_order_id=?", [p_order_id])
+    rows = cursor.fetchall()
+    for row in rows:
+      item_id = row[0]
+      item_quantity = row[1]
+      print("id: "+str(row[0])+" quantity "+str(row[1]))
+      # decrease stock of item
+      cursor = db.execute("SELECT stock FROM ITEM WHERE rowid=?", [item_id])
+      results = cursor.fetchall()
+      initial_item_stock = results[0]['stock']
+      print("initial stock: "+str(initial_item_stock))
+      new_item_stock = initial_item_stock - item_quantity
+      print("new stock: "+str(new_item_stock))
+      cursor = db.execute("UPDATE ITEM SET stock = ? WHERE rowid=?", [new_item_stock, item_id])
+
+    # TODO: delete increase table
+    # cursor = db.execute("DELETE FROM INCREASE WHERE p_order_id=?", [p_order_id])
+
+    # TODO: delete purchase order
+
+    # db.commit()
+
+  else:
+    return jsonify({"message": "Content-type not supported!"})
+  return "ok"
