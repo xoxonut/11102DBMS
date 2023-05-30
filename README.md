@@ -147,7 +147,17 @@
 ```
 - D
     - request
-        - p_order_id : str
+        - p_order_id : int
+ ```
+ {
+    "p_order_id": 1
+}
+```
+-Read purchase order item detail
+    -request
+        - p_order_id : int
+    -response
+        - itemdetail list
 
 ## sales order
 - C
