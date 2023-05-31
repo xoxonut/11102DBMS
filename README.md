@@ -92,12 +92,12 @@
 
 ## purchase order
 
-- C
-    - request
+### C
+   - request
         - supplier_id : int
         - staff_id : int
         - items : list[item]
-```
+```json
 {
     "supplier_id": 1,
     "staff_id": 2,
@@ -117,11 +117,17 @@
     ]
 }
 ```
-
-- R
-    - response
+  - response
+```json
+{
+    "message": "Create purchase order success!"
+}
+```
+    
+ ### R
+   - response
         - orders : json list[purchase order]
- ```
+ ```json
  {
     "p_order_list": [
         {
@@ -145,19 +151,50 @@
        ]
     }
 ```
-- D
-    - request
+### D
+   - request
         - p_order_id : int
- ```
+ ```json
  {
     "p_order_id": 1
 }
 ```
-- Read purchase order item detail
-    - request
+   - response
+```json
+{
+    "message": "Delete purchase order success!"
+}
+```
+### Read purchase order item detail
+   - request
         - p_order_id : int
-    - response
-        - itemdetail list
+```json
+{
+    "p_order_id": 55583
+}
+```
+
+   - response
+        - item_detail list
+      
+```json
+{
+    "item_list": [
+        {
+            "item_name": "iphone 14",
+            "item_quantity": 3,
+            "item_type": "mobile phone",
+            "unit_cost": 50
+        },
+        {
+            "item_name": "Mac",
+            "item_quantity": 10,
+            "item_type": "test",
+            "unit_cost": 1000
+        }
+    ]
+}
+```
 
 ## sales order
 - C
