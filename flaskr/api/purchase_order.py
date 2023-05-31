@@ -127,23 +127,22 @@ def delete_purchase_order():
     for row in rows:
       item_id = row[0]
       item_quantity = row[1]
-      print("id: "+str(row[0])+" quantity "+str(row[1]))
       # decrease stock of item
       cursor = db.execute("SELECT stock FROM ITEM WHERE rowid=?", [item_id])
       results = cursor.fetchall()
       initial_item_stock = results[0]['stock']
-      print("initial stock: "+str(initial_item_stock))
       new_item_stock = initial_item_stock - item_quantity
-      print("new stock: "+str(new_item_stock))
       cursor = db.execute("UPDATE ITEM SET stock = ? WHERE rowid=?", [new_item_stock, item_id])
 
-    # TODO: delete increase table
-    # cursor = db.execute("DELETE FROM INCREASE WHERE p_order_id=?", [p_order_id])
+    # delete increase table
+    cursor = db.execute("DELETE FROM INCREASE WHERE p_order_id=?", [p_order_id])
 
-    # TODO: delete purchase order
+    # delete purchase order
+    cursor = db.execute("DELETE FROM PURCHASE_ORDER WHERE rowid=?", [p_order_id])
 
-    # db.commit()
+    db.commit()
+    return jsonify({"message": "Delete purchase order success!"})
 
   else:
     return jsonify({"message": "Content-type not supported!"})
-  return "ok"
+  
