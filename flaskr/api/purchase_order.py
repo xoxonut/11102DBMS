@@ -89,7 +89,6 @@ def create_purchase_order():
         final_item_stock = rows[0]['stock']
         print("final stock: "+str(final_item_stock))
 
-
       cursor = db.execute("SELECT rowid FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
       rows = cursor.fetchall()
       item_id = rows[0][0]
@@ -102,8 +101,8 @@ def create_purchase_order():
       print("create increase record")
       print("item_id: "+str(rows[0][0])+" p_order_id: "+str(rows[0][1])+" unit cost: "+str(rows[0][2])+" item quantity: "+str(rows[0][3]))
 
-      db.commit()
-
+    db.commit()
+    db.close()
       
     return jsonify({"message": "Create purchase order success!"})
   else:
@@ -114,7 +113,7 @@ def delete_purchase_order():
   content_type = request.headers.get('Content-Type')
   if (content_type == 'application/json'):
     p_order_id = request.json.get('p_order_id')
-    # check purchase order exist
+    # check if purchase order exist
     db = get_db()
     cursor = db.execute("SELECT COUNT(*) AS result FROM PURCHASE_ORDER WHERE rowid=?", [p_order_id])
     rows = cursor.fetchall()
@@ -141,8 +140,49 @@ def delete_purchase_order():
     cursor = db.execute("DELETE FROM PURCHASE_ORDER WHERE rowid=?", [p_order_id])
 
     db.commit()
+    db.close()
     return jsonify({"message": "Delete purchase order success!"})
 
   else:
     return jsonify({"message": "Content-type not supported!"})
+
+@bp.route('/detail', methods = ['GET'])
+def read_purchase_order_detail():
+  content_type = request.headers.get('Content-Type')
+  if (content_type == 'application/json'):
+    p_order_id = request.json.get('p_order_id')
+    # check if purchase order exist
+    db = get_db()
+    cursor = db.execute("SELECT COUNT(*) AS result FROM PURCHASE_ORDER WHERE rowid=?", [p_order_id])
+    rows = cursor.fetchall()
+    if (rows[0]['result'] != 1):
+      return {"message": "This purchase order doesn't exist!"}
+    
+    # query from Increase JOIN Item
+    cursor = db.execute("""
+        SELECT ICE.unit_cost, ICE.item_quantity, IT.name, IT.type 
+        FROM INCREASE ICE, ITEM IT
+        WHERE ICE.item_id = IT.rowid AND ICE.p_order_id = ?""", [p_order_id])
+    rows = cursor.fetchall()
+
+    item_list = []
+    for row in rows:
+      unit_cost = row['unit_cost']
+      item_quantity = row['item_quantity']
+      item_name = row['name']
+      item_type = row['type']
+      print("name: "+item_name+" type: "+item_type+" quantity: "+str(item_quantity)+" unit_cost: "+str(unit_cost))
+      item = {
+        "item_name": item_name,
+        "item_type": item_type,
+        "item_quantity": item_quantity,
+        "unit_cost": unit_cost
+      }
+      item_list.append(item)
+
+    db.close()
+
+    return jsonify({"item_list": item_list}) 
+  else:
+    return jsonify({"message": "Content-Type not supported!"})
   
