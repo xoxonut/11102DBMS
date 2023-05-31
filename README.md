@@ -153,10 +153,10 @@
     "p_order_id": 1
 }
 ```
--Read purchase order item detail
-    -request
+- Read purchase order item detail
+    - request
         - p_order_id : int
-    -response
+    - response
         - itemdetail list
 
 ## sales order
