@@ -3,7 +3,7 @@ from flaskr.db import get_db
 import datetime
 import random
 
-bp = Blueprint("supplier", __name__, url_prefix="/myErp/supplier")
+bp = Blueprint("supplier", __name__, url_prefix="/supplier")
 
 
 @bp.route("/", methods=["GET"])

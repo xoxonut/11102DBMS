@@ -1,30 +1,26 @@
 from flask import Blueprint, jsonify, request
 from flaskr.db import get_db
 
-bp = Blueprint("staff", __name__, url_prefix="/myErp/staff")
+bp = Blueprint("staff", __name__, url_prefix="/staff")
 
 
-@bp.route("/", methods=["GET"])
+@bp.route("/get_staff", methods=["GET"])
 def get_staff():
     db = get_db()
-    cursor = db.execute("SELECT * FROM staff")
+    cursor = db.execute("SELECT * FROM STAFF")
     staff_members = cursor.fetchall()
-    db.close()
 
     staff_list = []
     for staff_member in staff_members:
-        staff_dict = {
-            "staff_id": staff_member["staff_id"],
-            "manager_id": staff_member["manager_id"],
-            "name": staff_member["name"],
-            "entry_date": staff_member["entry_date"],
-        }
-        staff_list.append(staff_dict)
+        manager_id, name, entry_date = staff_member
+        staff_list.append([manager_id, name, entry_date])
 
-    return jsonify({"staff_members": staff_list})
+    db.close()
+
+    return jsonify(staff_list)
 
 
-@bp.route("/", methods=["POST"])
+@bp.route("/create_staff", methods=["POST"])
 def create_staff():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -51,41 +47,18 @@ def create_staff():
         return jsonify({"message": "Content-Type not supported!"})
 
 
-@bp.route("/<int:staff_id>", methods=["GET"])
-def get_staff_member(staff_id):
-    db = get_db()
-    cursor = db.execute("SELECT * FROM staff WHERE staff_id = ?", (staff_id,))
-    staff_member = cursor.fetchone()
-    db.close()
-
-    if staff_member is None:
-        return jsonify({"message": "Staff member not found!"}), 404
-
-    staff_dict = {
-        "staff_id": staff_member["staff_id"],
-        "manager_id": staff_member["manager_id"],
-        "name": staff_member["name"],
-        "entry_date": staff_member["entry_date"],
-    }
-
-    return jsonify(staff_dict)
-
-
-@bp.route("/<int:staff_id>", methods=["PUT"])
-def update_staff_member(staff_id):
+@bp.route("/update_staff_member", methods=["PUT"])
+def update_staff_member():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
-        staff_data = request.json
+        staff_id = request.json.get("staff_id")
+        name = request.json.get("name")
+        manager_id = request.json.get("manager_id")
 
         db = get_db()
-        cursor = db.execute(
-            "UPDATE staff SET manager_id = ?, name = ?, entry_date = ? WHERE staff_id = ?",
-            (
-                staff_data.get("manager_id"),
-                staff_data.get("name"),
-                staff_data.get("entry_date"),
-                staff_id,
-            ),
+        db.execute(
+            "UPDATE STAFF SET manager_id = ?, name = ? WHERE rowid = ?",
+            [manager_id, name, staff_id],
         )
         db.commit()
         db.close()
@@ -96,10 +69,14 @@ def update_staff_member(staff_id):
         return jsonify({"message": "Content-Type not supported!"})
 
 
-@bp.route("/<int:staff_id>", methods=["DELETE"])
-def delete_staff_member(staff_id):
+@bp.route("/delete_staff_member", methods=["DELETE"])
+def delete_staff_member():
+    staff_id = request.json.get("staff_id")
     db = get_db()
-    cursor = db.execute("DELETE FROM staff WHERE staff_id = ?", (staff_id,))
+    db.execute(
+        "DELETE FROM staff WHERE rowid = ?",
+        [staff_id],
+    )
     db.commit()
     db.close()
 

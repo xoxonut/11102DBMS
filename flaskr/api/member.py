@@ -5,7 +5,7 @@ from random import randint
 bp = Blueprint("member", __name__, url_prefix="/member")
 
 
-@bp.route("/", methods=["GET"])
+@bp.route("/get_members", methods=["GET"])
 def get_members():
     db = get_db()
     cursor = db.execute("SELECT * FROM member")
@@ -26,7 +26,7 @@ def get_members():
     return jsonify({"members": member_list})
 
 
-@bp.route("/", methods=["POST"])
+@bp.route("/create_member", methods=["POST"])
 def create_member():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -54,7 +54,7 @@ def create_member():
         return jsonify({"message": "Content-Type not supported!"})
 
 
-@bp.route("/<int:member_id>", methods=["GET"])
+@bp.route("/get_member", methods=["GET"])
 def get_member(member_id):
     db = get_db()
     cursor = db.execute("SELECT * FROM member WHERE member_id = ?", (member_id,))
@@ -75,7 +75,7 @@ def get_member(member_id):
     return jsonify(member_dict)
 
 
-@bp.route("/<int:member_id>", methods=["PUT"])
+@bp.route("/update_member", methods=["PUT"])
 def update_member(member_id):
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -107,7 +107,7 @@ def update_member(member_id):
         return jsonify({"message": "Content-Type not supported!"})
 
 
-@bp.route("/<int:member_id>", methods=["DELETE"])
+@bp.route("/delete_member", methods=["DELETE"])
 def delete_member(member_id):
     db = get_db()
     cursor = db.execute("DELETE FROM member WHERE member_id = ?", (member_id,))

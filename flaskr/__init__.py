@@ -41,9 +41,10 @@ def create_app(test_config=None):
     def myErp():
         return render_template("hello.jinja")
 
-    @app.route("/myErp/staff")
+    @app.route("/myErp/staff", methods=["GET"])
     def staff():
-        return redirect(url_for("staff"))
+        return "123"
+        # return redirect(url_for("staff"))
 
     @app.route("/myErp/supplier")
     def supplier():
@@ -65,8 +66,9 @@ def create_app(test_config=None):
 
     @app.route("/myErp/sale_order")
     def sale_order():
-        return redirect(url_for('sale_order'))
-    @app.route('/add',methods=['GET','POST'])
+        return redirect(url_for("sale_order"))
+
+    @app.route("/add", methods=["GET", "POST"])
     def add():
         if request.method == "POST":
             staff_id = request.form.get("id")
