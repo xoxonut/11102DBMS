@@ -7,7 +7,39 @@ bp = Blueprint('sale_order', __name__, url_prefix='/sale_order')
 
 @bp.route('/', methods=['DELETE'])
 def delete_sales_order():
-    return 'Sale Order index page'
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+      s_order_id = request.json.get('s_order_id')
+      # check order exist
+      db = get_db()
+      cursor = db.execute("SELECT COUNT(*) AS result FROM PURCHASE_ORDER WHERE rowid=?", [s_order_id])
+      rows = cursor.fetchall()
+      if (rows[0]['result'] != 1):
+        return {"message": "The sales order doesn't exist!"}
+      
+      cursor = db.execute("SELECT item_id, item_quantity FROM DECREASE WHERE s_order_id=?", [s_order_id])
+      rows = cursor.fetchall()
+      for row in rows:
+        item_id = row[0]
+        item_quantity = row[1]
+        # increase stock of item
+        cursor = db.execute("SELECT stock FROM ITEM WHERE rowid=?", [item_id])
+        results = cursor.fetchall()
+        initial_item_stock = results[0]['stock']
+        new_item_stock = initial_item_stock + item_quantity
+        cursor = db.execute("UPDATE ITEM SET stock = ? WHERE rowid=?", [new_item_stock, item_id])
+
+      # delete decrease
+      cursor = db.execute("DELETE FROM DECREASE WHERE s_order_id=?", [s_order_id])
+
+      # delete order
+      cursor = db.execute("DELETE FROM SALES_ORDER WHERE rowid=?", [s_order_id])
+
+      db.commit()
+      return jsonify({"message": "Delete sales order success!"})
+
+    else:
+      return jsonify({"message": "Content-type not supported!"})
 
 @bp.route('/', methods=['GET'])
 def read_sales_order():
