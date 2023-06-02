@@ -65,9 +65,8 @@ def create_app(test_config=None):
 
     @app.route("/myErp/sale_order")
     def sale_order():
-        return "123"
-
-    @app.route("/add", methods=["GET", "POST"])
+        return redirect(url_for('sale_order'))
+    @app.route('/add',methods=['GET','POST'])
     def add():
         if request.method == "POST":
             staff_id = request.form.get("id")
