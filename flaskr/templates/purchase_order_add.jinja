@@ -9,33 +9,36 @@
 </head>
 
 <body>
-    <button class="nes-btn is-primary" id="add-btn">Add</button>
-    <button class="nes-btn is-primary" id="send-btn">Send</button>
-    <div style="display: flex; margin:10px; flex-direction:column">
-        <label for="supplier-id">Supplier</label>
-        <input type="text" class="nes-input" id="supplier-id">
-        <label for="staff-id">Staff</label>
-        <input type="text" class="nes-input" id="staff-id">
+    <div style="margin: 10PX;">
+        <button class="nes-btn is-primary" id="add-btn">Add</button>
+        <button class="nes-btn is-primary" id="send-btn">Send</button>
+        <div style="display: flex; margin:10px; flex-direction:column">
+            <label for="supplier-id">Supplier</label>
+            <input type="text" class="nes-input" id="supplier-id">
+            <label for="staff-id">Staff</label>
+            <input type="text" class="nes-input" id="staff-id">
+        </div>
+        <div class="nes-table responsive">
+            <table class="nes-table is-bordered" id="item-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    {%for item in items%}
+                    <tr style="text-align: center;">
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="nes-table responsive">
-        <table class="nes-table is-bordered" id="item-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody id="item-list">
-                {%for item in items%}
-                <tr style="text-align: center;">
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-    </div>
+
     <dialog class="nes-dialog" id="item_add">
         <button class="nes-btn is-primary" id="reset-btn">rest</button>
         <form method="dialog">
@@ -82,10 +85,10 @@
             $("#item-list").append(item);
             reset();
         })
-        $('#item-table').on('click', '.removeRowBtn', function() {
-                // Find the closest table row and remove it
-                $(this).closest('tr').remove();
-            });
+        $('#item-table').on('click', '.removeRowBtn', function () {
+            // Find the closest table row and remove it
+            $(this).closest('tr').remove();
+        });
     });
 </script>
 

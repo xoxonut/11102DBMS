@@ -1,12 +1,13 @@
 {% extends "base.jinja" %}
 {% block title %}Supplier Management{% endblock title %}
 {% block content %}
-<h1 class="page-title">Supplier Management</h1>
-<div>
-    <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="nes-btn add-button">add data</a>
+<div class="title-btn-group">
+    <h1 class="page-title">Supplier Management</h1>
+    <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="nes-btn add-button">add
+        data</a>
 </div>
 <div class="nes-table-responsive">
-    <table  class="table-bordered">
+    <table class="table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -31,7 +32,8 @@
                     ,'{{ s.phone }}','{{ s.address }}', '/modifysupplier')"></i>
                 </td>
                 <td>
-                <i class="nes-icon close is-small" onclick="showDialog('Delete  data' , 
+                    <i class="nes-icon close is-small"
+                        onclick="showDialog('Delete  data' , 
                 '{{ s.id }}', '{{ s.name }}', '{{ s.email }}','{{ s.phone}}','{{ s.address }}', '/deletesupplier' ,true)"></i>
                 </td>
             </tr>
@@ -60,7 +62,7 @@
             <div class="input-wrapper">
                 <label for="Name_field">Address: </label>
                 <input type="text" id="dialog-address" class="nes-input" name="name">
-            </div>                                    
+            </div>
 
             <span id="dialog-path" hidden></span>
             <menu class="dialog-menu">
@@ -71,17 +73,18 @@
     </dialog>
 </div>
 <style>
-.input-wrapper input {
-    display: table-cell;
-    vertical-align: middle;
-    width:300px
-}
-.nnes-table is-bordered{
-    width: 900px;
-}
+    .input-wrapper input {
+        display: table-cell;
+        vertical-align: middle;
+        width: 300px
+    }
+
+    .nnes-table is-bordered {
+        width: 900px;
+    }
 </style>
 <script>
-    function showDialog(title,id, name, email,phone,address,path,readonly = false) {
+    function showDialog(title, id, name, email, phone, address, path, readonly = false) {
         const dialogTitle = document.getElementById('dialog-title');
         const dialog = document.getElementById('dialog-default');
         const dialogId = document.getElementById('dialog-id');
@@ -93,12 +96,12 @@
 
         dialogTitle.textContent = title;
         dialogId.value = id;
-        dialogName.value= name;
+        dialogName.value = name;
         dialogEmail.value = email;
         dialogPhone.value = phone;
-        dialogAddress.value= address;
+        dialogAddress.value = address;
 
-        if(readonly){
+        if (readonly) {
             dialogId.setAttribute("readonly", "False");
             dialogName.setAttribute("readonly", "true");
             dialogEmail.setAttribute("readonly", "true");
@@ -123,10 +126,10 @@
         const dialogPath = document.getElementById('dialog-path').textContent;
         dialog.close();
         dialog.removeAttribute('opened');
-        params = "id="+dialogId
+        params = "id=" + dialogId
 
         // Send GET request to supplier/ endpoint
-        if(send){
+        if (send) {
             /*    
             const xhr = new XMLHttpRequest();
             xhr.open('POST', dialogPath );
