@@ -1,5 +1,5 @@
 import os
-
+from flask import url_for
 from flask import Flask, render_template, redirect, request
 from flask import Flask, request, jsonify
 
@@ -53,9 +53,11 @@ def create_app(test_config=None):
     def member():
         return "123"
 
-    @app.route("/myErp/item", methods=["GET"])
+    @app.route("/myErp/item", methods=["GET", "PUT"])
     def item():
-        return jsonify(index())
+        return "123"
+        # return redirect(url_for("item"))
+        # return jsonify(read_item())
 
     @app.route("/myErp/purchase_order")
     def purchase_order():
