@@ -41,7 +41,7 @@ def create_app(test_config=None):
     def myErp():
         return render_template("hello.jinja")
 
-    @app.route("/myErp/staff", methods=["GET"])
+    @app.route("/myErp/staff")
     def staff():
         return redirect(url_for("staff"))
 

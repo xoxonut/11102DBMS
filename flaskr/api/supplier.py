@@ -1,156 +1,83 @@
 from flask import Blueprint, jsonify, request
 from flaskr.db import get_db
-import datetime
-import random
 
 bp = Blueprint("supplier", __name__, url_prefix="/supplier")
 
 
-@bp.route("/", methods=["GET"])
-def read_suppliers():
+@bp.route("/get_suppliers", methods=["GET"])
+def get_suppliers():
     db = get_db()
-    cursor = db.execute(
-        """
-        SELECT S.rowid AS supplier_id, S.staff_id, S.name AS supplier_name, S.entry_date, ST.name AS staff_name
-        FROM SUPPLIER S
-        LEFT JOIN STAFF ST ON S.staff_id = ST.rowid
-    """
-    )
-    rows = cursor.fetchall()
-
+    cursor = db.execute("SELECT * FROM SUPPLIER")
+    suppliers = cursor.fetchall()
     supplier_list = []
-    for row in rows:
-        supplier_id, staff_id, supplier_name, entry_date, staff_name = row
-        supplier = {
-            "supplier_id": supplier_id,
-            "staff_id": staff_id,
-            "supplier_name": supplier_name,
-            "entry_date": entry_date,
-            "staff_name": staff_name,
-        }
-        supplier_list.append(supplier)
+    for supplier in suppliers:
+        name, email, phone_number,address = supplier
+        supplier_list.append([ name, email, phone_number,address])
 
     db.close()
 
     return jsonify(supplier_list)
 
 
-@bp.route("/", methods=["POST"])
+@bp.route("/create_supplier", methods=["POST"])
 def create_supplier():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
-        staff_id = request.json.get("staff_id")
-        name = request.json.get("name")
-        entry_date = request.json.get("entry_date")
-
+        supplier_data = request.json
         db = get_db()
-
-        # Check if the staff exists
         cursor = db.execute(
-            "SELECT COUNT(*) AS result FROM STAFF WHERE rowid=?", [staff_id]
+            "INSERT INTO supplier (name,email, phone_number,address) VALUES (?, ?, ?, ?)",
+            (
+                supplier_data.get("name"),
+                supplier_data.get("email"),
+                supplier_data.get("phone_number"),
+                supplier_data.get("address")
+            ),
         )
-        rows = cursor.fetchall()
-        if rows[0]["result"] != 1:
-            return jsonify({"message": "This staff doesn't exist!"})
-
-        # Insert into the supplier table
-        supplier_id = random.randint(1000, 100000)
-        cursor = db.execute(
-            "INSERT INTO SUPPLIER (supplier_id, staff_id, name, entry_date) VALUES (?, ?, ?, ?)",
-            [supplier_id, staff_id, name, entry_date],
-        )
+        supplier_id = cursor.lastrowid
         db.commit()
+        db.close()
 
-        return jsonify({"message": "Supplier created successfully"})
+        return jsonify(
+            {"message": "Supplier created successfully!", "supplier_id": supplier_id}
+        )
+
     else:
         return jsonify({"message": "Content-Type not supported!"})
 
-
-@bp.route("/<int:supplier_id>", methods=["GET"])
-def get_supplier(supplier_id):
-    db = get_db()
-    cursor = db.execute(
-        """
-        SELECT S.rowid AS supplier_id, S.staff_id, S.name AS supplier_name, S.entry_date, ST.name AS staff_name
-        FROM SUPPLIER S
-        LEFT JOIN STAFF ST ON S.staff_id = ST.rowid
-        WHERE S.rowid = ?
-    """,
-        [supplier_id],
-    )
-    supplier = cursor.fetchone()
-
-    if supplier is None:
-        return jsonify({"message": "Supplier not found"})
-
-    supplier_id, staff_id, supplier_name, entry_date, staff_name = supplier
-    supplier_data = {
-        "supplier_id": supplier_id,
-        "staff_id": staff_id,
-        "supplier_name": supplier_name,
-        "entry_date": entry_date,
-        "staff_name": staff_name,
-    }
-
-    return jsonify(supplier_data)
-
-
-@bp.route("/<int:supplier_id>", methods=["PUT"])
-def update_supplier(supplier_id):
+@bp.route("/update_supplier", methods=["PUT"])
+def update_supplier():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
-        staff_id = request.json.get("staff_id")
+        supplier_id = request.json.get("supplier_id")
         name = request.json.get("name")
-        entry_date = request.json.get("entry_date")
+        email = request.json.get("email")
+        phone_number = request.json.get("phone_number")
+        address = request.json.get("address")
 
         db = get_db()
-
-        # Check if the supplier exists
-        cursor = db.execute(
-            "SELECT COUNT(*) AS result FROM SUPPLIER WHERE rowid=?", [supplier_id]
-        )
-        rows = cursor.fetchall()
-        if rows[0]["result"] != 1:
-            return jsonify({"message": "Supplier not found"})
-
-        # Check if the staff exists
-        cursor = db.execute(
-            "SELECT COUNT(*) AS result FROM STAFF WHERE rowid=?", [staff_id]
-        )
-        rows = cursor.fetchall()
-        if rows[0]["result"] != 1:
-            return jsonify({"message": "This staff doesn't exist!"})
-
-        # Update the supplier
         db.execute(
-            "UPDATE SUPPLIER SET staff_id = ?, name = ?, entry_date = ? WHERE rowid = ?",
-            [staff_id, name, entry_date, supplier_id],
+            "UPDATE SUPPLIER SET name= ?,email = ?,phone_number = ?,address = ? WHERE rowid = ?",
+            [ name,email,phone_number,address, supplier_id],
         )
         db.commit()
+        db.close()
 
-        return jsonify({"message": "Supplier updated successfully"})
+        return jsonify({"message": "Staff member updated successfully!"})
+
     else:
         return jsonify({"message": "Content-Type not supported!"})
-
-
-@bp.route("/<int:supplier_id>", methods=["DELETE"])
-def delete_supplier(supplier_id):
-    content_type = request.headers.get("Content-Type")
-    if content_type == "application/json":
-        db = get_db()
-
-        # Check if the supplier exists
-        cursor = db.execute(
-            "SELECT COUNT(*) AS result FROM SUPPLIER WHERE rowid=?", [supplier_id]
-        )
-        rows = cursor.fetchall()
-        if rows[0]["result"] != 1:
-            return jsonify({"message": "Supplier not found"})
-
-        # Delete the supplier
-        db.execute("DELETE FROM SUPPLIER WHERE rowid=?", [supplier_id])
-        db.commit()
-
-        return jsonify({"message": "Supplier deleted successfully"})
-    else:
-        return jsonify({"message": "Content-Type not supported!"})
+    
+@bp.route("/delete_supplier", methods=["DELETE"])
+def delete_supplier():
+     supplier_id = request.json.get("supplier_id")
+     db = get_db()
+     cursor = db.execute("SELECT COUNT(*) AS result FROM STAFF WHERE rowid=?", [supplier_id])
+     rows = cursor.fetchall()
+     if (rows[0]['result'] != 1):
+      return {"message": "This supplier doesn't exist!"}
+     db = get_db()
+     db.execute("DELETE FROM SUPPLIER WHERE rowid=?", [supplier_id])
+     db.commit()
+     db.close()
+     return jsonify({"message": "Supplier deleted successfully"})

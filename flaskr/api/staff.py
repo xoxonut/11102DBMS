@@ -73,6 +73,12 @@ def update_staff_member():
 def delete_staff_member():
     staff_id = request.json.get("staff_id")
     db = get_db()
+    cursor = db.execute("SELECT COUNT(*) AS result FROM STAFF WHERE rowid=?", [staff_id])
+    rows = cursor.fetchall()
+    if (rows[0]['result'] != 1):
+      return {"message": "This staff doesn't exist!"}
+    
+    db = get_db()
     db.execute(
         "DELETE FROM staff WHERE rowid = ?",
         [staff_id],

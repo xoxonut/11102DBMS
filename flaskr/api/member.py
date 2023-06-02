@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request, render_template
 from flaskr.db import get_db
-from random import randint
 
 bp = Blueprint("member", __name__, url_prefix="/member")
 
@@ -51,9 +50,9 @@ def update_member():
     if content_type == "application/json":
         member_id = request.json.get("member_id")
         name = request.json.get("name")
-        address = request.json.get("address")
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
+        address = request.json.get("address")
         db = get_db()
         cursor = db.execute("SELECT * FROM member WHERE rowid = ?", [member_id])
         member = cursor.fetchone()
@@ -83,6 +82,11 @@ def update_member():
 @bp.route("/delete_member", methods=["DELETE"])
 def delete_member():
     member_id = request.json.get("member_id")
+    db = get_db()
+    cursor = db.execute("SELECT COUNT(*) AS result FROM MEMBER WHERE rowid=?", [member_id])
+    rows = cursor.fetchall()
+    if (rows[0]['result'] != 1):
+      return {"message": "This member doesn't exist!"}
     db = get_db()
     cursor = db.execute("DELETE FROM member WHERE rowid = ?", [member_id],)
     db.commit()
