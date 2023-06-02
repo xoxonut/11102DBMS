@@ -43,8 +43,7 @@ def create_app(test_config=None):
 
     @app.route("/myErp/staff", methods=["GET"])
     def staff():
-        return "123"
-        # return redirect(url_for("staff"))
+        return redirect(url_for("staff"))
 
     @app.route("/myErp/supplier")
     def supplier():

@@ -10,21 +10,13 @@ def get_members():
     db = get_db()
     cursor = db.execute("SELECT * FROM member")
     members = cursor.fetchall()
-    db.close()
-
+    
     member_list = []
     for member in members:
-        member_dict = {
-            "member_id": member["member_id"],
-            "name": member["name"],
-            "address": member["address"],
-            "email": member["email"],
-            "phone_number": member["phone_number"],
-        }
-        member_list.append(member_dict)
-
-    return jsonify({"members": member_list})
-
+        name,email,phone_number,address = member
+        member_list.append([ name,email,phone_number,address])
+    db.close()
+    return jsonify(member_list)
 
 @bp.route("/create_member", methods=["POST"])
 def create_member():
@@ -53,50 +45,31 @@ def create_member():
     else:
         return jsonify({"message": "Content-Type not supported!"})
 
-
-@bp.route("/get_member", methods=["GET"])
-def get_member(member_id):
-    db = get_db()
-    cursor = db.execute("SELECT * FROM member WHERE member_id = ?", (member_id,))
-    member = cursor.fetchone()
-    db.close()
-
-    if member is None:
-        return jsonify({"message": "Member not found!"}), 404
-
-    member_dict = {
-        "member_id": member["member_id"],
-        "name": member["name"],
-        "address": member["address"],
-        "email": member["email"],
-        "phone_number": member["phone_number"],
-    }
-
-    return jsonify(member_dict)
-
-
 @bp.route("/update_member", methods=["PUT"])
-def update_member(member_id):
+def update_member():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
-        member_data = request.json
-
+        member_id = request.json.get("member_id")
+        name = request.json.get("name")
+        address = request.json.get("address")
+        email = request.json.get("email")
+        phone_number = request.json.get("phone_number")
         db = get_db()
-        cursor = db.execute("SELECT * FROM member WHERE member_id = ?", (member_id,))
+        cursor = db.execute("SELECT * FROM member WHERE rowid = ?", [member_id])
         member = cursor.fetchone()
 
         if member is None:
             return jsonify({"message": "Member not found!"}), 404
 
-        cursor = db.execute(
-            "UPDATE member SET name = ?, address = ?, email = ?, phone_number = ? WHERE member_id = ?",
-            (
-                member_data.get("name"),
-                member_data.get("address"),
-                member_data.get("email"),
-                member_data.get("phone_number"),
-                member_id,
-            ),
+        db.execute(
+            "UPDATE MEMBER SET name = ?, address = ?, email = ?, phone_number = ? WHERE rowid = ?",
+            [
+                name,
+                address,
+                email,
+                phone_number,
+                member_id
+            ],
         )
         db.commit()
         db.close()
@@ -108,9 +81,10 @@ def update_member(member_id):
 
 
 @bp.route("/delete_member", methods=["DELETE"])
-def delete_member(member_id):
+def delete_member():
+    member_id = request.json.get("member_id")
     db = get_db()
-    cursor = db.execute("DELETE FROM member WHERE member_id = ?", (member_id,))
+    cursor = db.execute("DELETE FROM member WHERE rowid = ?", [member_id],)
     db.commit()
     db.close()
 
