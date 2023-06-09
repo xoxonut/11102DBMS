@@ -70,25 +70,92 @@
         - id : int
 
 ## member
-- C
-    - request
+### C
+   - request
         - name : str
         - address : str
         - email : str
         - address : str
-- R
-    - response
+```json
+{
+    "name": "Test",
+    "email": "test@test.com",
+    "phone_number": "1234567890",
+    "address": "Taipei"
+
+}
+```
+- response
+```json
+{
+    "member_id": 4,
+    "message": "Member created successfully!"
+}
+```
+### R
+   - response
         - members : list[member]
-- U
-    - request
+```json
+{
+    "member_list": [
+        {
+            "address": "nccu",
+            "email": "tom@gmail.com",
+            "name": "Tom",
+            "phone_number": "1122334455"
+        },
+        {
+            "address": "singapore",
+            "email": "emma@gmail.com",
+            "name": "Emma",
+            "phone_number": "6677889900"
+        },
+        {
+            "address": "thailand",
+            "email": "jack@gmail.com",
+            "name": "Jack",
+            "phone_number": "5544332211"
+        }
+    ]
+}
+```
+### U
+   - request
         - member_id : int
         - name : str
         - address : str
         - email : str
         - address : str
-- D
-    - request
+```json
+{
+    "member_id": 4,
+    "name": "newTest",
+    "email": "test@test.com.tw",
+    "phone_number": "1234567899",
+    "address": "NewTaipei"
+
+}
+```
+ - response
+```json
+{
+    "message": "Member updated successfully!"
+}
+```
+### D
+   - request
         - member_id : int
+```json
+{
+    "member_id":4
+}
+```
+ - response
+```json
+{
+    "message": "Member deleted successfully!"
+}
+```
 
 ## purchase order
 
