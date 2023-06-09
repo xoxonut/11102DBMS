@@ -4,7 +4,7 @@ from flaskr.db import get_db
 bp = Blueprint("item", __name__, url_prefix="/item")
 
 
-@bp.route("/read_item", methods=["GET"])
+@bp.route("/", methods=["GET"])
 def read_item():
     db = get_db()
 
@@ -21,7 +21,7 @@ def read_item():
     return jsonify(item_list)
 
 
-@bp.route("/update_item", methods=["PUT"])
+@bp.route("/", methods=["PUT"])
 def update_item():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -33,7 +33,7 @@ def update_item():
 
         db = get_db()
         db.execute(
-            "UPDATE ITEM SET unit_price = ? WHERE rowid = ?", [unit_price, item_id]
+          "UPDATE ITEM SET unit_price = ? WHERE rowid = ?", [unit_price, item_id]
         )
         db.commit()
 
