@@ -1,21 +1,23 @@
 import os
-
-from flask import Flask,render_template,redirect,request
+from flask import url_for
+from flask import Flask, render_template, redirect, request
+from flask import Flask, request, jsonify
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        SECRET_KEY="dev",
+        DATABASE=os.path.join(app.instance_path, "flaskr.sqlite"),
     )
     # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    # try:
+    #     os.makedirs(app.instance_path)
+    # except OSError:
+    #     pass
     from . import db
+
     db.init_app(app)
     staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
     members =[{'id':'1','name':'Frank','email':'frank@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'},
@@ -25,93 +27,60 @@ def create_app(test_config=None):
     porder = [{'id':1,'supplier_id':1,'staff_id':1},
             {'id':2,'supplier_id':2,'staff_id':2}]
     # a simple page that says hello
-    @app.route('/')
-    def index():    
-        return redirect('/myErp')
-    @app.route('/login',methods=['GET','POST'])
-    def login():    
-        if request.method=='POST':
-            staff_id=request.form.get('staff_id')
-            password=request.form.get('password')
+    @app.route("/")
+    def index():
+        return redirect("/myErp")
+
+    @app.route("/login", methods=["GET", "POST"])
+    def login():
+        if request.method == "POST":
+            staff_id = request.form.get("staff_id")
+            password = request.form.get("password")
             return redirect("/myErp")
         return render_template("login.jinja")
-    
-    
-    @app.route('/myErp')
+
+    @app.route("/myErp")
     def myErp():
-        return render_template('hello.jinja')
-    
-    
-    @app.route('/myErp/staff')
+        return render_template("hello.jinja")
+
+    @app.route("/myErp/staff")
     def staff():
-        return render_template('staff.jinja',staffs=staffs)
-    
-    
-    @app.route('/myErp/supplier')
+        return redirect(url_for("staff"))
+
+    @app.route("/myErp/supplier")
     def supplier():
-        return '123'
-    
-    
-    @app.route('/myErp/member')
+        return redirect(url_for("supplier"))
+
+    @app.route("/myErp/member")
     def member():
-        return render_template('member.jinja',members=members)
-    
-    
-    @app.route('/myErp/item')
+        return redirect(url_for("member"))
+
+    @app.route("/myErp/item", methods=["GET", "PUT"])
     def item():
-        return render_template('item.jinja',items=items)
-    
-    
-    @app.route('/myErp/purchase_order')
+        return "123"
+        # return redirect(url_for("item"))
+        # return jsonify(read_item())
+
+    @app.route("/myErp/purchase_order")
     def purchase_order():
-        return render_template('purchase_order.jinja',orders=porder)
-    
-    @app.route('/myErp/purchase_order/<pid>')
-    def purchase_order_detail(pid):
-        pid=int(pid)
-        return render_template('purchase_order_detail.jinja',items=[items[pid-1]])
-    
-    @app.route('/myErp/purchase_order/add')
-    def purchase_order_add():
-        return render_template('purchase_order_add.jinja')
-    
-    
-    
-    
-    @app.route('/myErp/sale_order')
+        return redirect("/myErp")
+
+    @app.route("/myErp/sale_order")
     def sale_order():
-        return render_template('sale_order.jinja',orders=porder)
-    @app.route('/myErp/sale_order/<pid>')
-    def sale_order_detail(pid):
-        pid=int(pid)
-        return render_template('sale_order_detail.jinja',items=[items[pid-1]])
-    @app.route('/myErp/sale_order/add')
-    def sale_order_add():
-        return render_template('sale_order_add.jinja')
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    @app.route('/add',methods=['GET','POST'])
+        return redirect(url_for("sale_order"))
+
+    @app.route("/add", methods=["GET", "POST"])
     def add():
-        if request.method=='POST':
-            staff_id=request.form.get('id')
-            name=request.form.get('name')
-            managerId=request.form.get('mId')
-            staffs.append({'id': staff_id, 'name': name, 'mId': managerId})
-            return redirect("/myErp/staff")  
-        return render_template('add.jinja')
-    
-    from .api import (staff, supplier, member, item,purchase_order, sale_order)
+        if request.method == "POST":
+            staff_id = request.form.get("id")
+            name = request.form.get("name")
+            managerId = request.form.get("mId")
+            staffs.append({"id": staff_id, "name": name, "mId": managerId})
+            return redirect("/myErp/staff")
+        return render_template("add.jinja")
+
+    from .api import staff, supplier, member, item, purchase_order, sale_order
+
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
     app.register_blueprint(member.bp)
