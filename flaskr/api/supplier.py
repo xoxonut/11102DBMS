@@ -4,7 +4,7 @@ from flaskr.db import get_db
 bp = Blueprint("supplier", __name__, url_prefix="/supplier")
 
 
-@bp.route("/get_suppliers", methods=["GET"])
+@bp.route("/", methods=["GET"])
 def get_suppliers():
     db = get_db()
     cursor = db.execute("SELECT * FROM SUPPLIER")
@@ -12,14 +12,20 @@ def get_suppliers():
     supplier_list = []
     for supplier in suppliers:
         name, email, phone_number,address = supplier
-        supplier_list.append([ name, email, phone_number,address])
+        one_supplier = {
+            "name": name,
+            "email": email,
+            "phone_number":phone_number,
+            "address": address
+        }
+        supplier_list.append(one_supplier)
 
     db.close()
 
-    return jsonify(supplier_list)
+    return jsonify({"supplier_list": supplier_list})
 
 
-@bp.route("/create_supplier", methods=["POST"])
+@bp.route("/", methods=["POST"])
 def create_supplier():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -45,7 +51,7 @@ def create_supplier():
     else:
         return jsonify({"message": "Content-Type not supported!"})
 
-@bp.route("/update_supplier", methods=["PUT"])
+@bp.route("/", methods=["PUT"])
 def update_supplier():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -68,11 +74,11 @@ def update_supplier():
     else:
         return jsonify({"message": "Content-Type not supported!"})
     
-@bp.route("/delete_supplier", methods=["DELETE"])
+@bp.route("/", methods=["DELETE"])
 def delete_supplier():
      supplier_id = request.json.get("supplier_id")
      db = get_db()
-     cursor = db.execute("SELECT COUNT(*) AS result FROM STAFF WHERE rowid=?", [supplier_id])
+     cursor = db.execute("SELECT COUNT(*) AS result FROM SUPPLIER WHERE rowid=?", [supplier_id])
      rows = cursor.fetchall()
      if (rows[0]['result'] != 1):
       return {"message": "This supplier doesn't exist!"}
