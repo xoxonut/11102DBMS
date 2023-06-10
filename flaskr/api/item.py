@@ -14,11 +14,17 @@ def read_item():
     item_list = []
     for row in rows:
         name, type, stock, unit_price = row
-        item_list.append([name, type, stock, unit_price])
+        item = {
+            "name": name,
+            "type": type,
+            "stock": stock,
+            "unit_price": unit_price
+        }
+        item_list.append(item)
 
     db.close()
 
-    return jsonify(item_list)
+    return jsonify({"item_list": item_list})
 
 
 @bp.route("/", methods=["PUT"])
