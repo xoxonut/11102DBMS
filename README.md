@@ -28,24 +28,82 @@
 
 ## staff
 
-- C 
-    - request 
+### C 
+   - request 
         - name : str
         - manager_id : int
+```json
+{
+    "manager_id": 2,
+    "name": "Test"
 
-- R 
-    - respond
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member created successfully!",
+    "staff_id": 4
+}
+```
+### R 
+   - respond
         - staffs : list[staff]
-- U 
-    - request
+```json
+{
+    "staff_list": [
+        {
+            "entry_date": "2023-05-20",
+            "manager_id": 2,
+            "name": "John"
+        },
+        {
+            "entry_date": "2023-05-21",
+            "manager_id": 1,
+            "name": "Michael"
+        },
+        {
+            "entry_date": "2023-05-21",
+            "manager_id": 1,
+            "name": "Steve"
+        }
+    ]
+}
+```
+### U 
+   - request
         - id : int
         - name : str
         - manager_id : int
+```json
+{
+    "manager_id": 1,
+    "staff_id": 4,
+    "name": "NewTest"
 
-- D 
-    - request
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member updated successfully!"
+}
+```
+### D 
+   - request
         - id : int
+```json
+{
+    "staff_id": 4
 
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member deleted successfully!"
+}
+```
 
 ## supplier
 
