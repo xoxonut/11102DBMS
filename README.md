@@ -107,26 +107,90 @@
 
 ## supplier
 
-- C 
-    - request
+### C 
+   - request
         - name : str
         - email : str
         - phone : str
         - address : str
-- R
-    - respond 
+```json
+{
+    "name": "Test",
+    "email": "test@test.com",
+    "phone_number": "0123456789",
+    "address": "Taipei"
+}
+```
+ - respond
+```json
+{
+    "message": "Supplier created successfully!",
+    "supplier_id": 4
+}
+```
+### R
+   - respond 
         - suppliers : list[supplier]
-- U
-    - request
+```json
+{
+    "supplier_list": [
+        {
+            "address": "Cupertino, California, United States",
+            "email": "apple@apple.com",
+            "name": "apple",
+            "phone_number": "1234567890"
+        },
+        {
+            "address": "Austin, Texas, United States",
+            "email": "tesla@tesla.com",
+            "name": "tesla",
+            "phone_number": "9876543210"
+        },
+        {
+            "address": "8, Li-Hsin Rd. 6, Hsinchu Science Park,\r\nHsinchu 300-096, Taiwan, R.O.C.",
+            "email": "tsmc@tsmc.com",
+            "name": "tsmc",
+            "phone_number": "1357924680"
+        }
+    ]
+}
+```
+### U
+   - request
         - id : int
         - name : str
         - email : str
         - phone : str
         - address : str
-- D
+```json
+{
+    "supplier_id": 4, 
+    "name": "NewTest",
+    "email": "test@test.com.tw",
+    "phone_number": "9123456789",
+    "address": "NTTaipei"
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member updated successfully!"
+}
+```
+### D
     - request
         - id : int
-
+```json
+{
+    "supplier_id": 4
+}
+```
+ - respond
+```json
+{
+    "message": "Supplier deleted successfully"
+}
+```
 ## member
 ### C
    - request
