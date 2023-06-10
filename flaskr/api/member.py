@@ -1,11 +1,10 @@
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, request
 from flaskr.db import get_db
-from random import randint
 
 bp = Blueprint("member", __name__, url_prefix="/member")
 
 
-@bp.route("/get_members", methods=["GET"])
+@bp.route("/", methods=["GET"])
 def get_members():
     db = get_db()
     cursor = db.execute("SELECT * FROM member")
@@ -14,11 +13,17 @@ def get_members():
     member_list = []
     for member in members:
         name,email,phone_number,address = member
-        member_list.append([ name,email,phone_number,address])
+        one_member = {
+            "name": name,
+            "email": email,
+            "phone_number": phone_number,
+            "address": address
+        }
+        member_list.append(one_member)
     db.close()
-    return jsonify(member_list)
+    return jsonify({"member_list": member_list})
 
-@bp.route("/create_member", methods=["POST"])
+@bp.route("/", methods=["POST"])
 def create_member():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
@@ -45,15 +50,15 @@ def create_member():
     else:
         return jsonify({"message": "Content-Type not supported!"})
 
-@bp.route("/update_member", methods=["PUT"])
+@bp.route("/", methods=["PUT"])
 def update_member():
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
         member_id = request.json.get("member_id")
         name = request.json.get("name")
-        address = request.json.get("address")
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
+        address = request.json.get("address")
         db = get_db()
         cursor = db.execute("SELECT * FROM member WHERE rowid = ?", [member_id])
         member = cursor.fetchone()
@@ -80,9 +85,14 @@ def update_member():
         return jsonify({"message": "Content-Type not supported!"})
 
 
-@bp.route("/delete_member", methods=["DELETE"])
+@bp.route("/", methods=["DELETE"])
 def delete_member():
     member_id = request.json.get("member_id")
+    db = get_db()
+    cursor = db.execute("SELECT COUNT(*) AS result FROM MEMBER WHERE rowid=?", [member_id])
+    rows = cursor.fetchall()
+    if (rows[0]['result'] != 1):
+      return {"message": "This member doesn't exist!"}
     db = get_db()
     cursor = db.execute("DELETE FROM member WHERE rowid = ?", [member_id],)
     db.commit()
