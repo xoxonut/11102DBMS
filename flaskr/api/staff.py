@@ -13,7 +13,9 @@ def get_staff():
 
     staff_list = []
     for staff_member in staff_members:
-        manager_id, name, entry_date = staff_member
+        manager_id = staff_member['manager_id']
+        name = staff_member['name']
+        entry_date = staff_member['entry_date']
         staff = {
             "name": name,
             "manager_id": manager_id,

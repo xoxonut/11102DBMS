@@ -4,6 +4,7 @@ conn = sqlite3.connect("instance/flaskr.sqlite")
 cursor = conn.cursor()
 
 staff = """CREATE TABLE STAFF(
+            staff_id INTEGER PRIMARY KEY,
             manager_id INTEGER,
             name CHAR(20) NOT NULL, 
             entry_date TEXT,
@@ -69,8 +70,8 @@ decrease = """CREATE TABLE DECREASE (
                 s_order_id INTEGER,
                 item_quantity INTEGER,
                 PRIMARY KEY (item_id, s_order_id),
-                FOREIGN KEY (item_id) REFERENCES ITEM(rowid)
-                FOREIGN KEY (s_order_id) REFERENCES SALES_ORDER(rowid)
+                FOREIGN KEY (item_id) REFERENCES ITEM(item_id)
+                FOREIGN KEY (s_order_id) REFERENCES SALES_ORDER(s_order_id)
                 )"""
 cursor.execute(decrease)
 

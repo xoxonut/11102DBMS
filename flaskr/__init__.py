@@ -19,11 +19,13 @@ def create_app(test_config=None):
     from . import db
 
     db.init_app(app)
-    staffs = [
-        {"id": "1", "name": "Frank", "mId": "2"},
-        {"id": "2", "name": "Rex", "mId": ""},
-    ]
-
+    staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
+    members =[{'id':'1','name':'Frank','email':'frank@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'},
+            {'id':'2','name':'Rex','email':'sad@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'}]
+    items = [{'id':1,'name':'apple','type':'fruit','unit_price':100,'stock':1984},
+            {'id':2,'name':'banana','type':'fruit','unit_price':50,'stock':1984}]
+    porder = [{'id':1,'supplier_id':1,'staff_id':1},
+            {'id':2,'supplier_id':2,'staff_id':2}]
     # a simple page that says hello
     @app.route("/")
     def index():

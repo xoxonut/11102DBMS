@@ -14,7 +14,7 @@
     - customer : C R
     - item : R U D
     - decrease : CRUD
-- item : R 
+- item : UR 
 
 ### http verb
 - C -> POST
@@ -28,111 +28,385 @@
 
 ## staff
 
-- C 
-    - request 
+### C 
+   - request 
         - name : str
-        - manager_id : str
+        - manager_id : int
+```json
+{
+    "manager_id": 2,
+    "name": "Test"
 
-- R 
-    - respond
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member created successfully!",
+    "staff_id": 4
+}
+```
+### R 
+   - respond
         - staffs : list[staff]
-- U 
-    - request
-        - id : str
+```json
+{
+    "staff_list": [
+        {
+            "entry_date": "2023-05-20",
+            "manager_id": 2,
+            "name": "John"
+        },
+        {
+            "entry_date": "2023-05-21",
+            "manager_id": 1,
+            "name": "Michael"
+        },
+        {
+            "entry_date": "2023-05-21",
+            "manager_id": 1,
+            "name": "Steve"
+        }
+    ]
+}
+```
+### U 
+   - request
+        - id : int
         - name : str
-        - manager_id : str
+        - manager_id : int
+```json
+{
+    "manager_id": 1,
+    "staff_id": 4,
+    "name": "NewTest"
 
-- D 
-    - request
-        - id : str
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member updated successfully!"
+}
+```
+### D 
+   - request
+        - id : int
+```json
+{
+    "staff_id": 4
 
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member deleted successfully!"
+}
+```
 
 ## supplier
 
-- C 
-    - request
+### C 
+   - request
         - name : str
         - email : str
         - phone : str
         - address : str
-- R
-    - respond 
+```json
+{
+    "name": "Test",
+    "email": "test@test.com",
+    "phone_number": "0123456789",
+    "address": "Taipei"
+}
+```
+ - respond
+```json
+{
+    "message": "Supplier created successfully!",
+    "supplier_id": 4
+}
+```
+### R
+   - respond 
         - suppliers : list[supplier]
-- U
-    - request
-        - id : str
+```json
+{
+    "supplier_list": [
+        {
+            "address": "Cupertino, California, United States",
+            "email": "apple@apple.com",
+            "name": "apple",
+            "phone_number": "1234567890"
+        },
+        {
+            "address": "Austin, Texas, United States",
+            "email": "tesla@tesla.com",
+            "name": "tesla",
+            "phone_number": "9876543210"
+        },
+        {
+            "address": "8, Li-Hsin Rd. 6, Hsinchu Science Park,\r\nHsinchu 300-096, Taiwan, R.O.C.",
+            "email": "tsmc@tsmc.com",
+            "name": "tsmc",
+            "phone_number": "1357924680"
+        }
+    ]
+}
+```
+### U
+   - request
+        - id : int
         - name : str
         - email : str
         - phone : str
         - address : str
-- D
+```json
+{
+    "supplier_id": 4, 
+    "name": "NewTest",
+    "email": "test@test.com.tw",
+    "phone_number": "9123456789",
+    "address": "NTTaipei"
+}
+```
+ - respond
+```json
+{
+    "message": "Staff member updated successfully!"
+}
+```
+### D
     - request
-        - id : str
-
+        - id : int
+```json
+{
+    "supplier_id": 4
+}
+```
+ - respond
+```json
+{
+    "message": "Supplier deleted successfully"
+}
+```
 ## member
-- C
-    - request
+### C
+   - request
         - name : str
         - address : str
         - email : str
         - address : str
-- R
-    - response
+```json
+{
+    "name": "Test",
+    "email": "test@test.com",
+    "phone_number": "1234567890",
+    "address": "Taipei"
+
+}
+```
+- response
+```json
+{
+    "member_id": 4,
+    "message": "Member created successfully!"
+}
+```
+### R
+   - response
         - members : list[member]
-- U
-    - request
-        - member_id : str
+```json
+{
+    "member_list": [
+        {
+            "address": "nccu",
+            "email": "tom@gmail.com",
+            "name": "Tom",
+            "phone_number": "1122334455"
+        },
+        {
+            "address": "singapore",
+            "email": "emma@gmail.com",
+            "name": "Emma",
+            "phone_number": "6677889900"
+        },
+        {
+            "address": "thailand",
+            "email": "jack@gmail.com",
+            "name": "Jack",
+            "phone_number": "5544332211"
+        }
+    ]
+}
+```
+### U
+   - request
+        - member_id : int
         - name : str
         - address : str
         - email : str
         - address : str
-- D
-    - request
-        - member_id : str
+```json
+{
+    "member_id": 4,
+    "name": "newTest",
+    "email": "test@test.com.tw",
+    "phone_number": "1234567899",
+    "address": "NewTaipei"
+
+}
+```
+ - response
+```json
+{
+    "message": "Member updated successfully!"
+}
+```
+### D
+   - request
+        - member_id : int
+```json
+{
+    "member_id":4
+}
+```
+ - response
+```json
+{
+    "message": "Member deleted successfully!"
+}
+```
 
 ## purchase order
 
-- C
-    - request
-        - supplier_id : str
-        - staff_id : str
+### C
+   - request
+        - supplier_id : int
+        - staff_id : int
         - items : list[item]
-        - delivery_date : datetime
-        - status : bool
-- R
-    - response
-        - orders : list[purchase order]
-- U
-    - request
-        - order_id : str
-        - status : bool
-- D
-    - request
-        - p_order_id : str
+```json
+{
+    "supplier_id": 1,
+    "staff_id": 2,
+    "item_list": [
+        {
+            "name": "iphone 14",
+            "type": "mobile phone",
+            "quantity": 3,
+            "unit_cost": 50
+        },
+        {            
+            "name": "Mac",
+            "type": "test",
+            "quantity": 10,
+            "unit_cost": 1000
+        }
+    ]
+}
+```
+  - response
+```json
+{
+    "message": "Create purchase order success!"
+}
+```
+    
+ ### R
+   - response
+        - orders : json list[purchase order]
+ ```json
+ {
+    "p_order_list": [
+        {
+            "p_order_date": "2023-5-22",
+            "p_order_id": 1,
+            "staff_name": "Michael",
+            "supplier_name": "apple"
+        },
+        {
+            "p_order_date": "2023-5-22",
+            "p_order_id": 2,
+            "staff_name": "Steve",
+            "supplier_name": "tesla"
+        },
+        {
+            "p_order_date": "2023-5-23",
+            "p_order_id": 3,
+            "staff_name": "John",
+            "supplier_name": "tsmc"
+        }
+       ]
+    }
+```
+### D
+   - request
+        - p_order_id : int
+ ```json
+ {
+    "p_order_id": 1
+}
+```
+   - response
+```json
+{
+    "message": "Delete purchase order success!"
+}
+```
+### Read purchase order item detail
+   - request
+        - p_order_id : int
+```json
+{
+    "p_order_id": 55583
+}
+```
+
+   - response
+        - item_detail list
+      
+```json
+{
+    "item_list": [
+        {
+            "item_name": "iphone 14",
+            "item_quantity": 3,
+            "item_type": "mobile phone",
+            "unit_cost": 50
+        },
+        {
+            "item_name": "Mac",
+            "item_quantity": 10,
+            "item_type": "test",
+            "unit_cost": 1000
+        }
+    ]
+}
+```
 
 ## sales order
 - C
     - request
-        - staff_id : str
-        - customer_id : str
+        - staff_id : int
+        - customer_id : int
         - deliver_date : datetime
         - status : bool
         - items : list[item]
 - R
     - response
         - orders : list[sales order]
-- U
-    - request
-        - order_id : str
-        - status : bool
+
 - D
     - request 
         - order_id : str
 ## Item
 - R
     - items : list[item]
-
-
+- U
+    - requerst
+        - item_id : int
+        - price : int
 
 # 分工
 - 前端 2
