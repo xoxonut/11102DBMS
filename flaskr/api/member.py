@@ -12,7 +12,10 @@ def get_members():
     
     member_list = []
     for member in members:
-        name,email,phone_number,address = member
+        name = member['name']
+        email = member['email']
+        phone_number = member['phone_number']
+        address = member['address']
         one_member = {
             "name": name,
             "email": email,
