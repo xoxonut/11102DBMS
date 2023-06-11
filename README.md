@@ -178,7 +178,7 @@
 }
 ```
 ### D
-    - request
+   - request
         - id : int
 ```json
 {
@@ -355,7 +355,7 @@
 }
 ```
 ### Read purchase order item detail
-   - request
+   - request: url: /purchase_order/detail
         - p_order_id : int
 ```json
 {
@@ -401,13 +401,55 @@
     - request 
         - order_id : str
 ## Item
-- R
-    - items : list[item]
-- U
-    - requerst
+### R
+   - respond
+     - items : list[item]
+```json
+{
+    "item_list": [
+        {
+            "name": "iphone 14",
+            "stock": 10,
+            "type": "mobile phone",
+            "unit_price": 100
+        },
+        {
+            "name": "model x",
+            "stock": 5,
+            "type": "car",
+            "unit_price": 1000
+        },
+        {
+            "name": "M2",
+            "stock": 50,
+            "type": "chip",
+            "unit_price": 100
+        },
+        {
+            "name": "Mac",
+            "stock": 0,
+            "type": "test",
+            "unit_price": null
+        }
+    ]
+}
+```
+### U
+   - requerst
         - item_id : int
         - price : int
-
+```json
+{
+    "item_id": 1,
+    "unit_price": 100
+}
+```
+ - respond
+```json
+{
+    "message": "Item updated successfully"
+}
+```
 # 分工
 - 前端 2
     - route
