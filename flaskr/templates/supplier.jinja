@@ -1,11 +1,13 @@
 {% extends "base.jinja" %}
 {% block title %}Supplier Management{% endblock title %}
 {% block content %}
-<h1 class="page-title">Supplier Management</h1>
-<div>
-    <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="nes-btn add-button">add data</a>
-</div>
 <div class="nes-table-responsive">
+    <div class="container" >
+        <div class="title-btn-group">
+            <h1 class="page-title">Supplier Management</h1>
+            <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="button">ADD</button>
+        </div>
+    </div>
     <table  class="table-bordered">
         <thead>
             <tr>
@@ -64,8 +66,8 @@
 
             <span id="dialog-path" hidden></span>
             <menu class="dialog-menu">
-                <button class="nes-btn Cwith-border" onclick="closeDialog(false)">Cancel</button>
-                <button class="nes-btn is-primary Cowith-border" onclick="closeDialog(true)">Confirm</button>
+                <button class="nes-btn " onclick="closeDialog(false)">Cancel</button>
+                <button class="nes-btn is-primary " onclick="closeDialog(true)">Confirm</button>
             </menu>
         </form>
     </dialog>

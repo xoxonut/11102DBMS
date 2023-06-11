@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>Purchase Order Detail</title>
+</head>
+
+<body>
+    <div style="margin: 10PX;">
+        <button class="nes-btn is-primary" id="add-btn">Add</button>
+        <button class="nes-btn is-primary" id="send-btn">Send</button>
+        <div style="display: flex; margin:10px; flex-direction:column">
+            <label for="member-id">Member</label>
+            <input type="text" class="nes-input" id="member-id">
+            <label for="staff-id">Staff</label>
+            <input type="text" class="nes-input" id="staff-id">
+        </div>
+        <div class="nes-table responsive">
+            <table class="nes-table is-bordered" id="item-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    {%for item in items%}
+                    <tr style="text-align: center;">
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <dialog class="nes-dialog" id="item_add">
+        <button class="nes-btn is-primary" id="reset-btn">rest</button>
+        <form method="dialog">
+            <p class="title">Add Item</p>
+            <label for="item-id">Item</label>
+            <input type="text" class="nes-input" id="item-id">
+            <label for="item-name">Name</label>
+            <input type="text" class="nes-input" id="item-name">
+            <label for="item-type">Type</label>
+            <input type="text" class="nes-input" id="item-type">
+            <label for="item-amount">Amount</label>
+            <input type="text" class="nes-input" id="item-amount">
+            <menu class="dialog-menu">
+                <button class="nes-btn" id="ok-btn">OK</button>
+                <button class="nes-btn is-primary" id="cancel-btn">Cancel</button>
+            </menu>
+        </form>
+    </dialog>
+</body>
+<script>
+    $(document).ready(function () {
+        const reset = function () {
+            $("#item-id").val("");
+            $("#item-name").val("");
+            $("#item-type").val("");
+            $("#item-amount").val("");
+        }
+        $("#add-btn").click(function () {
+            $("#item_add").show();
+        });
+        $("#cancel-btn").click(function () {
+            $("#item_add").hide();
+        });
+        $("#reset-btn").click(function () {
+            reset();
+        });
+        $("#ok-btn").click(function () {
+            $("#item_add").hide();
+            const item_id = $("#item-id").val();
+            const item_name = $("#item-name").val();
+            const item_type = $("#item-type").val();
+            const item_amount = $("#item-amount").val();
+            const item = "<tr style='text-align: center;'><td>" + item_id + "</td><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_amount + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
+            $("#item-list").append(item);
+            reset();
+        })
+        $('#item-table').on('click', '.removeRowBtn', function () {
+            // Find the closest table row and remove it
+            $(this).closest('tr').remove();
+        });
+    });
+</script>
+
+</html>

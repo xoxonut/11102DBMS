@@ -11,7 +11,7 @@
     <body>
         <div id="navigation">
             <div id="header">
-                <h1 style="margin-left: 20px;">ERP System</h1> <!-- Adjusted margin-left -->
+                <h1 style="margin-left: 20px;">ERP System</h1> 
             </div>
             <ul>
                 <li><a href="/myErp">Home</a></li>
@@ -36,42 +36,10 @@
                 </li>
             </ul>
         </div>
-
-        <div style="display: flex; flex-grow: 1;">
-            <div class="sidebar" style="margin-top: 50px;">
-                <ul style="padding: 0;">
-                    <li>
-                        <a href="/myErp/staff" class="box-link">
-                            <div class="box">Staff</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/myErp/supplier" class="box-link">
-                            <div class="box">Supplier</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/myErp/member" class="box-link">
-                            <div class="box">Member</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/myErp/purchase_order" class="box-link">
-                            <div class="box">Purchase_order</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/myErp/sale_order" class="box-link">
-                            <div class="box">Sale_order</div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="content">
-                {% block content %}{% endblock content %}
-            </div>
+        <div class="content">
+            {% block content %}{% endblock content %}
         </div>
+
     </body>
 
 </html>
