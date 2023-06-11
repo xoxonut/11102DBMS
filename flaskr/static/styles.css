@@ -1,10 +1,10 @@
 @font-face {
-    font-family: 'zpix';
-    src: url('./font/ark-pixel-12px-monospaced-zh_tw.woff2') format('woff2');
+  font-family: 'zpix';
+  src: url('./font/ark-pixel-12px-monospaced-zh_tw.woff2') format('woff2');
 }
 
 * {
-    font-family: 'zpix';
+  font-family: 'zpix';
 }
 .input-wrapper {
     display: table-row;
@@ -24,11 +24,6 @@
     
 }
 
-.nes-table-responsive {
-    margin: auto 170px;
-    text-align: center;
-  }
-
 .table-header {
     width: 100px;
     text-align: center;
@@ -36,32 +31,160 @@
 
 .table-bordered {
     border-collapse: collapse;
-    border: 4px solid #000;
+    border: 3px solid #000;
   }
   
 .table-bordered th,
 .table-bordered td {
-    border: 4px solid #000;
+    border: 3px solid #000;
     padding: 8px;
   }
-.add-button {
-    position: absolute;
-    top: 35px;
-    right: 225px;
-    width: 100px;
-    height:30px;
-    line-height: 15px;
-    font-size: 16px;
+
+.title-btn-group{
+  display: flex; 
+  align-items:center;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
 }
+
 .page-title {
-    margin-top: 30px;
-    margin-left: 380px;
-  }
-.Cowith-border {
-    border: 5px solid #006bb3;
+  margin-right: 20px; /* 调整按钮与页面标题之间的间距 */
 }
-.Cwith-border {
-  border: 5px solid #a6acaecf;
+
+.container{
+  display: flex; 
+  justify-content: center;
+}
+
+#header {
+  background-color: #212121;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#header h1 {
+  margin: 0;
+  margin-left: 20px; /* Adjusted margin-left */
+}
+#header img {
+  margin: 0;
+  margin-top: -8px; /* Adjusted margin-left */
+}
+#navigation {
+  background-color: #212121;
+  border: 2px solid #000;
+  padding: 10px;
+  text-align: right;
+}
+
+#navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Adjusted justify-content */
+  margin-right: 50px; /* Added margin-right */
+}
+
+#navigation ul li {
+  margin-left: 10px;
+}
+
+#navigation ul li:last-child {
+  margin-right: 0;
+}
+
+#navigation ul li a {
+  text-decoration: none;
+  color: #fff;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+#navigation ul li a:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #212121;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  color: #fff;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+
+.box {
+  margin: 15px 0;
+  padding: 20px;
+  border: 3px solid black;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+
+}
+
+.box-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  margin-top:100px
+}
+.button {
+  background-color: #E6E6E6;  /* 浅一点的灰色 */
+  color: #000000;  /* 黑色 */
+  border: 2px solid #000000;  /* 黑色外框 2px */
+  border-radius: 6px;  /* 更大的圆角效果 */
+  padding: 10px 20px;  /* 按钮内边距 */
+  font-size: 16px;  /* 文本字体大小 */
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);  /* 更立体的效果阴影 */
+  transition: background-color 0.3s;  /* 平滑过渡效果 */
+}
+
+.button:hover {
+  background-color: #CCCCCC;  /* 浅灰色 */
 }
 
 
