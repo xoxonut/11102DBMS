@@ -61,7 +61,7 @@ def create_app(test_config=None):
 
     @app.route("/myErp/purchase_order")
     def purchase_order():
-        return redirect("/myErp")
+        return redirect(url_for("purchase_order"))
 
     @app.route("/myErp/sale_order")
     def sale_order():
