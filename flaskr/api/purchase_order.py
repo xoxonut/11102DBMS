@@ -70,33 +70,21 @@ def create_purchase_order():
       if (rows[0]['result'] != 1):
         #item doesn't exist, then create item
         cursor = db.execute("INSERT INTO ITEM( name, type, stock) VALUES (?, ?, ?)", [ item_name, item_type, item_quantity]) 
-        print( "This item doesn't exist!")
       else:
         # item exist, get item stock then increase item quantity
         cursor = db.execute("SELECT stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
         rows = cursor.fetchall()
         initial_item_stock = rows[0]['stock']
-        print("initial stock: "+str(initial_item_stock))
         new_item_stock = initial_item_stock + item_quantity
         cursor = db.execute("UPDATE ITEM SET stock = ? WHERE name = ? AND type = ?", [new_item_stock, item_name, item_type])
-
-        cursor = db.execute("SELECT stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])        
-        rows = cursor.fetchall()
-        final_item_stock = rows[0]['stock']
-        print("final stock: "+str(final_item_stock))
 
       cursor = db.execute("SELECT rowid FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
       rows = cursor.fetchall()
       item_id = rows[0][0]
-      print("rowid: "+str(item_id))
 
       # insert into increase table
       cursor = db.execute("INSERT INTO INCREASE(item_id, p_order_id, unit_cost, item_quantity) VALUES(?,?,?,?)", [item_id, p_order_id, item_unit_cost, item_quantity])
 
-      cursor = db.execute("SELECT * FROM INCREASE WHERE item_id = ? AND p_order_id = ?", [item_id, p_order_id])
-      rows = cursor.fetchall()
-      print("create increase record")
-      print("item_id: "+str(rows[0][0])+" p_order_id: "+str(rows[0][1])+" unit cost: "+str(rows[0][2])+" item quantity: "+str(rows[0][3]))
 
     db.commit()
     db.close()
@@ -168,7 +156,6 @@ def read_purchase_order_detail():
       item_quantity = row['item_quantity']
       item_name = row['name']
       item_type = row['type']
-      print("name: "+item_name+" type: "+item_type+" quantity: "+str(item_quantity)+" unit_cost: "+str(unit_cost))
       item = {
         "item_name": item_name,
         "item_type": item_type,
