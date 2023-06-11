@@ -12,7 +12,6 @@ staff = """CREATE TABLE STAFF(
             )"""
 cursor.execute(staff)
 
-#t
 supplier = """CREATE TABLE SUPPLIER(
                 name CHAR(20) NOT NULL,
                 email CHAR(30),
