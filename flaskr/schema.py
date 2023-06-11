@@ -12,6 +12,7 @@ staff = """CREATE TABLE STAFF(
             )"""
 cursor.execute(staff)
 
+#o
 supplier = """CREATE TABLE SUPPLIER(
                 supplier_id INTEGER PRIMARY KEY,
                 name CHAR(20) NOT NULL,
