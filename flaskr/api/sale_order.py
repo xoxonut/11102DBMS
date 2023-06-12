@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flaskr.db import get_db
 import datetime
-import random
 
 bp = Blueprint('sale_order', __name__, url_prefix='/sale_order')
 
@@ -12,7 +11,7 @@ def delete_sales_order():
       s_order_id = request.json.get('s_order_id')
       # check order exist
       db = get_db()
-      cursor = db.execute("SELECT COUNT(*) AS result FROM PURCHASE_ORDER WHERE rowid=?", [s_order_id])
+      cursor = db.execute("SELECT COUNT(*) AS result FROM SALES_ORDER WHERE rowid=?", [s_order_id])
       rows = cursor.fetchall()
       if (rows[0]['result'] != 1):
         return {"message": "The sales order doesn't exist!"}
@@ -89,14 +88,12 @@ def create_sale_order():
     
     # insert into sale order
     s_order_date = datetime.datetime.now().strftime("%c")
-    s_order_id = random.randint(1000, 100000) # this line should delete after DB modified to rowid
-    cursor = db.execute("""INSERT INTO SALES_ORDER(s_order_id, staff_id, member_id, s_order_date) 
-      VALUES (?,?,?,?)""", [s_order_id, staff_id, member_id, s_order_date]) 
+    cursor = db.execute("""INSERT INTO SALES_ORDER( staff_id, member_id, s_order_date) 
+      VALUES (?,?,?)""", [ staff_id, member_id, s_order_date]) 
 
     cursor = db.execute("SELECT rowid FROM SALES_ORDER WHERE staff_id = ? AND member_id = ? AND s_order_date=?", [staff_id, member_id, s_order_date])
     rows = cursor.fetchall()
     s_order_id = rows[0][0]
-    print("create order: "+str(s_order_id))
     
     # check item 
     for item in item_list:
@@ -125,14 +122,8 @@ def create_sale_order():
         return {"error": "The item stock is not enough!"}
 
       # update item stock      
-      print("initial stock: "+str(initial_item_stock))
       new_item_stock = initial_item_stock - item_quantity
       cursor = db.execute("UPDATE ITEM SET stock = ? WHERE name = ? AND type = ?", [new_item_stock, item_name, item_type])
-
-      cursor = db.execute("SELECT stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
-      rows = cursor.fetchall()
-      final_item_stock = rows[0]['stock']
-      print("updated final stock: "+str(final_item_stock))
 
 
       cursor = db.execute("SELECT rowid FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
@@ -142,12 +133,9 @@ def create_sale_order():
       # insert into decrease table
       cursor = db.execute("INSERT INTO DECREASE(item_id, s_order_id, item_quantity) VALUES(?,?,?)", [item_id, s_order_id, item_quantity])
 
-      cursor = db.execute("SELECT * FROM DECREASE WHERE item_id = ? AND s_order_id = ?", [item_id, s_order_id])
-      rows = cursor.fetchall()
-      print("create decrease record")
-      print("item_id: "+str(rows[0][0])+" s_order_id: "+str(rows[0][1])+" item quantity: "+str(rows[0][2]))
 
-      db.commit()
+    db.commit()
+    db.close()
 
     return jsonify({"message": "Create sales order success!"})
   else:
@@ -167,7 +155,7 @@ def read_sales_order_detail():
     
     # query from decrease JOIN Item
     cursor = db.execute("""
-        SELECT DCE.unit_price, DCE.item_quantity, IT.name, IT.type 
+        SELECT IT.unit_price, DCE.item_quantity, IT.name, IT.type 
         FROM DECREASE DCE, ITEM IT
         WHERE DCE.item_id = IT.rowid AND DCE.s_order_id = ?""", [s_order_id])
     rows = cursor.fetchall()
