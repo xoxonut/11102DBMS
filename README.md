@@ -386,20 +386,104 @@
 ```
 
 ## sales order
-- C
-    - request
+### C
+   - request
         - staff_id : int
         - customer_id : int
         - deliver_date : datetime
         - status : bool
         - items : list[item]
-- R
-    - response
+```json
+{
+    "member_id": 1,
+    "staff_id": 2,
+    "item_list": [
+        {
+            "name": "iphone 14",
+            "type": "mobile phone",
+            "quantity": 2
+        },
+        {            
+            "name": "M2",
+            "type": "chip",
+            "quantity": 3
+        }
+    ]
+}
+```
+ - respond
+```json
+{
+    "message": "Create sales order success!"
+}
+```
+### R
+   - response
         - orders : list[sales order]
-
-- D
-    - request 
+```json
+{
+    "s_order_list": [
+        {
+            "member_name": "Tom",
+            "s_order_date": "2023-5-24",
+            "s_order_id": 1,
+            "staff_name": "Michael"
+        },
+        {
+            "member_name": "Jack",
+            "s_order_date": "2023-5-24",
+            "s_order_id": 2,
+            "staff_name": "Michael"
+        },
+        {
+            "member_name": "Tom",
+            "s_order_date": "2023-5-25",
+            "s_order_id": 3,
+            "staff_name": "Steve"
+        }
+    ]
+}
+```
+### D
+   - request 
         - order_id : str
+```json
+{
+    "s_order_id": 4
+}
+```
+ - respond
+```json
+{
+    "message": "Delete sales order success!"
+}
+```
+### read sales order detail of item
+ - request
+```json
+{
+    "s_order_id": 4
+}
+```
+- respond
+```json
+{
+    "item_list": [
+        {
+            "item_name": "iphone 14",
+            "item_quantity": 2,
+            "item_type": "mobile phone",
+            "unit_price": 100
+        },
+        {
+            "item_name": "M2",
+            "item_quantity": 3,
+            "item_type": "chip",
+            "unit_price": 100
+        }
+    ]
+}
+```
 ## Item
 ### R
    - respond
