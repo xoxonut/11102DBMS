@@ -13,11 +13,13 @@ def read_item():
 
     item_list = []
     for row in rows:
+        item_id = row['item_id']
         name = row['name']
         type = row['type']
         stock = row['stock']
         unit_price = row['unit_price'] 
         item = {
+            "item_id": item_id,
             "name": name,
             "type": type,
             "stock": stock,
