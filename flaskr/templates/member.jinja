@@ -2,7 +2,7 @@
 {%block title%}Member{%endblock%}
 {%block content%}
 <div class="nes-table-responsive">
-    <div class="container" >
+    <div class="container">
         <div class="title-btn-group">
             <h1 class="page-title">Member</h1>
             <button type="button" class="button" id="add_btn">ADD</button>
@@ -32,7 +32,7 @@
                     <i class="nes-icon coin is-small show-dialog"></i>
                 </td>
                 <td>
-                    <i class="nes-icon close is-small" onclick="location.reload()"></i>
+                    <i class="nes-icon close is-small" id="delete-member"></i>
                 </td>
             </tr>
             {% endfor %}
@@ -69,20 +69,20 @@
     <form method="dialog">
         <p class="title">Add</p>
         <div class="input-wrapper">
-            <label for="dialog-name">Name: </label>
-            <input type="text" class="nes-input" id="dialog-name">
+            <label for="add-name">Name: </label>
+            <input type="text" class="nes-input" id="add-name">
         </div>
         <div class="input-wrapper">
-            <label for="dialog-email">Email</label>
-            <input type="text" class="nes-input" id="dialog-email">
+            <label for="add-email">Email</label>
+            <input type="text" class="nes-input" id="add-email">
         </div>
         <div class="input-wrapper">
-            <label for="dialog-phone">Phone</label>
-            <input type="text" class="nes-input" id="dialog-phone">
+            <label for="add-phone">Phone</label>
+            <input type="text" class="nes-input" id="add-phone">
         </div>
         <div class="input-wrapper">
-            <label for="dialog-address">Address</label>
-            <input type="text" class="nes-input" id="dialog-address">
+            <label for="add-address">Address</label>
+            <input type="text" class="nes-input" id="add-address">
         </div>
         <menu class="dialog-menu">
             <button class="nes-btn" id="send-add-btn">OK</button>
@@ -104,8 +104,25 @@
         });
 
         $('.send-modify-dialog').click(function () {
-            $('#member_modify').hide();
-            location.reload();
+            const response = fetch('/member', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    member_id: $('#dialog-id').text(),
+                    name: $('#dialog-name').val(),
+                    email: $('#dialog-email').val(),
+                    phone_number: $('#dialog-phone').val(),
+                    address: $('#dialog-address').val()
+                })
+            }).then(res => {
+                if (res.statusText == "OK") {
+                    $('#member_modify').hide();
+                    location.reload()
+                }
+            }
+            );
         });
 
         $('#add_btn').click(function () {
@@ -113,16 +130,49 @@
         });
 
         $('#send-add-btn').click(function () {
-            $('#member_add').hide();
-            location.reload();
+            const response = fetch('/member', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: $('#add-name').val(),
+                    email: $('#add-email').val(),
+                    phone_number: $('#add-phone').val(),
+                    address: $('#add-address').val()
+                })
+            }).then(res => {
+                if (res.statusText == "OK") {
+                    $('#member_add').hide();
+                    location.reload()
+                }
+            }
+            );
         });
 
         $('.close-dialog').click(function () {
             $('#member_modify').hide();
             $('#member_add').hide();
         });
-    });
 
+        $('#delete-member').click(function () {
+            const member_id = $(this).parent().siblings().eq(0).text();
+            const response = fetch('/member', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    member_id: member_id
+                })
+            }).then(res => {
+                if (res.statusText == "OK") {
+                    location.reload()
+                }
+            }
+            );
+        });
+    });
 </script>
 <style>
     .nes-input {

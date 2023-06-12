@@ -16,12 +16,14 @@ def get_suppliers():
         email = supplier['email']
         phone_number = supplier['phone_number']
         address = supplier['address']
+        id = supplier['supplier_id']
         one_supplier = {
             "supplier_id": supplier_id,
             "name": name,
             "email": email,
             "phone":phone_number,
-            "address": address
+            "address": address,
+            "id":id
         }
         supplier_list.append(one_supplier)
 
@@ -32,7 +34,6 @@ def get_suppliers():
 
 @bp.route("/", methods=["POST"])
 def create_supplier():
-    print(request.headers)
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
         supplier_data = request.json
@@ -59,14 +60,16 @@ def create_supplier():
 
 @bp.route("/", methods=["PUT"])
 def update_supplier():
+    print(request.json)
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
+        print('XXXX\n\n')
         supplier_id = request.json.get("supplier_id")
         name = request.json.get("name")
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
         address = request.json.get("address")
-
+        print(supplier_id,name,email,phone_number,address)
         db = get_db()
         db.execute(
             "UPDATE SUPPLIER SET name= ?,email = ?,phone_number = ?,address = ? WHERE rowid = ?",

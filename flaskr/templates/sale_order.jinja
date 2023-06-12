@@ -12,19 +12,21 @@
         <thead>
             <tr>
                 <th>Order ID</th>
-                <th>Member ID</th>
-                <th>Staff ID</th>
+                <th>Member Name</th>
+                <th>Staff Name</th>
+                <th>Date</th>
                 <th>Detail</th>
             </tr>
         </thead>
         <tbody>
             {%for order in orders%}
             <tr style="text-align: center;">
-                <td>{{order.id}}</td>
-                <td>{{order.supplier_id}}</td>
-                <td>{{order.staff_id}}</td>
+                <td>{{order.s_order_id}}</td>
+                <td>{{order.member_name}}</td>
+                <td>{{order.staff_name}}</td>
+                <td>{{order.s_order_date}}</td>
                 <td>
-                    <a href="{{url_for('.sale_order_detail',pid=order.id)}}"><i class="nes-icon is-small star"></i></a>
+                    <a href="{{url_for('.sale_order_detail',pid=order.s_order_id)}}"><i class="nes-icon is-small star"></i></a>
                 </td>
             </tr>
             {%endfor%}

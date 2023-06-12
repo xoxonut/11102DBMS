@@ -72,7 +72,6 @@ def create_sale_order():
     member_id = request.json.get('member_id')
     staff_id = request.json.get('staff_id')
     item_list = request.json.get('item_list')
-
     # check if staff exist
     db = get_db()
     cursor = db.execute("SELECT COUNT(*) AS result FROM STAFF WHERE rowid=?", [staff_id])
@@ -122,7 +121,7 @@ def create_sale_order():
         return {"error": "The item stock is not enough!"}
 
       # update item stock      
-      new_item_stock = initial_item_stock - item_quantity
+      new_item_stock = initial_item_stock - int(item_quantity)
       cursor = db.execute("UPDATE ITEM SET stock = ? WHERE name = ? AND type = ?", [new_item_stock, item_name, item_type])
 
 

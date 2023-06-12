@@ -14,18 +14,26 @@
         <button class="nes-btn is-primary" id="send-btn">Send</button>
         <div style="display: flex; margin:10px; flex-direction:column">
             <label for="member-id">Member</label>
-            <input type="text" class="nes-input" id="member-id">
+            <select class="nes-select" id="member-id">
+                {%for member in members%}
+                <option value="{{member.id}}">{{member.name}}</option>
+                {%endfor%}
+            </select>
             <label for="staff-id">Staff</label>
-            <input type="text" class="nes-input" id="staff-id">
+            <select class="nes-select" id="staff-id">
+                {%for staff in staffs%}
+                <option value="{{staff.staff_id}}">{{staff.name}}</option>
+                {%endfor%}
+            </select>
+
         </div>
         <div class="nes-table responsive">
             <table class="nes-table is-bordered" id="item-table">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Amount</th>
+                        <th>Quantity</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -42,14 +50,12 @@
         <button class="nes-btn is-primary" id="reset-btn">rest</button>
         <form method="dialog">
             <p class="title">Add Item</p>
-            <label for="item-id">Item</label>
-            <input type="text" class="nes-input" id="item-id">
             <label for="item-name">Name</label>
             <input type="text" class="nes-input" id="item-name">
             <label for="item-type">Type</label>
             <input type="text" class="nes-input" id="item-type">
-            <label for="item-amount">Amount</label>
-            <input type="text" class="nes-input" id="item-amount">
+            <label for="item-quantity">Quantity</label>
+            <input type="text" class="nes-input" id="item-quantity">
             <menu class="dialog-menu">
                 <button class="nes-btn" id="ok-btn">OK</button>
                 <button class="nes-btn is-primary" id="cancel-btn">Cancel</button>
@@ -60,10 +66,9 @@
 <script>
     $(document).ready(function () {
         const reset = function () {
-            $("#item-id").val("");
             $("#item-name").val("");
             $("#item-type").val("");
-            $("#item-amount").val("");
+            $("#item-quantity").val("");
         }
         $("#add-btn").click(function () {
             $("#item_add").show();
@@ -76,11 +81,14 @@
         });
         $("#ok-btn").click(function () {
             $("#item_add").hide();
-            const item_id = $("#item-id").val();
             const item_name = $("#item-name").val();
             const item_type = $("#item-type").val();
-            const item_amount = $("#item-amount").val();
-            const item = "<tr style='text-align: center;'><td>" + item_id + "</td><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_amount + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
+            const item_quantity = $("#item-quantity").val();
+            if (item_name == "" || item_type == "" || item_quantity == "") {
+                alert("Please fill all the blanks");
+                return;
+            }
+            const item = "<tr style='text-align: center;'><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_quantity + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
             $("#item-list").append(item);
             reset();
         })
@@ -88,6 +96,37 @@
             // Find the closest table row and remove it
             $(this).closest('tr').remove();
         });
+
+        $("#send-btn").click(function(){
+            const data = {
+                member_id: $("#member-id").val(),
+                staff_id: $("#staff-id").val(),
+                item_list: []
+            }
+            $("#item-list tr").each(function(){
+                const item = {
+                    name: $(this).find("td").eq(0).html(),
+                    type: $(this).find("td").eq(1).html(),
+                    quantity: $(this).find("td").eq(2).html()
+                }
+                data.item_list.push(item);
+            })
+            const response = fetch("/sale_order", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(function(response){
+                if(response.status == 200){
+                    alert(response.body);
+                    window.location.href = "/myErp/sale_order";
+                }else{
+                    alert("fail");
+                }
+            })
+        })
+
     });
 </script>
 

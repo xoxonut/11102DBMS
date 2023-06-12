@@ -19,7 +19,7 @@ def read_item():
         stock = row['stock']
         unit_price = row['unit_price'] 
         item = {
-            "item_id": item_id,
+            "id": item_id,
             "name": name,
             "type": type,
             "stock": stock,

@@ -125,6 +125,7 @@
         dialog.close();
         dialog.removeAttribute('opened');
         params = "id=" + dialogId
+        console.log(dialogId)
 
         // Send GET request to supplier/ endpoint
         if (send) {
@@ -136,7 +137,7 @@
                 },
                 redirect: "follow",
                 body: JSON.stringify({
-                    id: dialogId,
+                    supplier_id: dialogId,
                     name: dialogName,
                     phone_number: dialogPhone,
                     email: dialogEmail,
@@ -144,7 +145,7 @@
                 })
             }).then(response => {
                 if (response.statusText == "OK") {
-                    location.reload();
+                    location.reload()
                 }
             })
         }

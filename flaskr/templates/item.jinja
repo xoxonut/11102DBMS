@@ -2,32 +2,79 @@
 {%block title%}Item{%endblock%}
 {%block content%}
 <div class="nes-table-responsive">
-    <div class="container" >
+    <div class="container">
         <div class="title-btn-group">
             <h1 class="page-title">Item</h1>
         </div>
-    </div>            
+    </div>
     <table class="table-bordered">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Stock</th>
-            <th>Unit Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        {%for item in items%}
-        <tr style="text-align: center;">
-            <td>{{item.id}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.type}}</td>
-            <td>{{item.stock}}</td>
-            <td>{{item.unit_price}}</td>
-        </tr>
-        {%endfor%}
-    </tbody>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Stock</th>
+                <th>Unit Price</th>
+                <th>Modify</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for item in items%}
+            <tr style="text-align: center;">
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.type}}</td>
+                <td>{{item.stock}}</td>
+                <td>{{item.unit_price}}</td>
+                <td><i class="nes-icon coin is-small modify-price"></i></td>
+            </tr>
+            {%endfor%}
+        </tbody>
     </table>
 </div>
+<dialog class="nes-dialog" id="dialog-default" style="width: 500px">
+    <form method="dialog">
+        <p class="title" id="dialog-title" style="text-align: center;"></p>
+        <div class="input-wrapper">
+            <label for="ID_field">Item ID: </label>
+            <input type="text" id="dialog-id" class="nes-input" name="ID_field" readonly>
+        </div>
+        <div class="input-wrapper">
+            <label for="Price_field">Price: </label>
+            <input type="text" id="dialog-price" class="nes-input" name="Price_field">
+        </div>
+        <menu class="dialog-menu">
+            <button class="nes-btn " onclick="$('#dialog-default').hide()">Cancel</button>
+            <button class="nes-btn is-primary send-modify">Confirm</button>
+        </menu>
+    </form>
+</dialog>
+<script>
+    $(document).ready(function () {
+        $('.modify-price').click(function () {
+            $('#dialog-title').text('Modify Item');
+            $('#dialog-id').val($(this).parent().parent().children().eq(0).text());
+            $('#dialog-price').val($(this).parent().parent().children().eq(4).text());
+            $('#dialog-default').show();
+        })
+
+        $('.send-modify').click(function () {
+            const response = fetch('/item', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    item_id: $('#dialog-id').val(),
+                    unit_price: $('#dialog-price').val()
+                })
+            }).then(res =>{
+                if(res.statusText == 'OK'){
+                    $('#dialog-default').hide();
+                    location.reload();
+                }
+            })
+        })
+    });
+</script>
 {%endblock%}

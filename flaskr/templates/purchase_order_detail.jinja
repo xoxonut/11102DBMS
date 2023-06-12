@@ -14,19 +14,19 @@
             <table class="nes-table is-bordered">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
                         <th>Type</th>
-                        <th>Amount</th>
+                        <th>Quantity</th>
+                        <th>Unit Cost</th>
                     </tr>
                 </thead>
                 <tbody>
                     {%for item in items%}
                     <tr style="text-align: center;">
-                        <td>{{item.id}}</td>
-                        <td>{{item.name}}</td>
-                        <td>{{item.type}}</td>
-                        <td>{{item.stock}}</td>
+                        <td>{{item.item_name}}</td>
+                        <td>{{item.item_type}}</td>
+                        <td>{{item.item_quantity}}</td>
+                        <td>{{item.unit_cost}}</td>
                     </tr>
                     {%endfor%}
                 </tbody>

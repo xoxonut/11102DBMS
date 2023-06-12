@@ -14,16 +14,7 @@ def create_app(test_config=None):
     except OSError:
         pass
     from . import db
-    db.init_app(app)
-    staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
-    members =[{'id':'1','name':'Frank','email':'frank@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'},
-            {'id':'2','name':'Rex','email':'sad@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'}]
-    items = [{'id':1,'name':'apple','type':'fruit','unit_price':100,'stock':1984},
-            {'id':2,'name':'banana','type':'fruit','unit_price':50,'stock':1984}]
-    porder = [{'id':1,'supplier_id':1,'staff_id':1},
-            {'id':2,'supplier_id':2,'staff_id':2}]
-    # a simple page that says hello
-    
+    db.init_app(app)    
     # a simple page that says hello
     @app.route('/')
     def index():    
@@ -51,93 +42,104 @@ def create_app(test_config=None):
         return render_template('supplier.jinja',suppliers=suppliers.json()['supplier_list'])
     @app.route('/myErp/member')
     def member():
-        return render_template('member.jinja',members=members)
+        members = requests.get('http://127.0.0.1:5000/member')
+        return render_template('member.jinja',members=members.json()['member_list'])
     @app.route('/myErp/item')
     def item():
-        return render_template('item.jinja',items=items)
+        items = requests.get('http://127.0.0.1:5000/item')
+        return render_template('item.jinja',items=items.json()['item_list'])
     @app.route('/myErp/purchase_order')
     def purchase_order():
-        return render_template('purchase_order.jinja',orders=porder)
+        porders = requests.get('http://127.0.0.1:5000/purchase_order')
+        return render_template('purchase_order.jinja',orders=porders.json()['p_order_list'])
     
     @app.route('/myErp/purchase_order/<pid>')
     def purchase_order_detail(pid):
-        pid=int(pid)
-        return render_template('purchase_order_detail.jinja',items=[items[pid-1]])
+        headers = {'Content-type': 'application/json'}
+        porder_detail = requests.get('http://127.0.0.1:5000/purchase_order/detail',headers=headers,json={'p_order_id':pid})
+        print(porder_detail)
+        return render_template('purchase_order_detail.jinja',items=porder_detail.json()['item_list'])
     
     @app.route('/myErp/purchase_order/add')
     def purchase_order_add():
-        return render_template('purchase_order_add.jinja')
+        staffs = requests.get('http://127.0.0.1:5000/staff').json()['staff_list']
+        suppliers = requests.get('http://127.0.0.1:5000/supplier').json()['supplier_list']
+        return render_template('purchase_order_add.jinja',suppliers=suppliers,staffs=staffs)
     
     @app.route('/myErp/sale_order')
     def sale_order():
-        return render_template('sale_order.jinja',orders=porder)
+        sorders = requests.get('http://127.0.0.1:5000/sale_order')
+        return render_template('sale_order.jinja',orders=sorders.json()['s_order_list'])
     @app.route('/myErp/sale_order/<pid>')
     def sale_order_detail(pid):
-        pid=int(pid)
-        return render_template('sale_order_detail.jinja',items=[items[pid-1]])
+        headers = {'Content-type': 'application/json'}
+        sorder_detail = requests.get('http://127.0.0.1:5000/sale_order/detail',headers=headers,json={'s_order_id':pid})
+        return render_template('sale_order_detail.jinja',items=sorder_detail.json()['item_list'])
     @app.route('/myErp/sale_order/add')
     def sale_order_add():
-        return render_template('sale_order_add.jinja')
+        staffs = requests.get('http://127.0.0.1:5000/staff').json()['staff_list']
+        members = requests.get('http://127.0.0.1:5000/member').json()['member_list']
+        return render_template('sale_order_add.jinja',members=members,staffs=staffs)
     
-    @app.route('/add', methods=['GET', 'POST'])
-    @app.route('/addsupplier', methods=['GET', 'POST'])
-    def add():
-        if request.method == 'POST':
-            if request.path == '/add':
-                staff_id = request.form.get('id')
-                name = request.form.get('name')
-                managerId = request.form.get('mId')
-                staffs.append({'id': staff_id, 'name': name, 'mId': managerId})
-                return redirect("/myErp/staff")
-            elif request.path == '/addsupplier':
-                supplier_id = request.form.get('id')
-                Name = request.form.get('name')
-                Phone = request.form.get('phone')
-                Email = request.form.get('email')
-                Address = request.form.get('address')
-                suppliers.append({'id': supplier_id, 'name': Name, 'phone': Phone, 'email': Email, 'address': Address})
-                return redirect("/myErp/supplier")
+    # @app.route('/add', methods=['GET', 'POST'])
+    # @app.route('/addsupplier', methods=['GET', 'POST'])
+    # def add():
+    #     if request.method == 'POST':
+    #         if request.path == '/add':
+    #             staff_id = request.form.get('id')
+    #             name = request.form.get('name')
+    #             managerId = request.form.get('mId')
+    #             staffs.append({'id': staff_id, 'name': name, 'mId': managerId})
+    #             return redirect("/myErp/staff")
+    #         elif request.path == '/addsupplier':
+    #             supplier_id = request.form.get('id')
+    #             Name = request.form.get('name')
+    #             Phone = request.form.get('phone')
+    #             Email = request.form.get('email')
+    #             Address = request.form.get('address')
+    #             suppliers.append({'id': supplier_id, 'name': Name, 'phone': Phone, 'email': Email, 'address': Address})
+    #             return redirect("/myErp/supplier")
     
-    @app.route('/delete', methods=['GET', 'POST'])
-    @app.route('/deletesupplier', methods=['GET', 'POST'])
-    def delete():
-        if request.method == 'POST':
-            id = request.form.get('id')
-            if request.path == '/delete':
-                for s in staffs:
-                    if s['id'] == id:
-                        staffs.remove(s)
-                return redirect("/myErp/staff")
-            elif request.path == '/deletesupplier':
-                for s in suppliers:
-                    if s['id'] == id:
-                        suppliers.remove(s)
-                return redirect("/myErp/supplier")
-    @app.route('/modify', methods=['GET', 'POST'])
-    @app.route('/modifysupplier', methods=['GET', 'POST'])
-    def modify():
-        if request.method == 'POST':
-            id = request.form.get('id')
-            if request.path == '/modify':
-                name = request.form.get('name')
-                managerId = request.form.get('mId')
-                for s in staffs:
-                    if s['id'] == id:
-                        s['name'] = name
-                        s['mId'] = managerId
-                return redirect("/myErp/staff")
-            elif request.path == '/modifysupplier':
-                name = request.form.get('name')
-                Phone = request.form.get('phone')
-                Email = request.form.get('email')
-                Address = request.form.get('address')
-                for s in suppliers:
-                    if s['id'] == id:
-                        s['name'] = name
-                        s['phone'] = Phone
-                        s['email'] = Email
-                        s['address'] = Address
-                return redirect("/myErp/supplier")
+    # @app.route('/delete', methods=['GET', 'POST'])
+    # @app.route('/deletesupplier', methods=['GET', 'POST'])
+    # def delete():
+    #     if request.method == 'POST':
+    #         id = request.form.get('id')
+    #         if request.path == '/delete':
+    #             for s in staffs:
+    #                 if s['id'] == id:
+    #                     staffs.remove(s)
+    #             return redirect("/myErp/staff")
+    #         elif request.path == '/deletesupplier':
+    #             for s in suppliers:
+    #                 if s['id'] == id:
+    #                     suppliers.remove(s)
+    #             return redirect("/myErp/supplier")
+    # @app.route('/modify', methods=['GET', 'POST'])
+    # @app.route('/modifysupplier', methods=['GET', 'POST'])
+    # def modify():
+    #     if request.method == 'POST':
+    #         id = request.form.get('id')
+    #         if request.path == '/modify':
+    #             name = request.form.get('name')
+    #             managerId = request.form.get('mId')
+    #             for s in staffs:
+    #                 if s['id'] == id:
+    #                     s['name'] = name
+    #                     s['mId'] = managerId
+    #             return redirect("/myErp/staff")
+    #         elif request.path == '/modifysupplier':
+    #             name = request.form.get('name')
+    #             Phone = request.form.get('phone')
+    #             Email = request.form.get('email')
+    #             Address = request.form.get('address')
+    #             for s in suppliers:
+    #                 if s['id'] == id:
+    #                     s['name'] = name
+    #                     s['phone'] = Phone
+    #                     s['email'] = Email
+    #                     s['address'] = Address
+    #             return redirect("/myErp/supplier")
 
     from .api import (staff, supplier, member, item,purchase_order, sale_order)
     app.register_blueprint(staff.bp)
