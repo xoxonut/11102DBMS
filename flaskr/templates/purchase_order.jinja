@@ -1,12 +1,14 @@
 {%extends "base.jinja"%}
 {%block title%}Purchase Order{%endblock%}
 {%block content%}
-<div style="display :flex; margin:10px">
-    <h1>Purchase Order</h1>
-    <a href="{{url_for('.purchase_order_add')}}"><button type="button" class="nes-btn is-primary" id="add_btn">ADD</button></a>  
-</div>
-<div class="nes-table responsive">
-    <table class="nes-table is-bordered">
+<div class="nes-table-responsive">
+    <div class="container" >
+        <div class="title-btn-group">
+            <h1 class="page-title">Purchase Order</h1>
+            <a href="{{url_for('.purchase_order_add')}}"><button type="button" class="button" id="add_btn">ADD</button></a>  
+        </div>
+    </div>
+    <table class="table-bordered">
         <thead>
             <tr>
                 <th>Order ID</th>

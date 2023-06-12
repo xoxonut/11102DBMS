@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+        <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
+    </head>
+    <body>
+        <div id="navigation">
+            <div id="header">
+                <h1>ERP System</h1> 
+            </div>
+            <ul>
+                <li><a href="/myErp">Home</a></li>
+                <li class="dropdown">
+                    <a href="#">Search/Modify</a>
+                    <div class="dropdown-content">
+                        <a href="/myErp/supplier">Supplier</a>
+                        <a href="/myErp/purchase_order">Purchase_order</a>
+                        <a href="/myErp/sale_order">Sale_order</a>
+                        <a href="/myErp/staff">Staff</a>
+                        <a href="/myErp/member">member</a>
+                    </div>
+                </li>
+                <li><a href="/myErp/item">Inventory</a></li>
+                <li><a href="#">Earnings</a></li>
+                <li class="dropdown">
+                    <a href="#">other</a>
+                    <div class="dropdown-content">
+                        <a href="#">Supplier's item</a>
+                        <a href="#">Item's supplier</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="login-container">
+            <h2>Welcome to our ERP</h2>
+            <form class="login-box nes-container is-rounded" method="POST">
+                <div class="login-text">
+                    <h3 >login</h3>
+                </div>
+                <label for="account">Account</label>
+                <input type="text" id="account" class="nes-input" name="account">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="nes-input" name="password">
+                {% if error_message and request.method == 'POST' %}
+                    <div class="error-message">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+                <div class="submit-wrapper">
+                    <button type="submit" class="button">submit</button>
+                </div>
+            </form>
+        </div>
+
+    </body>
+</html>
+<style>
+         .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+        }
+
+        .login-box {
+            padding: 20px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            background-color: #fff;
+            max-width: 500px;
+        }
+
+        .login-box input {
+            margin-bottom: 10px;
+        }
+
+        .login-box button {
+            margin-top: 10px;
+            box-shadow: 0px 3px 10px rgba(0,0,0,0.2); /* Added box shadow */
+            border: none;
+            outline: none;
+        }
+
+        .login-text {
+            text-align: center;
+        }
+
+        .login-box .submit-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+</style>
