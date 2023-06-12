@@ -18,7 +18,7 @@ def get_suppliers():
         one_supplier = {
             "name": name,
             "email": email,
-            "phone_number":phone_number,
+            "phone":phone_number,
             "address": address
         }
         supplier_list.append(one_supplier)
@@ -30,6 +30,7 @@ def get_suppliers():
 
 @bp.route("/", methods=["POST"])
 def create_supplier():
+    print(request.headers)
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
         supplier_data = request.json

@@ -1,6 +1,6 @@
 import os
 from flask import Flask, app,render_template,redirect,request
-
+import requests
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -15,8 +15,6 @@ def create_app(test_config=None):
         pass
     from . import db
     db.init_app(app)
-    suppliers = [{'id':'1','name':'ABC','email':'123456@gmail.com','phone':'0937957279','address':'台北市文山區指南路二段4號'}
-                ,{'id':'2','name':'DEF','email':'78901@gmail.com','phone':'0938307320','address':'台北市文山區指南路一段78號'}]
     staffs = [{'id':'1','name':'Frank','mId':'2'},{'id':'2','name':'Rex','mId':''}]
     members =[{'id':'1','name':'Frank','email':'frank@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'},
             {'id':'2','name':'Rex','email':'sad@gmail.com','phone':'0966513967','address':'235新北市中和區中正路291號'}]
@@ -49,7 +47,8 @@ def create_app(test_config=None):
         return render_template('staff.jinja',staffs=staffs)
     @app.route('/myErp/supplier')
     def supplier():
-        return render_template('supplier.jinja',suppliers=suppliers)
+        suppliers = requests.get('http://127.0.0.1:5000/supplier')
+        return render_template('supplier.jinja',suppliers=suppliers.json()['supplier_list'])
     @app.route('/myErp/member')
     def member():
         return render_template('member.jinja',members=members)

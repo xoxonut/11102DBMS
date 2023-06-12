@@ -2,13 +2,14 @@
 {% block title %}Supplier Management{% endblock title %}
 {% block content %}
 <div class="nes-table-responsive">
-    <div class="container" >
+    <div class="container">
         <div class="title-btn-group">
             <h1 class="page-title">Supplier Management</h1>
-            <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'/addsupplier')" class="button">ADD</button>
+            <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'POST')"
+                class="button">ADD</button>
         </div>
     </div>
-    <table  class="table-bordered">
+    <table class="table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -30,11 +31,12 @@
                 <td>{{ s.address }}</td>
                 <td>
                     <i class="nes-icon coin is-small" onclick="showDialog('Modify supplier data','{{ s.id }}', '{{ s.name }}', '{{ s.email }}'
-                    ,'{{ s.phone }}','{{ s.address }}', '/modifysupplier')"></i>
+                    ,'{{ s.phone }}','{{ s.address }}', 'PUT')"></i>
                 </td>
                 <td>
-                <i class="nes-icon close is-small" onclick="showDialog('Delete  data' , 
-                '{{ s.id }}', '{{ s.name }}', '{{ s.email }}','{{ s.phone}}','{{ s.address }}', '/deletesupplier' ,true)"></i>
+                    <i class="nes-icon close is-small"
+                        onclick="showDialog('Delete  data' , 
+                '{{ s.id }}', '{{ s.name }}', '{{ s.email }}','{{ s.phone}}','{{ s.address }}', 'DELETE' ,true)"></i>
                 </td>
             </tr>
             {% endfor %}
@@ -62,9 +64,9 @@
             <div class="input-wrapper">
                 <label for="Name_field">Address: </label>
                 <input type="text" id="dialog-address" class="nes-input" name="name">
-            </div>                                    
+            </div>
 
-            <span id="dialog-path" hidden></span>
+            <span id="dialog-method" hidden></span>
             <menu class="dialog-menu">
                 <button class="nes-btn " onclick="closeDialog(false)">Cancel</button>
                 <button class="nes-btn is-primary " onclick="closeDialog(true)">Confirm</button>
@@ -73,15 +75,14 @@
     </dialog>
 </div>
 <style>
-.input-wrapper input {
-    display: table-cell;
-    vertical-align: middle;
-    width:300px
-}
-
+    .input-wrapper input {
+        display: table-cell;
+        vertical-align: middle;
+        width: 300px
+    }
 </style>
 <script>
-    function showDialog(title,id, name, email,phone,address,path,readonly = false) {
+    function showDialog(title, id, name, email, phone, address, method, readonly = false) {
         const dialogTitle = document.getElementById('dialog-title');
         const dialog = document.getElementById('dialog-default');
         const dialogId = document.getElementById('dialog-id');
@@ -89,16 +90,16 @@
         const dialogEmail = document.getElementById('dialog-email');
         const dialogPhone = document.getElementById('dialog-phone');
         const dialogAddress = document.getElementById('dialog-address');
-        const dialogPath = document.getElementById('dialog-path');
+        const dialogMethod = document.getElementById('dialog-method');
 
         dialogTitle.textContent = title;
         dialogId.value = id;
-        dialogName.value= name;
+        dialogName.value = name;
         dialogEmail.value = email;
         dialogPhone.value = phone;
-        dialogAddress.value= address;
+        dialogAddress.value = address;
 
-        if(readonly){
+        if (readonly) {
             dialogId.setAttribute("readonly", "False");
             dialogName.setAttribute("readonly", "true");
             dialogEmail.setAttribute("readonly", "true");
@@ -106,7 +107,7 @@
             dialogAddress.setAttribute("readonly", "true");
 
         }
-        dialogPath.textContent = path;
+        dialogMethod.textContent = method;
         if (!dialog.hasAttribute('opened')) {
             dialog.showModal();
             dialog.setAttribute('opened', 'true');
@@ -120,69 +121,32 @@
         const dialogPhone = document.getElementById('dialog-phone').value;
         const dialogEmail = document.getElementById('dialog-email').value;
         const dialogAddress = document.getElementById('dialog-address').value;
-        const dialogPath = document.getElementById('dialog-path').textContent;
+        const dialogMethod = document.getElementById('dialog-method').textContent;
         dialog.close();
         dialog.removeAttribute('opened');
-        params = "id="+dialogId
+        params = "id=" + dialogId
 
         // Send GET request to supplier/ endpoint
-        if(send){
-            /*    
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', dialogPath );
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // 設定請求的內容類型
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const response = xhr.responseText;
-                    console.log(response); // Handle the response as needed
-                    const test=document.getElementById('failTest')
-                    test.textContent="fail"
+        if (send) {
+
+            const response = fetch('/supplier', {
+                method: dialogMethod,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: "follow",
+                body: JSON.stringify({
+                    id: dialogId,
+                    name: dialogName,
+                    phone_number: dialogPhone,
+                    email: dialogEmail,
+                    address: dialogAddress
+                })
+            }).then(response => {
+                if (response.statusText == "OK") {
+                    location.reload();
                 }
-            };
-                xhr.send(params);
-            */
-
-            // 建立一個 form 元素
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = dialogPath;  // 替換為你的伺服器端 API 的 URL
-
-            // 建立一個輸入欄位 (input) 並設定屬性
-            var param1Input = document.createElement('input');
-            param1Input.type = 'hidden';  // 隱藏欄位
-            param1Input.name = 'id';  // 參數名稱
-            param1Input.value = dialogId;  // 參數值
-            form.appendChild(param1Input);  // 將輸入欄位加入到表單中
-
-            var param2Input = document.createElement('input');
-            param2Input.type = 'hidden';  // 隱藏欄位
-            param2Input.name = 'name';  // 參數名稱
-            param2Input.value = dialogName;  // 參數值
-            form.appendChild(param2Input);  // 將輸入欄位加入到表單中
-
-            var param3Input = document.createElement('input');
-            param3Input.type = 'hidden';  // 隱藏欄位
-            param3Input.name = 'phone';  // 參數名稱
-            param3Input.value = dialogPhone;  // 參數值
-            form.appendChild(param3Input);  // 將輸入欄位加入到表單中
-
-            var param4Input = document.createElement('input');
-            param4Input.type = 'hidden';  // 隱藏欄位
-            param4Input.name = 'email';  // 參數名稱
-            param4Input.value = dialogEmail;  // 參數值
-            form.appendChild(param4Input);  // 將輸入欄位加入到表單中
-
-            var param5Input = document.createElement('input');
-            param5Input.type = 'hidden';  // 隱藏欄位
-            param5Input.name = 'address';  // 參數名稱
-            param5Input.value = dialogAddress;  // 參數值
-            form.appendChild(param5Input);  // 將輸入欄位加入到表單中
-
-            // 將表單加入到網頁的 body 元素中
-            document.body.appendChild(form);
-
-            // 提交表單
-            form.submit();
+            })
         }
     }
 </script>
