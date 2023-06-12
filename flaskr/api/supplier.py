@@ -11,11 +11,13 @@ def get_suppliers():
     suppliers = cursor.fetchall()
     supplier_list = []
     for supplier in suppliers:
+        supplier_id = supplier['supplier_id']
         name = supplier['name']
         email = supplier['email']
         phone_number = supplier['phone_number']
         address = supplier['address']
         one_supplier = {
+            "supplier_id": supplier_id,
             "name": name,
             "email": email,
             "phone":phone_number,

@@ -53,19 +53,22 @@
 {
     "staff_list": [
         {
-            "entry_date": "2023-05-20",
-            "manager_id": 2,
-            "name": "John"
+            "entry_date": "2023-5-20",
+            "manager_id": "NULL",
+            "name": "John",
+            "staff_id": 1
         },
         {
-            "entry_date": "2023-05-21",
+            "entry_date": "2023-5-21",
             "manager_id": 1,
-            "name": "Michael"
+            "name": "Michael",
+            "staff_id": 2
         },
         {
-            "entry_date": "2023-05-21",
+            "entry_date": "2023-5-21",
             "manager_id": 1,
-            "name": "Steve"
+            "name": "Steve",
+            "staff_id": 3
         }
     ]
 }
@@ -138,19 +141,22 @@
             "address": "Cupertino, California, United States",
             "email": "apple@apple.com",
             "name": "apple",
-            "phone_number": "1234567890"
+            "phone_number": "1234567890",
+            "supplier_id": 1
         },
         {
             "address": "Austin, Texas, United States",
             "email": "tesla@tesla.com",
             "name": "tesla",
-            "phone_number": "9876543210"
+            "phone_number": "9876543210",
+            "supplier_id": 2
         },
         {
-            "address": "8, Li-Hsin Rd. 6, Hsinchu Science Park,\r\nHsinchu 300-096, Taiwan, R.O.C.",
+            "address": "8, Li-Hsin Rd. 6, Hsinchu Science Park,Hsinchu 300-096, Taiwan, R.O.C.",
             "email": "tsmc@tsmc.com",
             "name": "tsmc",
-            "phone_number": "1357924680"
+            "phone_number": "1357924680",
+            "supplier_id": 3
         }
     ]
 }
@@ -221,20 +227,23 @@
 {
     "member_list": [
         {
-            "address": "nccu",
+            "address": "singapore",
             "email": "tom@gmail.com",
+            "member_id": 1,
             "name": "Tom",
             "phone_number": "1122334455"
         },
         {
-            "address": "singapore",
+            "address": "usa",
             "email": "emma@gmail.com",
+            "member_id": 2,
             "name": "Emma",
             "phone_number": "6677889900"
         },
         {
             "address": "thailand",
             "email": "jack@gmail.com",
+            "member_id": 3,
             "name": "Jack",
             "phone_number": "5544332211"
         }
@@ -386,20 +395,104 @@
 ```
 
 ## sales order
-- C
-    - request
+### C
+   - request
         - staff_id : int
         - customer_id : int
         - deliver_date : datetime
         - status : bool
         - items : list[item]
-- R
-    - response
+```json
+{
+    "member_id": 1,
+    "staff_id": 2,
+    "item_list": [
+        {
+            "name": "iphone 14",
+            "type": "mobile phone",
+            "quantity": 2
+        },
+        {            
+            "name": "M2",
+            "type": "chip",
+            "quantity": 3
+        }
+    ]
+}
+```
+ - respond
+```json
+{
+    "message": "Create sales order success!"
+}
+```
+### R
+   - response
         - orders : list[sales order]
-
-- D
-    - request 
+```json
+{
+    "s_order_list": [
+        {
+            "member_name": "Tom",
+            "s_order_date": "2023-5-24",
+            "s_order_id": 1,
+            "staff_name": "Michael"
+        },
+        {
+            "member_name": "Jack",
+            "s_order_date": "2023-5-24",
+            "s_order_id": 2,
+            "staff_name": "Michael"
+        },
+        {
+            "member_name": "Tom",
+            "s_order_date": "2023-5-25",
+            "s_order_id": 3,
+            "staff_name": "Steve"
+        }
+    ]
+}
+```
+### D
+   - request 
         - order_id : str
+```json
+{
+    "s_order_id": 4
+}
+```
+ - respond
+```json
+{
+    "message": "Delete sales order success!"
+}
+```
+### read sales order detail of item
+ - request
+```json
+{
+    "s_order_id": 4
+}
+```
+- respond
+```json
+{
+    "item_list": [
+        {
+            "item_name": "iphone 14",
+            "item_quantity": 2,
+            "item_type": "mobile phone",
+            "unit_price": 100
+        },
+        {
+            "item_name": "M2",
+            "item_quantity": 3,
+            "item_type": "chip",
+            "unit_price": 100
+        }
+    ]
+}
+```
 ## Item
 ### R
    - respond
@@ -408,24 +501,28 @@
 {
     "item_list": [
         {
+            "item_id": 1,
             "name": "iphone 14",
             "stock": 10,
             "type": "mobile phone",
             "unit_price": 100
         },
         {
+            "item_id": 2,
             "name": "model x",
             "stock": 5,
             "type": "car",
             "unit_price": 1000
         },
         {
+            "item_id": 3,
             "name": "M2",
             "stock": 50,
             "type": "chip",
             "unit_price": 100
         },
         {
+            "item_id": 4,
             "name": "Mac",
             "stock": 0,
             "type": "test",
