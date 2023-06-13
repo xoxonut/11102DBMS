@@ -468,7 +468,8 @@
 }
 ```
 ### read sales order detail of item
- - request
+ - request: url: /sale_order/detail
+   - s_order_id: int
 ```json
 {
     "s_order_id": 4
@@ -547,6 +548,24 @@
     "message": "Item updated successfully"
 }
 ```
+## 列出一段時間的營業額
+### R
+ - request: url: /income
+   - month: str
+   - year: str
+```json
+{
+    "month": "Jun",
+    "year": "2023"
+}
+```
+- respond:
+```json
+{
+    "income": 500
+}
+```
+
 # 分工
 - 前端 2
     - route
