@@ -15,12 +15,16 @@ def read_income():
         FROM SALES_ORDER S, DECREASE D, ITEM I
         WHERE S.s_order_date LIKE ? AND S.s_order_id = D.s_order_id AND D.item_id = I.item_id""", ('%'+month+'%'+year,))
     rows = cursor.fetchall()
-    # TODO: consider no sales in the month
+
+    # calculate total_income in the month
+    total_income = 0
     for row in rows:
-      print("quantity: "+str(row['item_quantity'])+" unit_price: "+str(row['unit_price']))
-      # TODO: calculate sum
+      item_quantity = row['item_quantity']
+      unit_price = row['unit_price']
+      total_income = total_income + (item_quantity*unit_price)
+      print("quantity: "+str(item_quantity)+" unit_price: "+str(unit_price)+" sum: "+str(total_income))
 
     db.close()
-    return jsonify({"message": "ok"})
+    return jsonify({"income": total_income})
   else:
     return jsonify({"message": "Content-Type not supported!"})
