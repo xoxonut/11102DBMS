@@ -9,45 +9,57 @@
 </head>
 
 <body>
-    <button class="nes-btn is-primary" id="add-btn">Add</button>
-    <button class="nes-btn is-primary" id="send-btn">Send</button>
-    <div style="display: flex; margin:10px; flex-direction:column">
-        <label for="supplier-id">Supplier</label>
-        <input type="text" class="nes-input" id="supplier-id">
-        <label for="staff-id">Staff</label>
-        <input type="text" class="nes-input" id="staff-id">
-    </div>
-    <div class="nes-table responsive">
-        <table class="nes-table is-bordered" id="item-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody id="item-list">
-                {%for item in items%}
-                <tr style="text-align: center;">
-                </tr>
+    <div style="margin: 10PX;">
+        <button class="nes-btn is-primary" id="add-btn">Add</button>
+        <button class="nes-btn is-primary" id="send-btn">Send</button>
+        <div style="display: flex; margin:10px; flex-direction:column">
+            <label for="supplier-id">Supplier</label>
+            <select class="nes-select" id="supplier-id">
+                {%for supplier in suppliers%}
+                <option value="{{supplier.supplier_id}}">{{supplier.name}}</option>
                 {%endfor%}
-            </tbody>
-        </table>
+            </select>
+            <label for="staff-id">Staff</label>
+            <select class="nes-select" id="staff-id">
+                {%for staff in staffs%}
+                <option value="{{staff.staff_id}}">{{staff.name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+        <div class="nes-table responsive">
+            <table class="nes-table is-bordered" id="item-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Unit Cost</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                    {%for item in items%}
+                    <tr style="text-align: center;">
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <dialog class="nes-dialog" id="item_add">
         <button class="nes-btn is-primary" id="reset-btn">rest</button>
         <form method="dialog">
             <p class="title">Add Item</p>
-            <label for="item-id">Item</label>
-            <input type="text" class="nes-input" id="item-id">
             <label for="item-name">Name</label>
             <input type="text" class="nes-input" id="item-name">
             <label for="item-type">Type</label>
             <input type="text" class="nes-input" id="item-type">
-            <label for="item-amount">Amount</label>
-            <input type="text" class="nes-input" id="item-amount">
+            <label for="item-quantity">Quantity</label>
+            <input type="text" class="nes-input" id="item-quantity">
+            <label for="item-unit-cost">Unit Cost</label>
+            <input type="text" class="nes-input" id="item-unit-cost">
+
             <menu class="dialog-menu">
                 <button class="nes-btn" id="ok-btn">OK</button>
                 <button class="nes-btn is-primary" id="cancel-btn">Cancel</button>
@@ -58,10 +70,10 @@
 <script>
     $(document).ready(function () {
         const reset = function () {
-            $("#item-id").val("");
             $("#item-name").val("");
             $("#item-type").val("");
-            $("#item-amount").val("");
+            $("#item-quantity").val("");
+            $("#item-unit-cost").val("");
         }
         $("#add-btn").click(function () {
             $("#item_add").show();
@@ -74,18 +86,53 @@
         });
         $("#ok-btn").click(function () {
             $("#item_add").hide();
-            const item_id = $("#item-id").val();
-            const item_name = $("#item-name").val();
-            const item_type = $("#item-type").val();
-            const item_amount = $("#item-amount").val();
+            const item_id = $("#item-name").val();
+            const item_name = $("#item-type").val();
+            const item_type = $("#item-quantity").val();
+            const item_amount = $("#item-unit-cost").val();
+            if (item_id == "" || item_name == "" || item_type == "" || item_amount == "") {
+                alert("Please fill in all the blanks");
+                return;
+            }
             const item = "<tr style='text-align: center;'><td>" + item_id + "</td><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_amount + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
             $("#item-list").append(item);
             reset();
         })
-        $('#item-table').on('click', '.removeRowBtn', function() {
-                // Find the closest table row and remove it
-                $(this).closest('tr').remove();
+        $('#item-table').on('click', '.removeRowBtn', function () {
+            // Find the closest table row and remove it
+            $(this).closest('tr').remove();
+        });
+
+        $("#send-btn").click(function () {
+            const data = {
+                supplier_id: $("#supplier-id").val(),
+                staff_id: $("#staff-id").val(),
+                item_list: []
+            }
+            $("#item-list tr").each(function () {
+                const item = {
+                    name: $(this).find("td").eq(0).html(),
+                    type: $(this).find("td").eq(1).html(),
+                    quantity: $(this).find("td").eq(2).html(),
+                    unit_cost: $(this).find("td").eq(3).html()
+                }
+                data.item_list.push(item);
             });
+            const response = fetch("/purchase_order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }).then(function (response) {
+                if (response.status == 200) {
+                    alert("Success");
+                    window.location.href = "/myErp/purchase_order";
+                } else {
+                    alert("Fail");
+                }
+            });
+        });
     });
 </script>
 

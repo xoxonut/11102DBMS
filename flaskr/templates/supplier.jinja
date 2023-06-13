@@ -1,0 +1,156 @@
+{% extends "base.jinja" %}
+{% block title %}Supplier Management{% endblock title %}
+{% block content %}
+<div class="nes-table-responsive">
+    <div class="container">
+        <div class="title-btn-group">
+            <h1 class="page-title">Supplier Management</h1>
+            <button onclick="showDialog('Add staff data' , '', '', '' ,'','' ,'POST')"
+                class="button">ADD</button>
+        </div>
+    </div>
+    <table class="table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Modify</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in suppliers %}
+            <tr style="text-align: center;">
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.email }}</td>
+                <td>{{ s.phone }}</td>
+                <td>{{ s.address }}</td>
+                <td>
+                    <i class="nes-icon coin is-small" onclick="showDialog('Modify supplier data','{{ s.id }}', '{{ s.name }}', '{{ s.email }}'
+                    ,'{{ s.phone }}','{{ s.address }}', 'PUT')"></i>
+                </td>
+                <td>
+                    <i class="nes-icon close is-small"
+                        onclick="showDialog('Delete  data' , 
+                '{{ s.id }}', '{{ s.name }}', '{{ s.email }}','{{ s.phone}}','{{ s.address }}', 'DELETE' ,true)"></i>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <dialog class="nes-dialog" id="dialog-default" style="width: 500px">
+        <form method="dialog">
+            <p class="title" id="dialog-title" style="text-align: center;"></p>
+            <div class="input-wrapper">
+                <label for="Name_field">Supplier ID: </label>
+                <input type="text" id="dialog-id" class="nes-input" name="name" readonly>
+            </div>
+            <div class="input-wrapper">
+                <label for="Name_field">Name: </label>
+                <input type="text" id="dialog-name" class="nes-input" name="name">
+            </div>
+            <div class="input-wrapper">
+                <label for="Name_field">Email: </label>
+                <input type="text" id="dialog-email" class="nes-input" name="name">
+            </div>
+            <div class="input-wrapper">
+                <label for="Name_field">Phone: </label>
+                <input type="text" id="dialog-phone" class="nes-input" name="name">
+            </div>
+            <div class="input-wrapper">
+                <label for="Name_field">Address: </label>
+                <input type="text" id="dialog-address" class="nes-input" name="name">
+            </div>
+
+            <span id="dialog-method" hidden></span>
+            <menu class="dialog-menu">
+                <button class="button" onclick="closeDialog(false)">Cancel</button>
+                <button class="button" onclick="closeDialog(true)">Confirm</button>
+            </menu>
+        </form>
+    </dialog>
+</div>
+<style>
+    .input-wrapper input {
+        display: table-cell;
+        vertical-align: middle;
+        width: 300px
+    }
+
+</style>
+<script>
+    function showDialog(title, id, name, email, phone, address, method, readonly = false) {
+        const dialogTitle = document.getElementById('dialog-title');
+        const dialog = document.getElementById('dialog-default');
+        const dialogId = document.getElementById('dialog-id');
+        const dialogName = document.getElementById('dialog-name');
+        const dialogEmail = document.getElementById('dialog-email');
+        const dialogPhone = document.getElementById('dialog-phone');
+        const dialogAddress = document.getElementById('dialog-address');
+        const dialogMethod = document.getElementById('dialog-method');
+
+        dialogTitle.textContent = title;
+        dialogId.value = id;
+        dialogName.value = name;
+        dialogEmail.value = email;
+        dialogPhone.value = phone;
+        dialogAddress.value = address;
+
+        if (readonly) {
+            dialogId.setAttribute("readonly", "False");
+            dialogName.setAttribute("readonly", "true");
+            dialogEmail.setAttribute("readonly", "true");
+            dialogPhone.setAttribute("readonly", "true");
+            dialogAddress.setAttribute("readonly", "true");
+
+        }
+        dialogMethod.textContent = method;
+        if (!dialog.hasAttribute('opened')) {
+            dialog.showModal();
+            dialog.setAttribute('opened', 'true');
+        }
+    }
+
+    function closeDialog(send) {
+        const dialog = document.getElementById('dialog-default');
+        const dialogId = document.getElementById('dialog-id').value;
+        const dialogName = document.getElementById('dialog-name').value;
+        const dialogPhone = document.getElementById('dialog-phone').value;
+        const dialogEmail = document.getElementById('dialog-email').value;
+        const dialogAddress = document.getElementById('dialog-address').value;
+        const dialogMethod = document.getElementById('dialog-method').textContent;
+        dialog.close();
+        dialog.removeAttribute('opened');
+        params = "id=" + dialogId
+        console.log(dialogId)
+
+        // Send GET request to supplier/ endpoint
+        if (send) {
+
+            const response = fetch('/supplier', {
+                method: dialogMethod,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: "follow",
+                body: JSON.stringify({
+                    supplier_id: dialogId,
+                    name: dialogName,
+                    phone_number: dialogPhone,
+                    email: dialogEmail,
+                    address: dialogAddress
+                })
+            }).then(response => {
+                if (response.statusText == "OK") {
+                    location.reload()
+                }
+            })
+        }
+    }
+</script>
+
+{% endblock content %}

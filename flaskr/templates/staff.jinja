@@ -1,69 +1,130 @@
 {% extends "base.jinja" %}
 {% block title %}Staff Management{% endblock title %}
 {% block content %}
-<h1>Staff Management</h1>
-<p id="failTest"></p>
-<div class="nes-table-responsive">
-    <table class="nes-table is-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Manager ID</th>
-                <th>Modify</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for s in staffs %}
-            <tr style="text-align: center">
-                <td>{{ s.id }}</td>
-                <td>{{ s.name }}</td>
-                <td>{{ s.mId }}</td>
-                <td>
-                    <i class="nes-icon coin is-small" onclick="showDialog('{{ s.id }}', '{{ s.name }}', '{{ s.mId }}')"></i>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <dialog class="nes-dialog" id="dialog-default">
-        <form method="dialog">
-            <p class="title">Dialog</p>
-            <p>Staff ID: <span id="dialog-id"></span></p>
-            <p>Name: <span id="dialog-name"></span></p>
-            <p>Manager ID: <span id="dialog-mid"></span></p>
-            <menu class="dialog-menu">
-                <button class="nes-btn" onclick="closeDialog(this)">Cancel</button>
-                <button class="nes-btn is-primary" onclick="closeDialog(this)">Confirm</button>
-            </menu>
-        </form>
-    </dialog>
-</div>
-<div>
-    <a href="/add" class="nes-btn" style="margin-left: 220px;height:50px width:50px">ADD</a>
-</div>
-<script>
-    function showDialog(id, name, mid) {
-        const dialog = document.getElementById('dialog-default');
-        const dialogId = document.getElementById('dialog-id');
-        const dialogName = document.getElementById('dialog-name');
-        const dialogMid = document.getElementById('dialog-mid');
+    <div class="nes-table-responsive">
+        <div class="container" >
+            <div class="title-btn-group">
+                <h1 class="page-title">Staff</h1>
+                <button onclick="showDialog('Add staff data', '', '', '','POST')" class="button">ADD</button>
+            </div>
+        </div>
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th class="table-header">ID</th>
+                    <th class="table-header">Name</th>
+                    <th class="table-header">mid</th>
+                    <th class="table-header">Modify</th>
+                    <th class="table-header">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in staffs %}
+                <tr class="table-header">
+                    <td>{{ s.staff_id }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.manager_id }}</td>
+                    <td>
+                        <i class="nes-icon coin is-small" onclick="showDialog('Modify staff data', '{{ s.staff_id }}', '{{ s.name }}', '{{ s.manager_id }}', 'PUT')"></i>
+                    </td>
+                    <td>
+                        <i class="nes-icon close is-small" onclick="showDialog('Delete staff data', '{{ s.staff_id }}', '{{ s.name }}', '{{ s.manager_id }}', 'DELETE', true)"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <dialog class="nes-dialog" id="dialog-default">
+            <form method="dialog">
+                <p class="title" id="dialog-title" style="text-align: center;"></p>
+                <div class="input-wrapper">
+                    <label for="Name_field">Staff ID: </label>
+                    <input type="text" id="dialog-id" class="nes-input" name="name" readonly>
+                </div>
+                <div class="input-wrapper">
+                    <label for="Name_field">Name: </label>
+                    <input type="text" id="dialog-name" class="nes-input" name="name">
+                </div>
+                <div class="input-wrapper">
+                    <label for="Name_field">Manager ID: </label>
+                    <input type="text" id="dialog-mid" class="nes-input" name="name">
+                </div>
+                <span id="dialog-method" hidden></span>
+                <menu class="dialog-menu">
+                    <button class="button" onclick="closeDialog(false)">Cancel</button>
+                    <button class="button" onclick="closeDialog(true)">Confirm</button>
+                </menu>
+            </form>
+        </dialog>
+    </div>
 
-        dialogId.textContent = id;
-        dialogName.textContent = name;
-        dialogMid.textContent = mid;
+    <script>
+        function showDialog(title,id, name, mid , method , readonly = false) {
+            const dialogTitle = document.getElementById('dialog-title');
+            const dialog = document.getElementById('dialog-default');
+            const dialogId = document.getElementById('dialog-id');
+            const dialogName = document.getElementById('dialog-name');
+            const dialogMid = document.getElementById('dialog-mid');
+            const dialogMethod = document.getElementById('dialog-method');
 
-        if (!dialog.hasAttribute('opened')) {
-            dialog.showModal();
-            dialog.setAttribute('opened', 'true');
+            dialogTitle.textContent = title;
+            dialogId.value = id;
+            dialogName.value = name;
+            dialogMid.value = mid;
+            if(readonly){
+                dialogId.setAttribute("readonly", "False");
+                dialogName.setAttribute("readonly", "true");
+                dialogMid.setAttribute("readonly", "true");
+            }
+            dialogMethod.textContent = method;
+            if (!dialog.hasAttribute('opened')) {
+                dialog.showModal();
+                dialog.setAttribute('opened', 'true');
+            }
         }
-    }
 
-    function closeDialog(element) {
-        const dialog = document.getElementById('dialog-default');
-        dialog.close();
-        dialog.removeAttribute('opened');
-    }
-</script>
+
+        
+        function closeDialog(send) {
+            const dialog = document.getElementById('dialog-default');
+            const dialogId = document.getElementById('dialog-id').value;
+            const dialogName = document.getElementById('dialog-name').value;
+            const dialogMid = document.getElementById('dialog-mid').value;
+            const dialogMethod = document.getElementById('dialog-method').textContent;
+
+            dialog.close();
+            dialog.removeAttribute('opened');
+
+            if( send && (dialogName == "" || dialogMid == "") ) {
+                alert("fat")
+                return
+            }
+            params = "id=" + dialogId
+            console.log(dialogId)
+            // Send GET request to staff/ endpoint
+            if (send) {
+
+            const response = fetch('/staff', {
+                method: dialogMethod,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: "follow",
+                body: JSON.stringify({
+                    staff_id: dialogId,
+                    name: dialogName,
+                    manager_id: dialogMid,
+                })
+            }).then(response => {
+                if (response.statusText == "OK") {
+                    location.reload()
+                }
+            })
+            }
+
+  
+        }
+    
+    </script>
 
 {% endblock content %}
