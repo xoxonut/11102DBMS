@@ -10,7 +10,6 @@ def read_performance():
     month = request.json.get('month')
     year = request.json.get('year')
     db = get_db()
-    # TODO: add time parameter
     cursor = db.execute("""
         SELECT SUM(D.item_quantity * I.unit_price) AS performance, ST.name
         FROM SALES_ORDER S, DECREASE D, ITEM I, STAFF ST
