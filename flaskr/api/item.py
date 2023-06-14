@@ -53,3 +53,30 @@ def update_item():
         return jsonify({"message": "Item updated successfully"})
 
     return jsonify({"error": "Invalid Content-Type"})
+
+@bp.route("/<item_id>", methods=["GET"])
+def get_item_supplier(item_id):
+    db = get_db()
+    try:
+        cursor = db.execute(
+            "SELECT DISTINCT SUPPLIER.supplier_id, SUPPLIER.name\
+                FROM ITEM,SUPPLIER,INCREASE,PURCHASE_ORDER\
+                WHERE ITEM.item_id = ?\
+                    AND ITEM.item_id = INCREASE.item_id\
+                    AND INCREASE.p_order_id = PURCHASE_ORDER.p_order_id\
+                    AND PURCHASE_ORDER.supplier_id = SUPPLIER.supplier_id",
+            item_id
+        )
+        rows = cursor.fetchall()
+        supplier_list = []
+        for row in rows:
+            supplier = {
+                "supplier_id": row["supplier_id"],
+                "name": row["name"]
+            }
+            supplier_list.append(supplier)
+    except:
+        return jsonify({"error": "Item not found"})
+    finally:
+        db.close()
+    return jsonify({"supplier_list": supplier_list})

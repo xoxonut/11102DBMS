@@ -16,6 +16,7 @@
                 <th>Stock</th>
                 <th>Unit Price</th>
                 <th>Modify</th>
+                <th>Suppliers</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
                 <td>{{item.stock}}</td>
                 <td>{{item.unit_price}}</td>
                 <td><i class="nes-icon coin is-small modify-price"></i></td>
+                <td><i class="nes-icon trophy is-small get-suppliers"></i></td>
             </tr>
             {%endfor%}
         </tbody>
@@ -77,6 +79,26 @@
                     if(data.message){
                         alert(data.message);
                         location.reload();
+                    }else{
+                        alert(data.error)
+                    }
+                })
+            })
+        })
+
+        $('.get-suppliers').click(function () {
+            const item_id = $(this).parent().parent().children().eq(0).text();
+            const response = fetch('/item/'+item_id, {
+                method: 'GET'
+            }).then(res =>{
+                res.json().then(data =>{
+                    console.log(data);
+                    if(data.supplier_list){
+                        suppliers =""
+                        for(let i = 0; i < data.supplier_list.length; i++){
+                            suppliers += data.supplier_list[i].name + "\n";
+                        }
+                        alert(suppliers);
                     }else{
                         alert(data.error)
                     }

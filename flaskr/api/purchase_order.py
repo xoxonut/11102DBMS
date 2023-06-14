@@ -75,7 +75,7 @@ def create_purchase_order():
         cursor = db.execute("SELECT stock FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
         rows = cursor.fetchall()
         initial_item_stock = rows[0]['stock']
-        new_item_stock = initial_item_stock + item_quantity
+        new_item_stock = initial_item_stock + int(item_quantity)
         cursor = db.execute("UPDATE ITEM SET stock = ? WHERE name = ? AND type = ?", [new_item_stock, item_name, item_type])
 
       cursor = db.execute("SELECT rowid FROM ITEM WHERE name = ? AND type = ?", [item_name, item_type])
