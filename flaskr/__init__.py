@@ -15,7 +15,6 @@ def create_app(test_config=None):
         pass
     from . import db
     db.init_app(app)    
-    # a simple page that says hello
     @app.route('/')
     def index():    
         return redirect('/loginpage')
@@ -81,9 +80,6 @@ def create_app(test_config=None):
         members = requests.get('http://127.0.0.1:5000/member').json()['member_list']
         return render_template('sale_order_add.jinja',members=members,staffs=staffs)
     
-    @app.route("/myErp/income")
-    def income():
-        return redirect(url_for("income"))
 
     # @app.route('/add', methods=['GET', 'POST'])
     # @app.route('/addsupplier', methods=['GET', 'POST'])
@@ -145,7 +141,7 @@ def create_app(test_config=None):
     #                     s['address'] = Address
     #             return redirect("/myErp/supplier"), income
 
-    from .api import (staff, supplier, member, item,purchase_order, sale_order)
+    from .api import (staff, supplier, member, item,purchase_order, sale_order,income)
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
     app.register_blueprint(member.bp)
