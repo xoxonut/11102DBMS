@@ -104,27 +104,12 @@ def create_app(test_config=None):
         staffs = requests.get('http://127.0.0.1:5000/staff').json()['staff_list']
         members = requests.get('http://127.0.0.1:5000/member').json()['member_list']
         return render_template('sale_order_add.jinja',members=members,staffs=staffs,items=items)
+    @app.route('/myErp/supplier_item')
+    def revenue():
+        suppliers = requests.get('http://127.0.0.1:5000/supplier')
+        return render_template('supplier_item.jinja',suppliers=suppliers.json()['supplier_list'])
 
-    @app.route("/myErp/income")
-    def income():
-        return redirect(url_for("income"))
-
-    @app.route("/myErp/staff_performance")
-    def staff_performance():
-        return redirect(url_for("staff_performance"))
-
-    @app.route("/add", methods=["GET", "POST"])
-    def add():
-        if request.method == "POST":
-            staff_id = request.form.get("id")
-            name = request.form.get("name")
-            managerId = request.form.get("mId")
-            staffs.append({"id": staff_id, "name": name, "mId": managerId})
-            return redirect("/myErp/staff")
-        return render_template("add.jinja")
-
-    from .api import staff, supplier, member, item, purchase_order, sale_order, income, staff_performance
-
+    from .api import (staff, supplier, member, item,purchase_order, sale_order,income,supplier_item)
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
     app.register_blueprint(member.bp)
@@ -132,5 +117,7 @@ def create_app(test_config=None):
     app.register_blueprint(purchase_order.bp)
     app.register_blueprint(sale_order.bp)
     app.register_blueprint(income.bp)
-    app.register_blueprint(staff_performance.bp)
+    app.register_blueprint(supplier_item.bp)
     return app
+  
+
