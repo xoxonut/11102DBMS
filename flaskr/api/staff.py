@@ -65,7 +65,7 @@ def update_staff_member():
         staff_id = request.json.get("staff_id")
         name = request.json.get("name")
         manager_id = request.json.get("manager_id")
-
+        print(staff_id,name,manager_id)
         db = get_db()
         db.execute(
             "UPDATE STAFF SET manager_id = ?, name = ? WHERE rowid = ?",
