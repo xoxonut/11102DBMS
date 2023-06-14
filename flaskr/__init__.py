@@ -132,5 +132,5 @@ def create_app(test_config=None):
     app.register_blueprint(purchase_order.bp)
     app.register_blueprint(sale_order.bp)
     app.register_blueprint(income.bp)
-    app.register_blueprint(income.bp)
+    app.register_blueprint(staff_performance.bp)
     return app
