@@ -86,7 +86,7 @@ def create_sale_order():
       return {"error": "This member doesn't exist!"}
     
     # insert into sale order
-    s_order_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    s_order_date = datetime.datetime.now().strftime("%c")
     cursor = db.execute("""INSERT INTO SALES_ORDER( staff_id, member_id, s_order_date) 
       VALUES (?,?,?)""", [ staff_id, member_id, s_order_date]) 
 

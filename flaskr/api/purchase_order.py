@@ -50,7 +50,7 @@ def create_purchase_order():
       return {"message": "This supplier doesn't exist!"}
 
     # insert into purchase order
-    p_order_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    p_order_date = datetime.datetime.now().strftime("%c")
     cursor = db.execute("""INSERT INTO PURCHASE_ORDER(supplier_id, staff_id, p_order_date) 
       VALUES (?,?,?)""", [ supplier_id, staff_id, p_order_date]) 
 

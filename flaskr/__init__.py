@@ -100,9 +100,10 @@ def create_app(test_config=None):
         return render_template('sale_order_detail.jinja',items=sorder_detail.json()['item_list'])
     @app.route('/myErp/sale_order/add')
     def sale_order_add():
+        items = requests.get('http://127.0.0.1:5000/item').json()['item_list']
         staffs = requests.get('http://127.0.0.1:5000/staff').json()['staff_list']
         members = requests.get('http://127.0.0.1:5000/member').json()['member_list']
-        return render_template('sale_order_add.jinja',members=members,staffs=staffs)
+        return render_template('sale_order_add.jinja',members=members,staffs=staffs,items=items)
 
     from .api import (staff, supplier, member, item,purchase_order, sale_order)
     app.register_blueprint(staff.bp)

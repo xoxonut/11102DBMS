@@ -38,10 +38,6 @@
                     </tr>
                 </thead>
                 <tbody id="item-list">
-                    {%for item in items%}
-                    <tr style="text-align: center;">
-                    </tr>
-                    {%endfor%}
                 </tbody>
             </table>
         </div>
@@ -69,21 +65,26 @@
 </body>
 <script>
     $(document).ready(function () {
+
         const reset = function () {
             $("#item-name").val("");
             $("#item-type").val("");
             $("#item-quantity").val("");
             $("#item-unit-cost").val("");
         }
+
         $("#add-btn").click(function () {
             $("#item_add").show();
         });
+
         $("#cancel-btn").click(function () {
             $("#item_add").hide();
         });
+
         $("#reset-btn").click(function () {
             reset();
         });
+
         $("#ok-btn").click(function () {
             $("#item_add").hide();
             const item_id = $("#item-name").val();
@@ -98,6 +99,7 @@
             $("#item-list").append(item);
             reset();
         })
+
         $('#item-table').on('click', '.removeRowBtn', function () {
             // Find the closest table row and remove it
             $(this).closest('tr').remove();
@@ -118,6 +120,11 @@
                 }
                 data.item_list.push(item);
             });
+            if (data.item_list.length == 0) {
+                alert("Please add at least one item");
+                return;
+            }
+
             const response = fetch("/purchase_order", {
                 method: "POST",
                 headers: {
@@ -125,12 +132,14 @@
                 },
                 body: JSON.stringify(data)
             }).then(function (response) {
-                if (response.status == 200) {
-                    alert("Success");
-                    window.location.href = "/myErp/purchase_order";
-                } else {
-                    alert("Fail");
-                }
+                response.json().then(function (data) {
+                    if (data.message) {
+                        alert(data.message);
+                        window.location.href = "/myErp/purchase_order";
+                    } else {
+                        alert(data.message);
+                    }
+                });
             });
         });
     });

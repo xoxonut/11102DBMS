@@ -59,6 +59,10 @@
         })
 
         $('.send-modify').click(function () {
+            if(!(/^\d+$/.test($('#dialog-price').val()))){
+                alert('Only number is allowed!');
+                return;
+            }
             const response = fetch('/item', {
                 method: 'PUT',
                 headers: {
@@ -69,10 +73,14 @@
                     unit_price: $('#dialog-price').val()
                 })
             }).then(res =>{
-                if(res.statusText == 'OK'){
-                    $('#dialog-default').hide();
-                    location.reload();
-                }
+                res.json().then(data =>{
+                    if(data.message){
+                        alert(data.message);
+                        location.reload();
+                    }else{
+                        alert(data.error)
+                    }
+                })
             })
         })
     });
