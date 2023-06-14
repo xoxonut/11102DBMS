@@ -1,0 +1,90 @@
+{% extends "home.jinja" %}
+{% block title %}Item{% endblock %}
+{% block content %}
+<div style="display: flex;flex-direction:column;">
+    <div style="margin-top: 50px; margin-right:50px">
+        <label for="year">Year</label>
+        <input type="text" id="year">
+        <label for="month">Month</label>
+        <select id="month">
+            <option value="Jan">January</option>
+            <option value="Feb">February</option>
+            <option value="Mar">March</option>
+            <option value="Apr">April</option>
+            <option value="May">May</option>
+            <option value="Jun">June</option>
+            <option value="Jul">July</option>
+            <option value="Aug">August</option>
+            <option value="Sep">September</option>
+            <option value="Oct">October</option>
+            <option value="Nov">November</option>
+            <option value="Dec">December</option>
+        </select>
+        <button class="button" id="submit-btn">Submit</button>
+    </div>
+
+    <div style="margin-top: 50px;display: flex;flex-direction:column;align-items: center;">
+        <div class="nes-table-responsive">
+            <div class="container">
+                <div class="title-btn-group">
+                    <h1 class="page-title">Staffs</h1>
+                </div>
+            </div>
+            <table class="table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+                <tbody id="itemTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#submit-btn').click(function () {
+            if (document.getElementById('year').value == '') {
+                alert('Please enter year')
+                return
+            }
+            fetch('/staff_performance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    year: document.getElementById('year').value,
+                    month: document.getElementById('month').value
+                })
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                if(data.message) {
+                    alert(data.message)
+                    return
+                }
+                const list = data.performance_list;
+                if (list.length == 0) {
+                    alert('No data')
+                    return
+                }
+                const tableBody = document.getElementById('itemTableBody');
+                tableBody.innerHTML = '';
+                for (var i in list) {
+                    var row = `<tr>
+                        <td>${list[i].name}</td>
+                        <td>${list[i].performance}</td>
+                    </tr>`
+                    tableBody.innerHTML += row;
+                }
+            })
+        })
+    })
+</script>
+
+
+{%endblock%}

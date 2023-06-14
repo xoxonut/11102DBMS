@@ -3,7 +3,7 @@ from flaskr.db import get_db
 
 bp = Blueprint("staff_performance", __name__, url_prefix="/staff_performance")
 
-@bp.route("/", methods=["GET"])
+@bp.route("/", methods=["POST"])
 def read_performance():
   content_type = request.headers.get('Content-Type')
   if (content_type == 'application/json'):

@@ -108,8 +108,11 @@ def create_app(test_config=None):
     def revenue():
         suppliers = requests.get('http://127.0.0.1:5000/supplier')
         return render_template('supplier_item.jinja',suppliers=suppliers.json()['supplier_list'])
-
-    from .api import (staff, supplier, member, item,purchase_order, sale_order,income,supplier_item)
+    @app.route('/myErp/staff_performance')
+    def staff_performance():
+        
+        return render_template('staff_performance.jinja')
+    from .api import (staff, supplier, member, item,purchase_order, sale_order,income,supplier_item,staff_performance)
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
     app.register_blueprint(member.bp)
@@ -118,6 +121,7 @@ def create_app(test_config=None):
     app.register_blueprint(sale_order.bp)
     app.register_blueprint(income.bp)
     app.register_blueprint(supplier_item.bp)
+    app.register_blueprint(staff_performance.bp)
     return app
-  
+
 
