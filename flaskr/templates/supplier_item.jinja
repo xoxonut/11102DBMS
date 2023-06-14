@@ -1,0 +1,77 @@
+{% extends "home.jinja" %}
+{% block title %}Item{% endblock %}
+{% block content %}
+<div style="display: flex;flex-direction:col;">
+    <div style="margin-top: 50px;">
+        <p class="title">Select supplier</p>
+        <label for="supplier" class="supplier-label">Supplier</label>
+        <select id="supplier" class="supplier-select">
+            {% for supplier in suppliers %}
+                <option value="{{ supplier.name }}">{{ supplier.name }}</option>
+            {% endfor %}
+        </select>
+        <button class="button" onclick="getSupplierItems()">Submit</button>
+    </div>
+
+    <div style="margin-top: 50px; margin-left: 20px;">
+        <div class="nes-table-responsive">
+            <div class="container">
+                <div class="title-btn-group">
+                    <h1 class="page-title">Item</h1>
+                </div>
+            </div>
+            <table class="table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Unit Price</th>
+                    </tr>
+                </thead>
+                <tbody id="itemTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+async function getSupplierItems() {
+    const name= document.getElementById("supplier").value;
+    const data = {"name" : name};
+
+    try {
+        const response = await fetch("/supplier_item/", {  // 更新 API 端點 URL
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            document.getElementById("itemTableBody").innerHTML = ""
+            for(var i in responseData.supplier_items) {
+                item = responseData.supplier_items[i]
+                v = ""
+                v += '<tr style="text-align: center;">'
+                v += '<td>' + item.item_id + '</td>'
+                v += '<td>' + item.name + '</td>'
+                v += '<td>' + item.type + '</td>'
+                v += '<td>' + item.unit_price + '</td>'
+                v += '</tr>'
+                document.getElementById("itemTableBody").innerHTML  += v
+            }
+        } else {
+            throw new Error("Request failed with status: " + response.status);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+</script>
+
+
+{%endblock%}

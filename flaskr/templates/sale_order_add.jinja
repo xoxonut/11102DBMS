@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <title>Purchase Order Detail</title>
-</head>
-
-<body>
+{% extends "home.jinja" %}
+{% block title %}Item{% endblock %}
+{% block content %}
     <div style="margin: 10PX;">
-        <button class="nes-btn is-primary" id="add-btn">Add</button>
-        <button class="nes-btn is-primary" id="send-btn">Send</button>
+
         <div style="display: flex; margin:10px; flex-direction:column">
             <label for="member-id">Member</label>
             <select class="nes-select" id="member-id">
@@ -25,10 +16,11 @@
                 <option value="{{staff.staff_id}}">{{staff.name}}</option>
                 {%endfor%}
             </select>
-
         </div>
+        <button class="button" id="add-btn">Add</button>
+        <button class="button" id="send-btn">Send</button>
         <div class="nes-table responsive">
-            <table class="nes-table is-bordered" id="item-table">
+            <table class="table-bordered" id="item-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -38,78 +30,71 @@
                     </tr>
                 </thead>
                 <tbody id="item-list">
+                    {%for item in items%}
+                    <tr style="text-align: center;">
+                    </tr>
+                    {%endfor%}
                 </tbody>
             </table>
         </div>
     </div>
     <dialog class="nes-dialog" id="item_add">
-        <form method="dialog" style="display:flex; flex-direction:column">
+        <button class="button" id="reset-btn">rest</button>
+        <form method="dialog">
             <p class="title">Add Item</p>
-            <select id="name-and-type" style="margin-bottom: 20px;">
-                {%for item in items%}
-                {%if item.stock > 0 and item.unit_price is number %}
-                <option value='{"name":"{{item.name}}","type":"{{item.type}}","quantity":{{item.stock}}}'>
-                    name:{{item.name}} type:{{item.type}}</option>
-                {%endif%}
-                {%endfor%}
-            </select>
-            <p>Quantity do not exceed</p>
-            <p id="max-quantity"></p>
-            <label>Quantity</label>
-            <input type="number" id="item-quantity" class="nes-input" min="0" />
+            <label for="item-name">Name</label>
+            <input type="text" class="nes-input" id="item-name">
+            <label for="item-type">Type</label>
+            <input type="text" class="nes-input" id="item-type">
+            <label for="item-quantity">Quantity</label>
+            <input type="text" class="nes-input" id="item-quantity">
             <menu class="dialog-menu">
-                <button class="nes-btn" id="ok-btn">OK</button>
-                <button class="nes-btn is-primary" id="cancel-btn">Cancel</button>
+                <button class="button" id="ok-btn">OK</button>
+                <button class="button" id="cancel-btn">Cancel</button>
             </menu>
         </form>
     </dialog>
-</body>
 <script>
     $(document).ready(function () {
-        function set_add_item_dialog() {
-            const item = JSON.parse($("#name-and-type").val());
-            $("#max-quantity").html(item.quantity);
-            $("#item-quantity").attr("max", item.quantity);
+        const reset = function () {
+            $("#item-name").val("");
+            $("#item-type").val("");
+            $("#item-quantity").val("");
         }
         $("#add-btn").click(function () {
-            set_add_item_dialog();
-            $("#item-quantity").val(0);
             $("#item_add").show();
         });
         $("#cancel-btn").click(function () {
             $("#item_add").hide();
         });
-
-        $("#name-and-type").change(function () {
-            set_add_item_dialog();
-        })
+        $("#reset-btn").click(function () {
+            reset();
+        });
         $("#ok-btn").click(function () {
             $("#item_add").hide();
-            const item_datas = JSON.parse($("#name-and-type").val());
-            const quantity = $("#item-quantity").val();
-            if (quantity > item_datas.quantity) {
-                alert("Quantity exceed");
-                return;
-            }else if(quantity == 0){
-                alert("Quantity cannot be 0");
+            const item_name = $("#item-name").val();
+            const item_type = $("#item-type").val();
+            const item_quantity = $("#item-quantity").val();
+            if (item_name == "" || item_type == "" || item_quantity == "") {
+                alert("Please fill all the blanks");
                 return;
             }
-
-            const item = "<tr style='text-align: center;'><td>" + item_datas.name + "</td><td>" + item_datas.type + "</td><td>" + quantity + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
+            const item = "<tr style='text-align: center;'><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_quantity + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
             $("#item-list").append(item);
+            reset();
         })
         $('#item-table').on('click', '.removeRowBtn', function () {
             // Find the closest table row and remove it
             $(this).closest('tr').remove();
         });
 
-        $("#send-btn").click(function () {
+        $("#send-btn").click(function(){
             const data = {
                 member_id: $("#member-id").val(),
                 staff_id: $("#staff-id").val(),
                 item_list: []
             }
-            $("#item-list tr").each(function () {
+            $("#item-list tr").each(function(){
                 const item = {
                     name: $(this).find("td").eq(0).html(),
                     type: $(this).find("td").eq(1).html(),
@@ -117,30 +102,22 @@
                 }
                 data.item_list.push(item);
             })
-            if (data.item_list.length == 0) {
-                alert("Please add at least one item");
-                return;
-            }
             const response = fetch("/sale_order", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json"
                 }
-            }).then(function (response) {
-                response.json().then(function (data) {
-                    if (data.message) {
-                        alert(data.message);
-                        window.location.href = "/myErp/sale_order";
-                    } else {
-                        alert(data.error);
-                        window.location.reload();
-                    }
-                })
+            }).then(function(response){
+                if(response.status == 200){
+                    alert(response.body);
+                    window.location.href = "/myErp/sale_order";
+                }else{
+                    alert("fail");
+                }
             })
         })
 
     });
 </script>
-
-</html>
+{%endblock content%}

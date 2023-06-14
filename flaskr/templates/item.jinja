@@ -44,8 +44,8 @@
             <input type="text" id="dialog-price" class="nes-input" name="Price_field">
         </div>
         <menu class="dialog-menu">
-            <button class="nes-btn " onclick="$('#dialog-default').hide()">Cancel</button>
-            <button class="nes-btn is-primary send-modify">Confirm</button>
+            <button class="button " onclick="$('#dialog-default').hide()">Cancel</button>
+            <button class="button send-modify">Confirm</button>
         </menu>
     </form>
 </dialog>
@@ -59,10 +59,6 @@
         })
 
         $('.send-modify').click(function () {
-            if(!(/^\d+$/.test($('#dialog-price').val()))){
-                alert('Only number is allowed!');
-                return;
-            }
             const response = fetch('/item', {
                 method: 'PUT',
                 headers: {
@@ -73,14 +69,10 @@
                     unit_price: $('#dialog-price').val()
                 })
             }).then(res =>{
-                res.json().then(data =>{
-                    if(data.message){
-                        alert(data.message);
-                        location.reload();
-                    }else{
-                        alert(data.error)
-                    }
-                })
+                if(res.statusText == 'OK'){
+                    $('#dialog-default').hide();
+                    location.reload();
+                }
             })
         })
     });
