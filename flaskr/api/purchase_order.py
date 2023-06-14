@@ -169,4 +169,3 @@ def read_purchase_order_detail():
     return jsonify({"item_list": item_list}) 
   else:
     return jsonify({"message": "Content-Type not supported!"})
-  

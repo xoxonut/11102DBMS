@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <title>Sales Order Detail</title>
-</head>
-
-<body>
+{% extends "home.jinja" %}
+{% block title %}Sales Order Detail{% endblock %}
+{% block content %}
     <div style="margin:10px auto;  width: 220px">
         <div class="nes-table responsive">
             <table class="table-bordered">
@@ -33,6 +25,5 @@
             </table>
         </div>
     </div>
-</body>
 
-</html>
+{%endblock content%}

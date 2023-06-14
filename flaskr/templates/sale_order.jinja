@@ -2,10 +2,10 @@
 {%block title%}Sales Order{%endblock%}
 {%block content%}
 <div class="nes-table-responsive">
-    <div class="container">
+    <div class="container" >
         <div class="title-btn-group">
             <h1 class="page-title">Sales Order</h1>
-            <a href="{{url_for('.sale_order_add')}}"><button type="button" class="button" id="add_btn">ADD</button></a>
+            <a href="{{url_for('.sale_order_add')}}"><button type="button" class="button" id="add_btn">ADD</button></a>  
         </div>
     </div>
     <table class="table-bordered">
@@ -16,7 +16,6 @@
                 <th>Staff Name</th>
                 <th>Date</th>
                 <th>Detail</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -27,37 +26,12 @@
                 <td>{{order.staff_name}}</td>
                 <td>{{order.s_order_date}}</td>
                 <td>
-                    <a href="{{url_for('.sale_order_detail',pid=order.s_order_id)}}"><i
-                            class="nes-icon is-small star"></i></a>
+                    <a href="{{url_for('.sale_order_detail',pid=order.s_order_id)}}"><i class="nes-icon is-small star"></i></a>
                 </td>
-                <td><i class="nes-icon is-small close delete-order"></i></td>
             </tr>
             {%endfor%}
         </tbody>
     </table>
 </div>
-<script>
-    $(document).ready(function () {
-        $('.delete-order').click(function () {
-            const response = fetch('/sale_order', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    's_order_id': $(this).parent().parent().children().eq(0).text()
-                })
-            }).then(function (response) {
-                response.json().then(function (data) {
-                    if (data.message) {
-                        alert(data.message);
-                        window.location.reload();
-                    } else {
-                        alert(data.error);
-                    }
-                });
-            })
-        });
-    });
-</script>
+
 {%endblock%}

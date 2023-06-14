@@ -69,7 +69,6 @@ def update_supplier():
         email = request.json.get("email")
         phone_number = request.json.get("phone_number")
         address = request.json.get("address")
-        print(supplier_id,name,email,phone_number,address)
         db = get_db()
         db.execute(
             "UPDATE SUPPLIER SET name= ?,email = ?,phone_number = ?,address = ? WHERE rowid = ?",

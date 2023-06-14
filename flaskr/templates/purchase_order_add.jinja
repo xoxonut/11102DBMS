@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <title>Purchase Order Detail</title>
-</head>
-
-<body>
+{% extends "home.jinja" %}
+{% block title %}Item{% endblock %}
+{% block content %}
     <div style="margin: 10PX;">
-        <button class="nes-btn is-primary" id="add-btn">Add</button>
-        <button class="nes-btn is-primary" id="send-btn">Send</button>
         <div style="display: flex; margin:10px; flex-direction:column">
             <label for="supplier-id">Supplier</label>
             <select class="nes-select" id="supplier-id">
@@ -26,8 +16,10 @@
                 {%endfor%}
             </select>
         </div>
+        <button class="button" id="add-btn">Add</button>
+        <button class="button" id="send-btn">Send</button>
         <div class="nes-table responsive">
-            <table class="nes-table is-bordered" id="item-table">
+            <table class="table-bordered" id="item-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -38,13 +30,17 @@
                     </tr>
                 </thead>
                 <tbody id="item-list">
+                    {%for item in items%}
+                    <tr style="text-align: center;">
+                    </tr>
+                    {%endfor%}
                 </tbody>
             </table>
         </div>
     </div>
 
     <dialog class="nes-dialog" id="item_add">
-        <button class="nes-btn is-primary" id="reset-btn">rest</button>
+        <button class="button" id="reset-btn">rest</button>
         <form method="dialog">
             <p class="title">Add Item</p>
             <label for="item-name">Name</label>
@@ -57,34 +53,28 @@
             <input type="text" class="nes-input" id="item-unit-cost">
 
             <menu class="dialog-menu">
-                <button class="nes-btn" id="ok-btn">OK</button>
-                <button class="nes-btn is-primary" id="cancel-btn">Cancel</button>
+                <button class="button" id="ok-btn">OK</button>
+                <button class="button" id="cancel-btn">Cancel</button>
             </menu>
         </form>
     </dialog>
-</body>
 <script>
     $(document).ready(function () {
-
         const reset = function () {
             $("#item-name").val("");
             $("#item-type").val("");
             $("#item-quantity").val("");
             $("#item-unit-cost").val("");
         }
-
         $("#add-btn").click(function () {
             $("#item_add").show();
         });
-
         $("#cancel-btn").click(function () {
             $("#item_add").hide();
         });
-
         $("#reset-btn").click(function () {
             reset();
         });
-
         $("#ok-btn").click(function () {
             $("#item_add").hide();
             const item_id = $("#item-name").val();
@@ -99,7 +89,6 @@
             $("#item-list").append(item);
             reset();
         })
-
         $('#item-table').on('click', '.removeRowBtn', function () {
             // Find the closest table row and remove it
             $(this).closest('tr').remove();
@@ -120,11 +109,6 @@
                 }
                 data.item_list.push(item);
             });
-            if (data.item_list.length == 0) {
-                alert("Please add at least one item");
-                return;
-            }
-
             const response = fetch("/purchase_order", {
                 method: "POST",
                 headers: {
@@ -132,17 +116,14 @@
                 },
                 body: JSON.stringify(data)
             }).then(function (response) {
-                response.json().then(function (data) {
-                    if (data.message) {
-                        alert(data.message);
-                        window.location.href = "/myErp/purchase_order";
-                    } else {
-                        alert(data.message);
-                    }
-                });
+                if (response.status == 200) {
+                    alert("Success");
+                    window.location.href = "/myErp/purchase_order";
+                } else {
+                    alert("Fail");
+                }
             });
         });
     });
 </script>
-
-</html>
+{%endblock content%}
