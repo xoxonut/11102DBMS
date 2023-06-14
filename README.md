@@ -565,7 +565,36 @@
     "income": 500
 }
 ```
-
+## 列出每位員工在一段時間內的業績
+### R
+ - request: url: /staff_performance
+  - month: str
+  - year: str
+```json
+{
+    "month": "Jun",
+    "year": "2023"
+}
+```
+ - respond:
+```json
+{
+    "performance_list": [
+        {
+            "name": "John",
+            "performance": 1200
+        },
+        {
+            "name": "Michael",
+            "performance": 500
+        },
+        {
+            "name": "Steve",
+            "performance": 1300
+        }
+    ]
+}
+```
 # 分工
 - 前端 2
     - route
