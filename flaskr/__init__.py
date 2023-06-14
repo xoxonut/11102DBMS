@@ -73,6 +73,10 @@ def create_app(test_config=None):
     def income():
         return redirect(url_for("income"))
 
+    @app.route("/myErp/staff_performance")
+    def staff_performance():
+        return redirect(url_for("staff_performance"))
+
     @app.route("/add", methods=["GET", "POST"])
     def add():
         if request.method == "POST":
@@ -83,7 +87,7 @@ def create_app(test_config=None):
             return redirect("/myErp/staff")
         return render_template("add.jinja")
 
-    from .api import staff, supplier, member, item, purchase_order, sale_order, income
+    from .api import staff, supplier, member, item, purchase_order, sale_order, income, staff_performance
 
     app.register_blueprint(staff.bp)
     app.register_blueprint(supplier.bp)
@@ -92,4 +96,5 @@ def create_app(test_config=None):
     app.register_blueprint(purchase_order.bp)
     app.register_blueprint(sale_order.bp)
     app.register_blueprint(income.bp)
+    app.register_blueprint(staff_performance.bp)
     return app
