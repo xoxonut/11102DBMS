@@ -81,6 +81,10 @@ def create_app(test_config=None):
         members = requests.get('http://127.0.0.1:5000/member').json()['member_list']
         return render_template('sale_order_add.jinja',members=members,staffs=staffs)
     
+    @app.route("/myErp/income")
+    def income():
+        return redirect(url_for("income"))
+
     # @app.route('/add', methods=['GET', 'POST'])
     # @app.route('/addsupplier', methods=['GET', 'POST'])
     # def add():
@@ -139,7 +143,7 @@ def create_app(test_config=None):
     #                     s['phone'] = Phone
     #                     s['email'] = Email
     #                     s['address'] = Address
-    #             return redirect("/myErp/supplier")
+    #             return redirect("/myErp/supplier"), income
 
     from .api import (staff, supplier, member, item,purchase_order, sale_order)
     app.register_blueprint(staff.bp)
@@ -148,6 +152,7 @@ def create_app(test_config=None):
     app.register_blueprint(item.bp)
     app.register_blueprint(purchase_order.bp)
     app.register_blueprint(sale_order.bp)
-    return app
-  
+    app.register_blueprint(income.bp)
+    return app  
+
 
