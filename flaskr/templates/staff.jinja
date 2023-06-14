@@ -5,7 +5,7 @@
         <div class="container" >
             <div class="title-btn-group">
                 <h1 class="page-title">Staff</h1>
-                <button onclick="showDialog('Add staff data', '', '', '', '', '', '/add')" class="button">ADD</button>
+                <button onclick="showDialog('Add staff data', '', '', '','POST')" class="button">ADD</button>
             </div>
         </div>
         <table class="table-bordered">
@@ -21,14 +21,14 @@
             <tbody>
                 {% for s in staffs %}
                 <tr class="table-header">
-                    <td>{{ s.id }}</td>
+                    <td>{{ s.staff_id }}</td>
                     <td>{{ s.name }}</td>
-                    <td>{{ s.mId }}</td>
+                    <td>{{ s.manager_id }}</td>
                     <td>
-                        <i class="nes-icon coin is-small" onclick="showDialog('Modify staff data', '{{ s.id }}', '{{ s.name }}', '{{ s.mId }}', '/modify')"></i>
+                        <i class="nes-icon coin is-small" onclick="showDialog('Modify staff data', '{{ s.staff_id }}', '{{ s.name }}', '{{ s.manager_id }}', 'PUT')"></i>
                     </td>
                     <td>
-                        <i class="nes-icon close is-small" onclick="showDialog('Delete staff data', '{{ s.id }}', '{{ s.name }}', '{{ s.mId }}', '/delete', true)"></i>
+                        <i class="nes-icon close is-small" onclick="showDialog('Delete staff data', '{{ s.staff_id }}', '{{ s.name }}', '{{ s.manager_id }}', 'DELETE', true)"></i>
                     </td>
                 </tr>
                 {% endfor %}
@@ -37,7 +37,6 @@
         <dialog class="nes-dialog" id="dialog-default">
             <form method="dialog">
                 <p class="title" id="dialog-title" style="text-align: center;"></p>
-                <!-- <p>Staff ID: <span id="dialog-id"></span></p> -->
                 <div class="input-wrapper">
                     <label for="Name_field">Staff ID: </label>
                     <input type="text" id="dialog-id" class="nes-input" name="name" readonly>
@@ -50,7 +49,7 @@
                     <label for="Name_field">Manager ID: </label>
                     <input type="text" id="dialog-mid" class="nes-input" name="name">
                 </div>
-                <span id="dialog-path" hidden></span>
+                <span id="dialog-method" hidden></span>
                 <menu class="dialog-menu">
                     <button class="button" onclick="closeDialog(false)">Cancel</button>
                     <button class="button" onclick="closeDialog(true)">Confirm</button>
@@ -60,13 +59,13 @@
     </div>
 
     <script>
-        function showDialog(title,id, name, mid , path , readonly = false) {
+        function showDialog(title,id, name, mid , method , readonly = false) {
             const dialogTitle = document.getElementById('dialog-title');
             const dialog = document.getElementById('dialog-default');
             const dialogId = document.getElementById('dialog-id');
             const dialogName = document.getElementById('dialog-name');
             const dialogMid = document.getElementById('dialog-mid');
-            const dialogPath = document.getElementById('dialog-path');
+            const dialogMethod = document.getElementById('dialog-method');
 
             dialogTitle.textContent = title;
             dialogId.value = id;
@@ -77,71 +76,55 @@
                 dialogName.setAttribute("readonly", "true");
                 dialogMid.setAttribute("readonly", "true");
             }
-            dialogPath.textContent = path;
-
+            dialogMethod.textContent = method;
             if (!dialog.hasAttribute('opened')) {
                 dialog.showModal();
                 dialog.setAttribute('opened', 'true');
             }
         }
+
+
         
         function closeDialog(send) {
             const dialog = document.getElementById('dialog-default');
             const dialogId = document.getElementById('dialog-id').value;
             const dialogName = document.getElementById('dialog-name').value;
             const dialogMid = document.getElementById('dialog-mid').value;
-            const dialogPath = document.getElementById('dialog-path').textContent;
+            const dialogMethod = document.getElementById('dialog-method').textContent;
+
             dialog.close();
             dialog.removeAttribute('opened');
-            // Send GET request to staff/ endpoint
-            params = "id="+dialogId
-            if(send){
-                /*
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', dialogPath );
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");  // 設定請求的內容類型
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        const response = xhr.responseText;
-                        console.log(response); // Handle the response as needed
-                        const test=document.getElementById('failTest')
-                        test.textContent="fail"
-                    }
-                };
-                    xhr.send(params);
-                */
 
-                // 建立一個 form 元素
-                var form = document.createElement('form');
-                form.method = 'POST';
-                form.action = dialogPath;  // 替換為你的伺服器端 API 的 URL
-
-                // 建立一個輸入欄位 (input) 並設定屬性
-                var param1Input = document.createElement('input');
-                param1Input.type = 'hidden';  // 隱藏欄位
-                param1Input.name = 'id';  // 參數名稱
-                param1Input.value = dialogId;  // 參數值
-                form.appendChild(param1Input);  // 將輸入欄位加入到表單中
-
-                var param2Input = document.createElement('input');
-                param2Input.type = 'hidden';  // 隱藏欄位
-                param2Input.name = 'name';  // 參數名稱
-                param2Input.value = dialogName;  // 參數值
-                form.appendChild(param2Input);  // 將輸入欄位加入到表單中
-
-                var param3Input = document.createElement('input');
-                param3Input.type = 'hidden';  // 隱藏欄位
-                param3Input.name = 'mId';  // 參數名稱
-                param3Input.value = dialogMid;  // 參數值
-                form.appendChild(param3Input);  // 將輸入欄位加入到表單中
-
-                // 將表單加入到網頁的 body 元素中
-                document.body.appendChild(form);
-
-                // 提交表單
-                form.submit();
+            if( send && (dialogName == "" || dialogMid == "") ) {
+                alert("fat")
+                return
             }
+            params = "id=" + dialogId
+            console.log(dialogId)
+            // Send GET request to staff/ endpoint
+            if (send) {
+
+            const response = fetch('/staff', {
+                method: dialogMethod,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: "follow",
+                body: JSON.stringify({
+                    staff_id: dialogId,
+                    name: dialogName,
+                    manager_id: dialogMid,
+                })
+            }).then(response => {
+                if (response.statusText == "OK") {
+                    location.reload()
+                }
+            })
+            }
+
+  
         }
+    
     </script>
 
 {% endblock content %}

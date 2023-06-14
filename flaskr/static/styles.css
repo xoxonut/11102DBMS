@@ -186,5 +186,12 @@
 .button:hover {
   background-color: #CCCCCC;  /* 浅灰色 */
 }
+.dialog-menu {
+  display: flex;
+  justify-content: center;
+  }
 
+.dialog-menu button {
+  margin: 0 10px; /* Adjust the spacing as needed */
+  }
 
