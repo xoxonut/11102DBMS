@@ -9,45 +9,54 @@
 </head>
 
 <body>
-    <button class="nes-btn is-primary" id="add-btn">Add</button>
-    <button class="nes-btn is-primary" id="send-btn">Send</button>
-    <div style="display: flex; margin:10px; flex-direction:column">
-        <label for="member-id">Member</label>
-        <input type="text" class="nes-input" id="member-id">
-        <label for="staff-id">Staff</label>
-        <input type="text" class="nes-input" id="staff-id">
-    </div>
-    <div class="nes-table responsive">
-        <table class="nes-table is-bordered" id="item-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody id="item-list">
-                {%for item in items%}
-                <tr style="text-align: center;">
-                </tr>
+    <div style="margin: 10PX;">
+        <button class="nes-btn is-primary" id="add-btn">Add</button>
+        <button class="nes-btn is-primary" id="send-btn">Send</button>
+        <div style="display: flex; margin:10px; flex-direction:column">
+            <label for="member-id">Member</label>
+            <select class="nes-select" id="member-id">
+                {%for member in members%}
+                <option value="{{member.id}}">{{member.name}}</option>
                 {%endfor%}
-            </tbody>
-        </table>
+            </select>
+            <label for="staff-id">Staff</label>
+            <select class="nes-select" id="staff-id">
+                {%for staff in staffs%}
+                <option value="{{staff.staff_id}}">{{staff.name}}</option>
+                {%endfor%}
+            </select>
+
+        </div>
+        <div class="nes-table responsive">
+            <table class="nes-table is-bordered" id="item-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="item-list">
+                </tbody>
+            </table>
+        </div>
     </div>
     <dialog class="nes-dialog" id="item_add">
-        <button class="nes-btn is-primary" id="reset-btn">rest</button>
-        <form method="dialog">
+        <form method="dialog" style="display:flex; flex-direction:column">
             <p class="title">Add Item</p>
-            <label for="item-id">Item</label>
-            <input type="text" class="nes-input" id="item-id">
-            <label for="item-name">Name</label>
-            <input type="text" class="nes-input" id="item-name">
-            <label for="item-type">Type</label>
-            <input type="text" class="nes-input" id="item-type">
-            <label for="item-amount">Amount</label>
-            <input type="text" class="nes-input" id="item-amount">
+            <select id="name-and-type" style="margin-bottom: 20px;">
+                {%for item in items%}
+                {%if item.stock > 0 and item.unit_price is number %}
+                <option value='{"name":"{{item.name}}","type":"{{item.type}}","quantity":{{item.stock}}}'>
+                    name:{{item.name}} type:{{item.type}}</option>
+                {%endif%}
+                {%endfor%}
+            </select>
+            <p>Quantity do not exceed</p>
+            <p id="max-quantity"></p>
+            <label>Quantity</label>
+            <input type="number" id="item-quantity" class="nes-input" min="0" />
             <menu class="dialog-menu">
                 <button class="nes-btn" id="ok-btn">OK</button>
                 <button class="nes-btn is-primary" id="cancel-btn">Cancel</button>
@@ -57,35 +66,80 @@
 </body>
 <script>
     $(document).ready(function () {
-        const reset = function () {
-            $("#item-id").val("");
-            $("#item-name").val("");
-            $("#item-type").val("");
-            $("#item-amount").val("");
+        function set_add_item_dialog() {
+            const item = JSON.parse($("#name-and-type").val());
+            $("#max-quantity").html(item.quantity);
+            $("#item-quantity").attr("max", item.quantity);
         }
         $("#add-btn").click(function () {
+            set_add_item_dialog();
+            $("#item-quantity").val(0);
             $("#item_add").show();
         });
         $("#cancel-btn").click(function () {
             $("#item_add").hide();
         });
-        $("#reset-btn").click(function () {
-            reset();
-        });
+
+        $("#name-and-type").change(function () {
+            set_add_item_dialog();
+        })
         $("#ok-btn").click(function () {
             $("#item_add").hide();
-            const item_id = $("#item-id").val();
-            const item_name = $("#item-name").val();
-            const item_type = $("#item-type").val();
-            const item_amount = $("#item-amount").val();
-            const item = "<tr style='text-align: center;'><td>" + item_id + "</td><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_amount + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
+            const item_datas = JSON.parse($("#name-and-type").val());
+            const quantity = $("#item-quantity").val();
+            if (quantity > item_datas.quantity) {
+                alert("Quantity exceed");
+                return;
+            }else if(quantity == 0){
+                alert("Quantity cannot be 0");
+                return;
+            }
+
+            const item = "<tr style='text-align: center;'><td>" + item_datas.name + "</td><td>" + item_datas.type + "</td><td>" + quantity + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
             $("#item-list").append(item);
-            reset();
         })
-        $('#item-table').on('click', '.removeRowBtn', function() {
-                // Find the closest table row and remove it
-                $(this).closest('tr').remove();
-            });
+        $('#item-table').on('click', '.removeRowBtn', function () {
+            // Find the closest table row and remove it
+            $(this).closest('tr').remove();
+        });
+
+        $("#send-btn").click(function () {
+            const data = {
+                member_id: $("#member-id").val(),
+                staff_id: $("#staff-id").val(),
+                item_list: []
+            }
+            $("#item-list tr").each(function () {
+                const item = {
+                    name: $(this).find("td").eq(0).html(),
+                    type: $(this).find("td").eq(1).html(),
+                    quantity: $(this).find("td").eq(2).html()
+                }
+                data.item_list.push(item);
+            })
+            if (data.item_list.length == 0) {
+                alert("Please add at least one item");
+                return;
+            }
+            const response = fetch("/sale_order", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(function (response) {
+                response.json().then(function (data) {
+                    if (data.message) {
+                        alert(data.message);
+                        window.location.href = "/myErp/sale_order";
+                    } else {
+                        alert(data.error);
+                        window.location.reload();
+                    }
+                })
+            })
+        })
+
     });
 </script>
 

@@ -1,15 +1,36 @@
-{% extends "base.jinja" %}
+{% extends "home.jinja" %}
 {%block title%}Hello{%endblock title%}
 {%block content%}
-    <h1>{{user}}你好</h1>
-    <section class="icon-list" style="display: flex;flex-direction: column;">
-    <!-- close -->
-    <i class="nes-icon close is-large"></i>
-
-    <!-- trophy -->
-    <i class="nes-icon trophy is-large"></i>
-
-    <!-- coin -->
-    <i class="nes-icon coin is-large"></i>
-    </section>
+<div display="flex !important">
+    <div>
+        <button class="btn-primary" onclick="easter_egg()">請注意</button>
+    </div>
+    <div style="margin-top:50px ;">
+        <form>
+            <p class="title">月營收</p>
+            <label for="year">Year</label>
+            <input type="text" id="year">
+            <label for="month">Month</label>
+            <input type="text" id="month">
+            <button class="btn-primary" onclick="get_monthly_revenue()">Submit</button>
+        </form>
+    </div>
+</div>
+<script>
+    function easter_egg() {
+        alert("謝謝注意");
+    }
+    function get_monthly_revenue() {
+        const response = fetch("/api/monthly_revenue", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                year: document.getElementById("year").value,
+                month: document.getElementById("month").value
+            })
+        }).then(response => response.json())
+    }
+</script>
 {%endblock content%}

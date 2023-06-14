@@ -18,10 +18,10 @@ def get_members():
         phone_number = member['phone_number']
         address = member['address']
         one_member = {
-            "member_id": member_id,
+            "id": member_id,
             "name": name,
             "email": email,
-            "phone_number": phone_number,
+            "phone": phone_number,
             "address": address
         }
         member_list.append(one_member)
