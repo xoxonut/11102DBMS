@@ -39,7 +39,7 @@
         <dialog class="nes-dialog" id="dialog-default">
             <form method="dialog">
                 <p class="title" id="dialog-title" style="text-align: center;"></p>
-                <div class="input-wrapper">
+                <div class="input-wrapper" id="id_field">
                     <label for="Name_field">Staff ID: </label>
                     <input type="text" id="dialog-id" class="nes-input" name="name" readonly>
                 </div>
@@ -68,7 +68,10 @@
             const dialogName = document.getElementById('dialog-name');
             const dialogMid = document.getElementById('dialog-mid');
             const dialogMethod = document.getElementById('dialog-method');
-
+            if(method=='POST'){
+                document.getElementById("id_field").setAttribute("style","display:none")
+                dialogId.setAttribute("style","display:none")
+            }
             dialogTitle.textContent = title;
             dialogId.value = id;
             dialogName.value = name;
