@@ -13,6 +13,8 @@
     `.\venv\Scripts\activate.bat`
   - In Linux / MacOS:
     `source ./venv/bin/activate`
+  - Common problem-solving methods:
+    https://hackercat.org/windows/powershell-cannot-be-loaded-because-the-execution-of-scripts-is-disabled-on-this-system
 - Install flask:
   `pip3 install flask`
 - Install requests:
