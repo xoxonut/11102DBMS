@@ -32,7 +32,7 @@
                     <i class="nes-icon coin is-small show-dialog"></i>
                 </td>
                 <td>
-                    <i class="nes-icon close is-small" id="delete-member"></i>
+                    <i class="nes-icon close is-small delete-member"></i>
                 </td>
             </tr>
             {% endfor %}
@@ -161,7 +161,7 @@
             $('#member_add').hide();
         });
 
-        $('#delete-member').click(function () {
+        $('.delete-member').click(function () {
             const member_id = $(this).parent().siblings().eq(0).text();
             const response = fetch('/member', {
                 method: 'DELETE',
