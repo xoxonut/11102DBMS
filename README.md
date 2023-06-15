@@ -1,22 +1,48 @@
 # 11102DBMS
 
-`flask --app flaskr run --debug`
+## first setup virtual environment
 
+- Install virtual environment:
+  `pip3 install virtualenv`
+- Create env file:
+  `virtualenv env`
+- Activate virtual environment:
+  - In Windows Powershell:
+    `.\env\Scripts\activate.ps1`
+  - In Windows CMD:
+    `.\venv\Scripts\activate.bat`
+  - In Linux / MacOS:
+    `source ./venv/bin/activate`
+- Install flask:
+  `pip3 install flask`
+- Create Database:
+  `python schema.py`
+- Run the app:
+  `flask --app flaskr run --debug`
 
 ## API
+
 - staff : CRUD
 - supplier : CRUD
 - member : CRUD
 - purchase order : CRUD
-    - increase : CRUD
-    - item C U
+  - increase : CRUD
+  - item C U
 - sales order : CRUD
+<<<<<<< HEAD
     - customer : C R
     - item : R U D
     - decrease : CRUD
 - item : UR 
+=======
+  - customer : C R
+  - item : R U D
+  - decrease : CRUD
+- item : R
+>>>>>>> feature/db_and_item_api
 
 ### http verb
+
 - C -> POST
 - R -> GET
 - U -> PUT
@@ -24,10 +50,11 @@
 
 ## LIST
 
-**沒寫respond的話就是回傳msg : str**
+**沒寫 respond 的話就是回傳 msg : str**
 
 ## staff
 
+<<<<<<< HEAD
 ### C 
    - request 
         - name : str
@@ -595,15 +622,127 @@
     ]
 }
 ```
+=======
+- C
+
+  - request
+    - name : str
+    - manager_id : str
+
+- R
+  - respond
+    - staffs : list[staff]
+- U
+
+  - request
+    - id : str
+    - name : str
+    - manager_id : str
+
+- D
+  - request
+    - id : str
+
+## supplier
+
+- C
+  - request
+    - name : str
+    - email : str
+    - phone : str
+    - address : str
+- R
+  - respond
+    - suppliers : list[supplier]
+- U
+  - request
+    - id : str
+    - name : str
+    - email : str
+    - phone : str
+    - address : str
+- D
+  - request
+    - id : str
+
+## member
+
+- C
+  - request
+    - name : str
+    - address : str
+    - email : str
+    - address : str
+- R
+  - response
+    - members : list[member]
+- U
+  - request
+    - member_id : str
+    - name : str
+    - address : str
+    - email : str
+    - address : str
+- D
+  - request
+    - member_id : str
+
+## purchase order
+
+- C
+  - request
+    - supplier_id : str
+    - staff_id : str
+    - items : list[item]
+    - delivery_date : datetime
+    - status : bool
+- R
+  - response
+    - orders : list[purchase order]
+- U
+  - request
+    - order_id : str
+    - status : bool
+- D
+  - request
+    - p_order_id : str
+
+## sales order
+
+- C
+  - request
+    - staff_id : str
+    - customer_id : str
+    - deliver_date : datetime
+    - status : bool
+    - items : list[item]
+- R
+  - response
+    - orders : list[sales order]
+- U
+  - request
+    - order_id : str
+    - status : bool
+- D
+  - request
+    - order_id : str
+
+## Item
+
+- R
+  - items : list[item]
+
+>>>>>>> feature/db_and_item_api
 # 分工
+
 - 前端 2
-    - route
-    - figma
-- 後端 4 
-    - **進貨**
-    - **出貨**
-    - member
-      - staff
-      - supplier
-   - item
-      - 建DB
+  - route
+  - figma
+- 後端 4
+  - **進貨**
+  - **出貨**
+  - member
+    - staff
+    - supplier
+  - item
+    - 建 DB
