@@ -11,7 +11,7 @@ def read_supplier_items():
 
         db = get_db()
         cursor = db.execute("""
-            SELECT I.item_id, I.name, I.type, I.stock, I.unit_price
+            SELECT DISTINCT I.item_id, I.name, I.type, I.stock, I.unit_price
             FROM ITEM I
             JOIN INCREASE INC ON I.item_id = INC.item_id
             JOIN PURCHASE_ORDER PO ON INC.p_order_id = PO.p_order_id
