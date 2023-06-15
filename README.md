@@ -15,15 +15,15 @@
     `source ./venv/bin/activate`
 - Install flask:
   `pip3 install flask`
-- Install requests
+- Install requests:
   `pip install requests`
 - Create Database:
   `python schema.py`
 - Run the app:
   `flask --app flaskr run --debug`
 - login page
-  account: `erp123`
-  password: `erp456`
+  - account: `erp123`
+  - password: `erp456`
 
 ## API
 
