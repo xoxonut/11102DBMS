@@ -95,6 +95,8 @@ def delete_staff_member():
         [staff_id],
     )
     db.commit()
+    
+    db.execute("UPDATE STAFF SET manager_id = NULL WHERE manager_id = ?", [staff_id])
+    db.commit()
     db.close()
-
     return jsonify({"message": "Staff member deleted successfully!"})
