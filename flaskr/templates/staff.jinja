@@ -13,6 +13,7 @@
                 <tr>
                     <th class="table-header">ID</th>
                     <th class="table-header">Name</th>
+                    <th class="table-header">Entry Date</th>
                     <th class="table-header">mid</th>
                     <th class="table-header">Modify</th>
                     <th class="table-header">Delete</th>
@@ -23,6 +24,7 @@
                 <tr class="table-header">
                     <td>{{ s.staff_id }}</td>
                     <td>{{ s.name }}</td>
+                    <td>{{ s.entry_date }}</td>
                     <td>{{ s.manager_id }}</td>
                     <td>
                         <i class="nes-icon coin is-small" onclick="showDialog('Modify staff data', '{{ s.staff_id }}', '{{ s.name }}', '{{ s.manager_id }}', 'PUT')"></i>
