@@ -30,10 +30,6 @@
                     </tr>
                 </thead>
                 <tbody id="item-list">
-                    {%for item in items%}
-                    <tr style="text-align: center;">
-                    </tr>
-                    {%endfor%}
                 </tbody>
             </table>
         </div>
@@ -85,7 +81,7 @@
                 alert("Please fill in all the blanks");
                 return;
             }
-            const item = "<tr style='text-align: center;'><td>" + item_id + "</td><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_amount + "</td><td><button class='nes-btn removeRowBtn'>Delete</button></td></tr>";
+            const item = "<tr style='text-align: center;'><td>" + item_id + "</td><td>" + item_name + "</td><td>" + item_type + "</td><td>" + item_amount + "</td><td><button class='removeRowBtn'>Delete</button></td></tr>";
             $("#item-list").append(item);
             reset();
         })
@@ -109,6 +105,10 @@
                 }
                 data.item_list.push(item);
             });
+            if (data.item_list.length == 0) {
+                alert("Please add at least one item");
+                return;
+            }
             const response = fetch("/purchase_order", {
                 method: "POST",
                 headers: {
