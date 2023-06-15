@@ -9,24 +9,25 @@ def get_members():
     db = get_db()
     cursor = db.execute("SELECT * FROM member")
     members = cursor.fetchall()
-    
+
     member_list = []
     for member in members:
-        member_id = member['member_id']
-        name = member['name']
-        email = member['email']
-        phone_number = member['phone_number']
-        address = member['address']
+        member_id = member["member_id"]
+        name = member["name"]
+        email = member["email"]
+        phone_number = member["phone_number"]
+        address = member["address"]
         one_member = {
             "member_id": member_id,
             "name": name,
             "email": email,
             "phone_number": phone_number,
-            "address": address
+            "address": address,
         }
         member_list.append(one_member)
     db.close()
     return jsonify({"member_list": member_list})
+
 
 @bp.route("/", methods=["POST"])
 def create_member():
@@ -55,6 +56,7 @@ def create_member():
     else:
         return jsonify({"message": "Content-Type not supported!"})
 
+
 @bp.route("/", methods=["PUT"])
 def update_member():
     content_type = request.headers.get("Content-Type")
@@ -73,13 +75,7 @@ def update_member():
 
         db.execute(
             "UPDATE MEMBER SET name = ?, address = ?, email = ?, phone_number = ? WHERE rowid = ?",
-            [
-                name,
-                address,
-                email,
-                phone_number,
-                member_id
-            ],
+            [name, address, email, phone_number, member_id],
         )
         db.commit()
         db.close()
@@ -94,12 +90,17 @@ def update_member():
 def delete_member():
     member_id = request.json.get("member_id")
     db = get_db()
-    cursor = db.execute("SELECT COUNT(*) AS result FROM MEMBER WHERE rowid=?", [member_id])
+    cursor = db.execute(
+        "SELECT COUNT(*) AS result FROM MEMBER WHERE rowid=?", [member_id]
+    )
     rows = cursor.fetchall()
-    if (rows[0]['result'] != 1):
-      return {"message": "This member doesn't exist!"}
+    if rows[0]["result"] != 1:
+        return {"message": "This member doesn't exist!"}
     db = get_db()
-    cursor = db.execute("DELETE FROM member WHERE rowid = ?", [member_id],)
+    cursor = db.execute(
+        "DELETE FROM member WHERE rowid = ?",
+        [member_id],
+    )
     db.commit()
     db.close()
 
