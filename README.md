@@ -13,17 +13,19 @@
     `.\venv\Scripts\activate.bat`
   - In Linux / MacOS:
     `source ./venv/bin/activate`
+  - Common problem-solving methods:
+    https://hackercat.org/windows/powershell-cannot-be-loaded-because-the-execution-of-scripts-is-disabled-on-this-system
 - Install flask:
   `pip3 install flask`
-- Install requests
+- Install requests:
   `pip install requests`
 - Create Database:
   `python schema.py`
 - Run the app:
   `flask --app flaskr run --debug`
 - login page
-  account: `erp123`
-  password: `erp456`
+  - account: `erp123`
+  - password: `erp456`
 
 ## API
 
