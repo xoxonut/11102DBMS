@@ -59,8 +59,13 @@
     $(document).ready(function () {
         function set_add_item_dialog() {
             const item = JSON.parse($("#name-and-type").val());
-            $("#max-quantity").html(item.quantity);
-            $("#item-quantity").attr("max", item.quantity);
+            if(item.quantity){
+                $("#max-quantity").html(item.quantity);
+                $("#item-quantity").attr("max", item.quantity);
+            }else{
+                $("#max-quantity").html("0");
+                $("#item-quantity").attr("max", 0);
+            }
         }
         $("#add-btn").click(function () {
             set_add_item_dialog();
@@ -77,8 +82,12 @@
         $("#ok-btn").click(function () {
             $("#item_add").hide();
             const item_datas = JSON.parse($("#name-and-type").val());
+            const tmp_quantity = 0;
+            if (item_datas.quantity ) {
+                tmp_quantity = item_datas.quantity;
+            }
             const quantity = $("#item-quantity").val();
-            if (quantity > item_datas.quantity) {
+            if (quantity > tmp_quantity ) {
                 alert("Quantity exceed");
                 return;
             } else if (quantity == 0) {
