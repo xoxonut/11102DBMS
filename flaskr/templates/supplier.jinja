@@ -125,6 +125,10 @@
         const dialogMethod = document.getElementById('dialog-method').textContent;
         dialog.close();
         dialog.removeAttribute('opened');
+        if( send && (dialogName == "" || dialogPhone == ""||dialogEmail==""||dialogAddress=="") ) {
+            alert("some information is null!")
+            return
+            }
         params = "id=" + dialogId
         console.log(dialogId)
 

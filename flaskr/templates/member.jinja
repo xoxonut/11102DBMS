@@ -126,10 +126,16 @@
         });
 
         $('#add_btn').click(function () {
+            
             $('#member_add').show();
         });
 
         $('#send-add-btn').click(function () {
+             // Check if any field is empty
+            if ($('#add-name').val() === '' || $('#add-email').val() === '' || $('#add-phone').val() === '' || $('#add-address').val() === '') {
+                alert('Some information is null!');
+                return;
+            }
             const response = fetch('/member', {
                 method: 'POST',
                 headers: {
