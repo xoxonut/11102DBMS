@@ -96,7 +96,7 @@
             const dialogName = document.getElementById('dialog-name').value;
             const dialogMid = document.getElementById('dialog-mid').value;
             const dialogMethod = document.getElementById('dialog-method').textContent;
-
+            console.log(dialogMid)
             dialog.close();
             dialog.removeAttribute('opened');
 
@@ -104,8 +104,6 @@
                 alert("no data import!")
                 return
             }
-            params = "id=" + dialogId
-            console.log(dialogId)
             // Send GET request to staff/ endpoint
             if (send) {
 
@@ -121,9 +119,10 @@
                     manager_id: dialogMid,
                 })
             }).then(response => {
-                if (response.statusText == "OK") {
-                    location.reload()
-                }
+                response.json().then(data => {
+                    alert(data.message);
+                    location.reload();
+                });
             })
             }
 
