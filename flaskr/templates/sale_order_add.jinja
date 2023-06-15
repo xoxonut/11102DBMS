@@ -49,8 +49,8 @@
         <label>Quantity</label>
         <input type="number" id="item-quantity" class="nes-input" min="0" />
         <menu class="dialog-menu">
-            <button  id="ok-btn">OK</button>
-            <button  is-primary" id="cancel-btn">Cancel</button>
+            <button id="ok-btn">OK</button>
+            <button is-primary" id="cancel-btn">Cancel</button>
         </menu>
     </form>
 </dialog>
@@ -59,15 +59,19 @@
     $(document).ready(function () {
         function set_add_item_dialog() {
             const item = JSON.parse($("#name-and-type").val());
-            if(item.quantity){
+            if (item.quantity) {
                 $("#max-quantity").html(item.quantity);
                 $("#item-quantity").attr("max", item.quantity);
-            }else{
+            } else {
                 $("#max-quantity").html("0");
                 $("#item-quantity").attr("max", 0);
             }
         }
         $("#add-btn").click(function () {
+            if ($('#name-and-type option').length == 0) {
+                alert("No pricing item")
+                return;
+            }
             set_add_item_dialog();
             $("#item-quantity").val(0);
             $("#item_add").show();
@@ -83,11 +87,11 @@
             $("#item_add").hide();
             const item_datas = JSON.parse($("#name-and-type").val());
             const tmp_quantity = 0;
-            if (item_datas.quantity ) {
+            if (item_datas.quantity) {
                 tmp_quantity = item_datas.quantity;
             }
             const quantity = $("#item-quantity").val();
-            if (quantity > tmp_quantity ) {
+            if (quantity > tmp_quantity) {
                 alert("Quantity exceed");
                 return;
             } else if (quantity == 0) {

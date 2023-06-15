@@ -103,6 +103,7 @@ def create_app(test_config=None):
         items = requests.get('http://127.0.0.1:5000/item').json()['item_list']
         staffs = requests.get('http://127.0.0.1:5000/staff').json()['staff_list']
         members = requests.get('http://127.0.0.1:5000/member').json()['member_list']
+        print(items)
         return render_template('sale_order_add.jinja',members=members,staffs=staffs,items=items)
     @app.route('/myErp/supplier_item')
     def revenue():
