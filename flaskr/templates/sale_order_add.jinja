@@ -86,7 +86,7 @@
         $("#ok-btn").click(function () {
             $("#item_add").hide();
             const item_datas = JSON.parse($("#name-and-type").val());
-            const tmp_quantity = 0;
+            let tmp_quantity = 0;
             if (item_datas.quantity) {
                 tmp_quantity = item_datas.quantity;
             }
