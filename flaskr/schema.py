@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("../instance/flaskr.sqlite")
+conn = sqlite3.connect("instance/flaskr.sqlite")
 cursor = conn.cursor()
 
 staff = """CREATE TABLE STAFF(
