@@ -20,7 +20,8 @@
 - Install requests:
   `pip install requests`
 - Create Database:
-  `python schema.py`
+  `python ./flaskr/schema.py`
+   - Note: If `./instance/flaskr.sqlite` has existed, please delete it first.
 - Run the app:
   `flask --app flaskr run --debug`
 - login page
@@ -32,17 +33,13 @@
 - staff : CRUD
 - supplier : CRUD
 - member : CRUD
-- purchase order : CRUD
-  - increase : CRUD
-  - item C U
-- sales order : CRUD
-  <<<<<<< HEAD - customer : C R - item : R U D - decrease : CRUD
-- # item : UR
-  - customer : C R
-  - item : R U D
-  - decrease : CRUD
-- item : R
-  > > > > > > > feature/db_and_item_api
+- purchase order : CRD
+- increase : CRUD
+- sales order : CRD
+- customer : C R 
+- item : R U D 
+- decrease : CRUD
+
 
 ### http verb
 
@@ -56,9 +53,6 @@
 **沒寫 respond 的話就是回傳 msg : str**
 
 ## staff
-
-<<<<<<< HEAD
-
 ### C
 
 - request
