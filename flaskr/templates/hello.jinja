@@ -3,28 +3,26 @@
 {%block content%}
 <div display="flex !important">
     <div style="margin-top:50px ;">
-        <form>
-            <p class="title">Monthly Revenue</p>
-            <label for="year">Year</label>
-            <input type="text" id="year">
-            <label for="month">Month</label>
-            <select id="month">
-                <option value="Jan">January</option>
-                <option value="Feb">February</option>
-                <option value="Mar">March</option>
-                <option value="Apr">April</option>
-                <option value="May">May</option>
-                <option value="Jun">June</option>
-                <option value="Jul">July</option>
-                <option value="Aug">August</option>
-                <option value="Sep">September</option>
-                <option value="Oct">October</option>
-                <option value="Nov">November</option>
-                <option value="Dec">December</option>
-            </select>
-            <button class="button" onclick="get_monthly_revenue()">Submit</button>
-        </form>
-
+        <p class="title">Monthly Revenue</p>
+        <label for="year">Year</label>
+        <input type="text" id="year">
+        <label for="month">Month</label>
+        <select id="month">
+            <option value="Jan">January</option>
+            <option value="Feb">February</option>
+            <option value="Mar">March</option>
+            <option value="Apr">April</option>
+            <option value="May">May</option>
+            <option value="Jun">June</option>
+            <option value="Jul">July</option>
+            <option value="Aug">August</option>
+            <option value="Sep">September</option>
+            <option value="Oct">October</option>
+            <option value="Nov">November</option>
+            <option value="Dec">December</option>
+        </select>
+        <button class="button" onclick="get_monthly_revenue()">Submit</button>
+        <p id="revenue_phrase"></p>
     </div>
 </div>
 <script>
@@ -41,10 +39,11 @@
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.income);
-        });
+            .then(response => response.json())
+            .then(data => {
+                const income = data.income;
+                $("#revenue_phrase").text(`The revenue for ${month} ${year} is ${income}`);
+            });
     }
 </script>
 
